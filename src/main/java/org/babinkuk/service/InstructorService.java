@@ -13,7 +13,7 @@ public interface InstructorService {
 	
 	public InstructorVO findByEmail(String email) throws ObjectNotFoundException;
 	
-	public ApiResponse saveInstructor(InstructorVO InstructorVO) throws ObjectException;
+	public ApiResponse saveInstructor(InstructorVO instructorVO) throws ObjectException;
 	
 	public ApiResponse deleteInstructor(int id) throws ObjectNotFoundException;
 		

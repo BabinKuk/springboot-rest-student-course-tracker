@@ -1,17 +1,17 @@
 package org.babinkuk.controller;
 
 
-//import org.babinkuk.service.EmployeeService;
-//import org.babinkuk.validator.ActionType;
-//import org.babinkuk.validator.EmployeeValidatorFactory;
-//import org.babinkuk.validator.ValidatorType;
+import org.babinkuk.service.StudentService;
+import org.babinkuk.validator.ActionType;
+//import org.babinkuk.validator.StudentValidatorFactory;
+import org.babinkuk.validator.ValidatorType;
 import org.babinkuk.vo.StudentVO;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.babinkuk.common.ApiResponse;
-//import org.babinkuk.exception.EmployeeException;
-//import org.babinkuk.exception.EmployeeNotFoundException;
-//import org.babinkuk.exception.EmployeeValidationException;
+import org.babinkuk.exception.ObjectException;
+import org.babinkuk.exception.ObjectNotFoundException;
+import org.babinkuk.exception.ObjectValidationException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -40,12 +40,12 @@ public class StudentController {
 	
 	private final Logger log = LogManager.getLogger(getClass());
 	
-//	// employee service
-//	private EmployeeService employeeService;
-//	
+	// service
+	private StudentService studentService;
+	
 //	@Autowired
-//	private EmployeeValidatorFactory validatorFactory;
-//	
+//	private StudentValidatorFactory validatorFactory;
+	
 	@Autowired
 	private ObjectMapper mapper;
 	
@@ -53,10 +53,10 @@ public class StudentController {
 		// TODO Auto-generated constructor stub
 	}
 
-//	@Autowired
-//	public EmployeeController(EmployeeService employeeService) {
-//		this.employeeService = employeeService;
-//	}
+	@Autowired
+	public StudentController(StudentService studentService) {
+		this.studentService = studentService;
+	}
 
 	/**
 	 * get student list
@@ -67,113 +67,103 @@ public class StudentController {
 	@GetMapping("/get")
 	public ResponseEntity<Iterable<StudentVO>> getAllStudents() {
 		log.info("Called StudentController.getAllStudents");
-		//return ResponseEntity.of(Optional.ofNullable(employeeService.getAllEmployees()));
-		return null;
+
+		return ResponseEntity.of(Optional.ofNullable(studentService.getAllStudents()));
 	}
-//	
-//	/**
-//	 * expose GET "/employees/{employeeId}"
-//	 *
-//	 * @param 
-//	 * @return ResponseEntity
-//	 */
-//	@GetMapping("/get/{employeeId}")
-//	public ResponseEntity<EmployeeVO> getEmployee(@PathVariable int employeeId) {
-//		log.info("Called EmployeeController.getEmployee(employeeId={})", employeeId);
-//		
-//		//return new ResponseEntity<>(employee, HttpStatus.OK);
-//		//return ResponseEntity.ok().body(employee);
-//		return ResponseEntity.of(Optional.ofNullable(employeeService.findById(employeeId)));
-//	}
-//	
-//	/**
-//	 * expose POST "/employees"
-//	 * 
-//	 * @param employeeVO
-//	 * @return
-//	 * @throws JsonProcessingException
-//	 */
-//	@PostMapping("")
-//	public ResponseEntity<ApiResponse> addEmployee(
-//			@RequestBody EmployeeVO employeeVO,
-//			@RequestParam(name="validationType", required = false) ValidatorType validationType) throws JsonProcessingException {
-//		log.info("Called EmployeeController.addEmployee({})", mapper.writeValueAsString(employeeVO));
-//		
-//		// in case id is passed in json, set to 0
-//		// this is to force a save of new item ... instead of update
-//		employeeVO.setId(0);
-//		
-//		employeeVO = validatorFactory.getValidator(validationType).validate(employeeVO, true, ActionType.CREATE);
-//		
-//		//return employee;
-//		return ResponseEntity.of(Optional.ofNullable(employeeService.saveEmployee(employeeVO)));
-//	}
-//	
-//	/**
-//	 * expose PUT "/employees"
-//	 * 
-//	 * @param employeeVO
-//	 * @return
-//	 * @throws JsonProcessingException
-//	 */
-//	@PutMapping("")
-//	public ResponseEntity<ApiResponse> updateEmployee(
-//			@RequestBody EmployeeVO employeeVO,
-//			@RequestParam(name="validationType", required = false) ValidatorType validationType) throws JsonProcessingException {
-//		log.info("Called EmployeeController.updateEmployee({})", mapper.writeValueAsString(employeeVO));
-//
-//		employeeVO = validatorFactory.getValidator(validationType).validate(employeeVO, false, ActionType.UPDATE);
-//
-////		Employee dbEmployee = employeeService.findById(employee.getId());
-////		
-////		if (dbEmployee == null) {
-////			throw new EmployeeException("Employee id not found " + employee.getId());
-////		}
-//		
-//		//return employee;
-//		return ResponseEntity.of(Optional.ofNullable(employeeService.saveEmployee(employeeVO)));
-//	}
-//	
-//	/**
-//	 * expose DELETE "/{employeeId}"
-//	 * 
-//	 * @param employeeId
-//	 * @return
-//	 */
-//	@DeleteMapping("/{employeeId}")
-//	public ResponseEntity<ApiResponse> deleteEmployee(
-//			@PathVariable int employeeId, 
-//			@RequestParam(name="validationType", required = false) ValidatorType validationType) {
-//		log.info("Called EmployeeController.deleteEmployee(employeeId={}, validationType={})", employeeId, validationType);
-//		
-//		EmployeeVO employeeVO = validatorFactory.getValidator(validationType).validate(employeeId, ActionType.DELETE);
-//		
-//		return ResponseEntity.of(Optional.ofNullable(employeeService.deleteEmployee(employeeId)));
-//	}
-//
-//	@ExceptionHandler
-//	public ResponseEntity<ApiResponse> handleException(Exception exc) {
-//		
-//		return new ApiResponse(HttpStatus.BAD_REQUEST, exc.getMessage()).toEntity();
-//	}
-//	
-//	@ExceptionHandler
-//	public ResponseEntity<ApiResponse> handleException(EmployeeException exc) {
-//
-//		return new ApiResponse(HttpStatus.INTERNAL_SERVER_ERROR, exc.getMessage()).toEntity();
-//	}
-//
-//	@ExceptionHandler
-//	public ResponseEntity<ApiResponse> handleException(EmployeeNotFoundException exc) {
-//
-//		return new ApiResponse(HttpStatus.OK, exc.getMessage()).toEntity();
-//	}
-//	
-//	@ExceptionHandler
-//	public ResponseEntity<ApiResponse> handleException(EmployeeValidationException exc) {
-//		ApiResponse apiResponse = new ApiResponse(HttpStatus.BAD_REQUEST, exc.getMessage());
-//		apiResponse.setErrors(exc.getValidationErrors());
-//		return apiResponse.toEntity();
-//	}
-//	
+	
+	/**
+	 * expose GET "/students/get/{studentId}"
+	 *
+	 * @param 
+	 * @return ResponseEntity
+	 */
+	@GetMapping("/get/{studentId}")
+	public ResponseEntity<StudentVO> getStudent(@PathVariable int studentId) {
+		log.info("Called StudentController.getStudent(studentId={})", studentId);
+		
+		return ResponseEntity.of(Optional.ofNullable(studentService.findById(studentId)));
+	}
+	
+	/**
+	 * expose POST "/students"
+	 * 
+	 * @param studentVO
+	 * @return
+	 * @throws JsonProcessingException
+	 */
+	@PostMapping("")
+	public ResponseEntity<ApiResponse> addStudent(
+			@RequestBody StudentVO studentVO/*,
+			@RequestParam(name="validationType", required = false) ValidatorType validationType*/) throws JsonProcessingException {
+		log.info("Called StudentController.addStudent({})", mapper.writeValueAsString(studentVO));
+		
+		// in case id is passed in json, set to 0
+		// this is to force a save of new item ... instead of update
+		studentVO.setId(0);
+		
+//		studentVO = validatorFactory.getValidator(validationType).validate(studentVO, true, ActionType.CREATE);
+		
+		return ResponseEntity.of(Optional.ofNullable(studentService.saveStudent(studentVO)));
+	}
+	
+	/**
+	 * expose PUT "/students"
+	 * 
+	 * @param studentVO
+	 * @return
+	 * @throws JsonProcessingException
+	 */
+	@PutMapping("")
+	public ResponseEntity<ApiResponse> updateStudent(
+			@RequestBody StudentVO studentVO/*,
+			@RequestParam(name="validationType", required = false) ValidatorType validationType*/) throws JsonProcessingException {
+		log.info("Called StudentController.updateStudent({})", mapper.writeValueAsString(studentVO));
+
+//		studentVO = validatorFactory.getValidator(validationType).validate(studentVO, false, ActionType.UPDATE);
+
+		return ResponseEntity.of(Optional.ofNullable(studentService.saveStudent(studentVO)));
+	}
+	
+	/**
+	 * expose DELETE "/{studentId}"
+	 * 
+	 * @param studentId
+	 * @return
+	 */
+	@DeleteMapping("/{studentId}")
+	public ResponseEntity<ApiResponse> deleteStudent(
+			@PathVariable int studentId/*, 
+			@RequestParam(name="validationType", required = false) ValidatorType validationType*/) {
+//		log.info("Called StudentController.deleteStudent(studentId={}, validationType={})", studentId, validationType);
+		
+//		StudentVO studentVO = validatorFactory.getValidator(validationType).validate(studentId, ActionType.DELETE);
+		
+		return ResponseEntity.of(Optional.ofNullable(studentService.deleteStudent(studentId)));
+	}
+
+	@ExceptionHandler
+	public ResponseEntity<ApiResponse> handleException(Exception exc) {
+		
+		return new ApiResponse(HttpStatus.BAD_REQUEST, exc.getMessage()).toEntity();
+	}
+	
+	@ExceptionHandler
+	public ResponseEntity<ApiResponse> handleException(ObjectException exc) {
+
+		return new ApiResponse(HttpStatus.INTERNAL_SERVER_ERROR, exc.getMessage()).toEntity();
+	}
+
+	@ExceptionHandler
+	public ResponseEntity<ApiResponse> handleException(ObjectNotFoundException exc) {
+
+		return new ApiResponse(HttpStatus.OK, exc.getMessage()).toEntity();
+	}
+	
+	@ExceptionHandler
+	public ResponseEntity<ApiResponse> handleException(ObjectValidationException exc) {
+		ApiResponse apiResponse = new ApiResponse(HttpStatus.BAD_REQUEST, exc.getMessage());
+		apiResponse.setErrors(exc.getValidationErrors());
+		return apiResponse.toEntity();
+	}
+	
 }

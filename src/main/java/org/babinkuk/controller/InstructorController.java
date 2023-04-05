@@ -58,7 +58,7 @@ public class InstructorController {
 	}
 
 	/**
-	 * get Instructor list
+	 * get instructor list
 	 *
 	 * @param 
 	 * 
@@ -72,7 +72,7 @@ public class InstructorController {
 	}
 	
 	/**
-	 * expose GET "/Instructors/{InstructorId}"
+	 * expose GET "/instructors/get/{InstructorId}"
 	 *
 	 * @param 
 	 * @return ResponseEntity
@@ -106,9 +106,9 @@ public class InstructorController {
 	}
 	
 	/**
-	 * expose PUT "/Instructors"
+	 * expose PUT "/instructors"
 	 * 
-	 * @param InstructorVO
+	 * @param instructorVO
 	 * @return
 	 * @throws JsonProcessingException
 	 */
@@ -124,7 +124,7 @@ public class InstructorController {
 	}
 	
 	/**
-	 * expose DELETE "/{instructorId}"
+	 * expose DELETE "instructors/{instructorId}"
 	 * 
 	 * @param instructorId
 	 * @return

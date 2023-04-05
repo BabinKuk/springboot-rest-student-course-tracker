@@ -88,7 +88,6 @@ public class BusinessValidator {
 	 * @throws ValidatorException
 	 */
 	public void emailExists(InstructorVO vo) throws ValidatorException {
-		//validateStringIsBlank(employee, ValidatorCodes.ERROR_CODE_EMPLOYEE_INVALID);
 		
 		//BaseVO dbVO = null;
 		//if (vo instanceof InstructorVO) {
