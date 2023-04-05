@@ -68,7 +68,7 @@ public class InstructorDetail {
 		this.hobby = hobby;
 	}
 
-		public Instructor getInstructor() {
+	public Instructor getInstructor() {
 		return instructor;
 	}
 

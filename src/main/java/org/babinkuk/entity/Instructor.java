@@ -54,6 +54,10 @@ public class Instructor {
 	public Instructor() {
 		// TODO Auto-generated constructor stub
 	}
+	
+	public Instructor(int id) {
+		this.id = id;
+	}
 
 	public Instructor(String firstName, String lastName, String email) {
 		this.firstName = firstName;
