@@ -72,7 +72,7 @@ public class StudentVO extends BaseVO {
 	
 	@Override
 	public String toString() {
-		return "StudentVO [firstName=" + firstName + ", lastName=" + lastName + ", email=" + emailAddress + "]";
+		return "StudentVO [firstName=" + firstName + ", lastName=" + lastName + ", emailAddress=" + emailAddress + "]";
 	}
 
 }

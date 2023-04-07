@@ -22,7 +22,7 @@ import org.springframework.stereotype.Component;
  *
  */
 @Component("validator.ROLE_MANAGER")
-public class InstructorValidatorImplRoleManager implements InstructorValidator {
+public class ValidatorImplRoleManager implements Validator {
 
 private final Logger log = LogManager.getLogger(getClass());
 	
@@ -33,27 +33,25 @@ private final Logger log = LogManager.getLogger(getClass());
 	private InstructorValidatorHelper validatorHelper;
 	
 	@Override
-	public InstructorVO validate(InstructorVO vo, boolean isInsert, ActionType action) throws ObjectValidationException {
-		log.info("ROLE_MANAGER Validating {} (vo={})", action, vo);
+	public BaseVO validate(BaseVO vo, boolean isInsert, ActionType action, ValidatorType validatorType) throws ObjectValidationException {
+		log.info("ROLE_MANAGER Validating {} {} (vo={})", action, validatorType, vo);
 		
 		List<ValidatorException> exceptionList = new LinkedList<ValidatorException>();
 		
 		if (ActionType.DELETE == action) {
 			log.info("delete action disabled");
 			
-			//String message = String.format(ValidatorCodes.ERROR_CODE_ACTION_INVALID.getMessage(), action);
 			String message = String.format(messageSource.getMessage(ValidatorCodes.ERROR_CODE_ACTION_INVALID.getMessage(), new Object[] {}, LocaleContextHolder.getLocale()), action);
 			ObjectValidationException e = new ObjectValidationException(message);
 			throw e;
 		
 		} else {
-			exceptionList.addAll(validatorHelper.validate(vo, isInsert));
+			exceptionList.addAll(validatorHelper.validate(vo, isInsert, validatorType));
 			
 			ObjectValidationException e = new ObjectValidationException("Validation failed");
 			
 			for (ValidatorException validationException : exceptionList) {
 				//log.error(validationException.getErrorCode().getMessage());
-				//e.addValidationError(validationException.getErrorCode().getMessage());
 				e.addValidationError(messageSource.getMessage(validationException.getErrorCode().getMessage(), new Object[] {}, LocaleContextHolder.getLocale()));
 			}
 			
@@ -66,23 +64,22 @@ private final Logger log = LogManager.getLogger(getClass());
 	}
 	
 	@Override
-	public InstructorVO validate(int id, ActionType action) throws ObjectNotFoundException {
-		log.info("ROLE_MANAGER Validating {} (id={})", action, id);
+	public BaseVO validate(int id, ActionType action, ValidatorType validatorType) throws ObjectNotFoundException {
+		log.info("ROLE_MANAGER Validating {} {} (id={})", action, validatorType, id);
 		
-		InstructorVO vo = null;
+		BaseVO vo = null;
 		
 		// DELETE action disabled
 		if (ActionType.DELETE == action) {
 			log.info("delete action disabled");
 			
-			//String message = String.format(ValidatorCodes.ERROR_CODE_ACTION_INVALID.getMessage(), action);
 			String message = String.format(messageSource.getMessage(ValidatorCodes.ERROR_CODE_ACTION_INVALID.getMessage(), new Object[] {}, LocaleContextHolder.getLocale()), action);
 			ObjectValidationException e = new ObjectValidationException(message);
 			throw e;
 		
 		} else {
 			try {
-				vo = validatorHelper.validate(id);
+				vo = validatorHelper.validate(id, validatorType);
 			} catch (ObjectNotFoundException e) {
 				log.error(e.getMessage());
 				throw e;

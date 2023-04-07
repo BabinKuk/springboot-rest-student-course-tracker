@@ -22,7 +22,7 @@ import org.springframework.stereotype.Component;
  *
  */
 @Component("validator.ROLE_EMPLOYEE")
-public class InstructorValidatorImplRoleEmployee implements InstructorValidator {
+public class ValidatorImplRoleEmployee implements Validator {
 
 private final Logger log = LogManager.getLogger(getClass());
 	
@@ -33,21 +33,20 @@ private final Logger log = LogManager.getLogger(getClass());
 	private MessageSource messageSource;
 	
 	@Override
-	public InstructorVO validate(InstructorVO vo, boolean isInsert, ActionType action) throws ObjectValidationException {
-		log.info("ROLE_EMPLOYEE Validating {} (vo={})", action, vo);
+	public BaseVO validate(BaseVO vo, boolean isInsert, ActionType action, ValidatorType validatorType) throws ObjectValidationException {
+		log.info("ROLE_EMPLOYEE Validating {} {} (vo={})", action, validatorType, vo);
 				
 		List<ValidatorException> exceptionList = new LinkedList<ValidatorException>();
 		
 		// only READ action enabled
 		if (ActionType.READ == action) {
 			log.info("read action only");
-			exceptionList.addAll(validatorHelper.validate(vo, isInsert));
+			exceptionList.addAll(validatorHelper.validate(vo, isInsert, validatorType));
 			
 			ObjectValidationException e = new ObjectValidationException("Validation failed");
 			
 			for (ValidatorException validationException : exceptionList) {
 				//log.error(validationException.getErrorCode().getMessage());
-				//e.addValidationError(validationException.getErrorCode().getMessage());
 				e.addValidationError(messageSource.getMessage(validationException.getErrorCode().getMessage(), new Object[] {}, LocaleContextHolder.getLocale()));
 			}
 			
@@ -67,17 +66,17 @@ private final Logger log = LogManager.getLogger(getClass());
 	}
 
 	@Override
-	public InstructorVO validate(int id, ActionType action) throws ObjectNotFoundException, ObjectValidationException {
-		log.info("ROLE_EMPLOYEE Validating {} (id={})", action, id);
+	public BaseVO validate(int id, ActionType action, ValidatorType validatorType) throws ObjectNotFoundException {
+		log.info("ROLE_EMPLOYEE Validating {} {} (id={})", action, validatorType, id);
 		
-		InstructorVO vo = null;
+		BaseVO vo = null;
 		
 		// only READ action enabled
 		if (ActionType.READ == action) {
 			log.info("read action only");
 			
 			try {
-				vo = validatorHelper.validate(id);
+				vo = validatorHelper.validate(id, validatorType);
 			} catch (ObjectNotFoundException e) {
 				log.error(e.getMessage());
 				throw e;

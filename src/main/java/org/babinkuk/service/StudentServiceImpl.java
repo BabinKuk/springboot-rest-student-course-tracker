@@ -36,8 +36,8 @@ public class StudentServiceImpl implements StudentService {
 	@Autowired
 	private ObjectMapper mapper;
 		
-//	@Autowired
-//	private StudentMapper studentMapper;
+	@Autowired
+	private StudentMapper studentMapper;
 	
 	@Autowired
 	private MessageSource messageSource;
@@ -67,9 +67,9 @@ public class StudentServiceImpl implements StudentService {
 			student = result.get();
 			log.info("student ({})", student);
 			
-//			// mapping
-//			instructorVO = instructorMapper.toVO(instructor);
-//			log.info("instVO ({})", instructorVO);
+			// mapping
+			studentVO = studentMapper.toVO(student);
+			log.info("studentVO ({})", studentVO);
 			
 			return studentVO;
 		} else {
@@ -92,9 +92,9 @@ public class StudentServiceImpl implements StudentService {
 		if (result.isPresent()) {
 			student = result.get();
 			
-//			// mapping
-//			studentVO = instructorMapper.toVO(student);
-//			log.info("studentVO ({})", studentVO);
+			// mapping
+			studentVO = studentMapper.toVO(student);
+			log.info("studentVO ({})", studentVO);
 		} else {
 			// not found
 			String message = String.format(getMessage("error_code_student_email_not_found"), email);
@@ -122,18 +122,17 @@ public class StudentServiceImpl implements StudentService {
 			log.info("entity ({})", entity);
 			log.info("mapping for update");
 			
-//			// mapping
-//			student = instructorMapper.toEntity(studentVO, student);
-//			log.info("inst ({})", student);
-
+			// mapping
+			student = studentMapper.toEntity(studentVO, student);
 		} else {
 			// instructor not found
 			log.info("mapping for insert");
 			
-//			// mapping
-//			student = instructorMapper.toEntity(studentVO);
-//			log.info("Instructor ({})", student);
+			// mapping
+			student = studentMapper.toEntity(studentVO);
 		}
+
+		log.info("student ({})", student);
 		
 		studentRepository.save(student);
 		
@@ -155,8 +154,7 @@ public class StudentServiceImpl implements StudentService {
 
 	@Override
 	public Iterable<StudentVO> getAllStudents() {
-		//return instructorMapper.toVO(instructorRepository.findAll());
-		return null;
+		return studentMapper.toVO(studentRepository.findAll());
 	}
 
 }

@@ -21,7 +21,7 @@ public class InstructorValidatorHelper {
 	@Autowired
 	private BusinessValidator validator;
 	
-	public List<ValidatorException> validate(InstructorVO vo, boolean isInsert) throws ObjectValidationException {
+	public List<ValidatorException> validate(BaseVO vo, boolean isInsert, ValidatorType validatorType) throws ObjectValidationException {
 		List<ValidatorException> exceptions = new LinkedList<ValidatorException>();
 		
 		try {
@@ -53,11 +53,11 @@ public class InstructorValidatorHelper {
 		return exceptions;
 	}
 	
-	public InstructorVO validate(int id) throws ObjectNotFoundException {
-		InstructorVO vo = null;
+	public BaseVO validate(int id, ValidatorType validatorType) throws ObjectNotFoundException {
+		BaseVO vo = null;
 		
 		try {
-			vo = validator.objectExists(id);
+			vo = validator.objectExists(id, validatorType);
 		} catch (ObjectNotFoundException e) {
 			log.error(e.getMessage());
 			throw e;

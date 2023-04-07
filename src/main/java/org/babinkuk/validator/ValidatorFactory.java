@@ -7,19 +7,19 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Component;
 
 @Component
-public class InstructorValidatorFactory {
+public class ValidatorFactory {
 	
 	private final Logger log = LogManager.getLogger(getClass());
 	
 	@Autowired
 	private ApplicationContext applicationContext;
 	
-	public InstructorValidator getValidator(ValidatorType type) {
+	public Validator getValidator(ValidatorRole type) {
 		
 		log.info("validatorType={}", type);
-		String beanName = "validator." + (type != null ? type : ValidatorType.ROLE_EMPLOYEE);
+		String beanName = "validator." + (type != null ? type : ValidatorRole.ROLE_EMPLOYEE);
 		
-		InstructorValidator validator = applicationContext.getBean(beanName, InstructorValidator.class);
+		Validator validator = applicationContext.getBean(beanName, Validator.class);
 		
 		if (validator == null) {
 			throw new IllegalStateException("Cannot acquire validator instance for type : " + type);

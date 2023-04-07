@@ -35,7 +35,6 @@ import org.mapstruct.factory.Mappers;
 	unmappedSourcePolicy = ReportingPolicy.WARN,
 	imports = {StringUtils.class, Objects.class},
 	uses = {InstructorDetailMapper.class}
-	//if needed add uses = {add different classes for complex objects} 
 )
 public interface InstructorMapper {
 	
@@ -79,11 +78,13 @@ public interface InstructorMapper {
 		System.out.println(entity.toString());
 	}
 	
+	// for insert
 	@Named("toEntity")
 	@Mapping(source = "emailAddress", target = "email")
 	//@Mapping(source = "instructorVO", target= "instructorDetail", qualifiedByName = "setDetails")
 	Instructor toEntity(InstructorVO instructorVO);
 	
+	// for update
 	@Named("toEntity")
 	@Mapping(source = "emailAddress", target = "email")
 	Instructor toEntity(InstructorVO instructorVO, @MappingTarget Instructor instructor);
@@ -106,6 +107,5 @@ public interface InstructorMapper {
 	@IterableMapping(qualifiedByName = "toVO")
 	@BeanMapping(ignoreByDefault = true)
 	Iterable<InstructorVO> toVO(Iterable<Instructor> instructorLst);
-	
 	
 }

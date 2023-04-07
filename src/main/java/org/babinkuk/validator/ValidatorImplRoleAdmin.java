@@ -22,7 +22,7 @@ import org.springframework.stereotype.Component;
  *
  */
 @Component("validator.ROLE_ADMIN")
-public class InstructorValidatorImplRoleAdmin implements InstructorValidator {
+public class ValidatorImplRoleAdmin implements Validator {
 
 private final Logger log = LogManager.getLogger(getClass());
 	
@@ -33,19 +33,18 @@ private final Logger log = LogManager.getLogger(getClass());
 	private InstructorValidatorHelper validatorHelper;
 	
 	@Override
-	public InstructorVO validate(InstructorVO vo, boolean isInsert, ActionType action) throws ObjectValidationException {
-		log.info("ROLE_ADMIN Validating {} (vo={})", action, vo);
+	public BaseVO validate(BaseVO vo, boolean isInsert, ActionType action, ValidatorType validatorType) throws ObjectValidationException {
+		log.info("ROLE_ADMIN Validating {} {} (vo={})", action, validatorType, vo);
 		
 		List<ValidatorException> exceptionList = new LinkedList<ValidatorException>();
 		
 		// all action types are enabled
-		exceptionList.addAll(validatorHelper.validate(vo, isInsert));
+		exceptionList.addAll(validatorHelper.validate(vo, isInsert, validatorType));
 		
 		ObjectValidationException e = new ObjectValidationException("Validation failed");
 		
 		for (ValidatorException validationException : exceptionList) {
 			//log.error(validationException.getErrorCode().getMessage());
-			//e.addValidationError(validationException.getErrorCode().getMessage());
 			e.addValidationError(messageSource.getMessage(validationException.getErrorCode().getMessage(), new Object[] {}, LocaleContextHolder.getLocale()));
 		}
 		
@@ -57,14 +56,14 @@ private final Logger log = LogManager.getLogger(getClass());
 	}
 
 	@Override
-	public InstructorVO validate(int id, ActionType action) throws ObjectNotFoundException {
-		log.info("ROLE_ADMIN Validating {} (id={})", action, id);
+	public BaseVO validate(int id, ActionType action, ValidatorType validatorType) throws ObjectNotFoundException {
+		log.info("ROLE_ADMIN Validating {} {} (id={})", action, validatorType, id);
 		
-		InstructorVO vo = null;
+		BaseVO vo = null;
 		
-		// all action types are eabled
+		// all action types are enabled
 		try {
-			vo = validatorHelper.validate(id);
+			vo = validatorHelper.validate(id, validatorType);
 		} catch (ObjectNotFoundException e) {
 			log.error(e.getMessage());
 			throw e;

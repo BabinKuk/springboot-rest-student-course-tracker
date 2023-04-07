@@ -3,7 +3,8 @@ package org.babinkuk.controller;
 
 import org.babinkuk.service.StudentService;
 import org.babinkuk.validator.ActionType;
-//import org.babinkuk.validator.StudentValidatorFactory;
+import org.babinkuk.validator.ValidatorFactory;
+import org.babinkuk.validator.ValidatorRole;
 import org.babinkuk.validator.ValidatorType;
 import org.babinkuk.vo.StudentVO;
 import org.apache.logging.log4j.LogManager;
@@ -43,8 +44,8 @@ public class StudentController {
 	// service
 	private StudentService studentService;
 	
-//	@Autowired
-//	private StudentValidatorFactory validatorFactory;
+	@Autowired
+	private ValidatorFactory validatorFactory;
 	
 	@Autowired
 	private ObjectMapper mapper;
@@ -93,15 +94,15 @@ public class StudentController {
 	 */
 	@PostMapping("")
 	public ResponseEntity<ApiResponse> addStudent(
-			@RequestBody StudentVO studentVO/*,
-			@RequestParam(name="validationType", required = false) ValidatorType validationType*/) throws JsonProcessingException {
+			@RequestBody StudentVO studentVO,
+			@RequestParam(name="validationRole", required = false) ValidatorRole validationRole) throws JsonProcessingException {
 		log.info("Called StudentController.addStudent({})", mapper.writeValueAsString(studentVO));
 		
 		// in case id is passed in json, set to 0
 		// this is to force a save of new item ... instead of update
 		studentVO.setId(0);
 		
-//		studentVO = validatorFactory.getValidator(validationType).validate(studentVO, true, ActionType.CREATE);
+		studentVO = (StudentVO) validatorFactory.getValidator(validationRole).validate(studentVO, true, ActionType.CREATE, ValidatorType.STUDENT);
 		
 		return ResponseEntity.of(Optional.ofNullable(studentService.saveStudent(studentVO)));
 	}
@@ -115,11 +116,11 @@ public class StudentController {
 	 */
 	@PutMapping("")
 	public ResponseEntity<ApiResponse> updateStudent(
-			@RequestBody StudentVO studentVO/*,
-			@RequestParam(name="validationType", required = false) ValidatorType validationType*/) throws JsonProcessingException {
+			@RequestBody StudentVO studentVO,
+			@RequestParam(name="validationRole", required = false) ValidatorRole validationRole) throws JsonProcessingException {
 		log.info("Called StudentController.updateStudent({})", mapper.writeValueAsString(studentVO));
 
-//		studentVO = validatorFactory.getValidator(validationType).validate(studentVO, false, ActionType.UPDATE);
+		studentVO = (StudentVO) validatorFactory.getValidator(validationRole).validate(studentVO, false, ActionType.UPDATE, ValidatorType.STUDENT);
 
 		return ResponseEntity.of(Optional.ofNullable(studentService.saveStudent(studentVO)));
 	}
@@ -132,11 +133,11 @@ public class StudentController {
 	 */
 	@DeleteMapping("/{studentId}")
 	public ResponseEntity<ApiResponse> deleteStudent(
-			@PathVariable int studentId/*, 
-			@RequestParam(name="validationType", required = false) ValidatorType validationType*/) {
-//		log.info("Called StudentController.deleteStudent(studentId={}, validationType={})", studentId, validationType);
+			@PathVariable int studentId, 
+			@RequestParam(name="validationRole", required = false) ValidatorRole validationRole) {
+		log.info("Called StudentController.deleteStudent(studentId={}, validationType={})", studentId, validationRole);
 		
-//		StudentVO studentVO = validatorFactory.getValidator(validationType).validate(studentId, ActionType.DELETE);
+		StudentVO studentVO = (StudentVO) validatorFactory.getValidator(validationRole).validate(studentId, ActionType.DELETE, ValidatorType.STUDENT);
 		
 		return ResponseEntity.of(Optional.ofNullable(studentService.deleteStudent(studentId)));
 	}

@@ -3,11 +3,14 @@ package org.babinkuk.validator;
 import java.util.Arrays;
 import java.util.regex.Pattern;
 
+import javax.persistence.criteria.CriteriaBuilder.Case;
+
 import org.apache.commons.lang.StringUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.babinkuk.exception.ObjectNotFoundException;
 import org.babinkuk.service.InstructorService;
+import org.babinkuk.service.StudentService;
 import org.babinkuk.vo.BaseVO;
 import org.babinkuk.vo.InstructorVO;
 import org.babinkuk.vo.StudentVO;
@@ -21,6 +24,9 @@ public class BusinessValidator {
 	
 	@Autowired
 	private InstructorService instructorService;
+	
+	@Autowired
+	private StudentService studentService;
 	
 	/**
 	 * @param name
@@ -42,7 +48,7 @@ public class BusinessValidator {
 	 * @param email
 	 * @throws ValidationException
 	 */
-	public void validateEmail(InstructorVO vo) throws ValidatorException {
+	public void validateEmail(BaseVO vo) throws ValidatorException {
 		validateStringIsBlank(vo.getEmailAddress(), ValidatorCodes.ERROR_CODE_EMAIL_EMPTY);
 		validateEmailFormat(vo.getEmailAddress(), ValidatorCodes.ERROR_CODE_EMAIL_INVALID);
 		emailExists(vo);
@@ -87,14 +93,15 @@ public class BusinessValidator {
 	 * @return
 	 * @throws ValidatorException
 	 */
-	public void emailExists(InstructorVO vo) throws ValidatorException {
-		
-		//BaseVO dbVO = null;
-		//if (vo instanceof InstructorVO) {
-		
-		//}
-		InstructorVO dbVO = instructorService.findByEmail(vo.getEmailAddress());
-		
+	public void emailExists(BaseVO vo) throws ValidatorException {
+		log.info("email " + vo.toString());
+		BaseVO dbVO = null;
+		if (vo instanceof InstructorVO) {
+			dbVO = instructorService.findByEmail(vo.getEmailAddress());
+		} else if (vo instanceof StudentVO) {
+			dbVO = studentService.findByEmail(vo.getEmailAddress());
+		}
+		 
 		if (dbVO == null) {
 			// email not found
 			// that's ok
@@ -114,15 +121,15 @@ public class BusinessValidator {
 	
 	/**
 	 * validate if object already exist
-	 * @param employee
+	 * @param vo
 	 * @param isInsert
 	 * @return
 	 * @throws ValidatorException
 	 */
-	public void objectExists(InstructorVO vo) throws ValidatorException {
+	public void objectExists(BaseVO vo) throws ValidatorException {
 		
-		InstructorVO result;
-		//if (vo instanceof InstructorVO) {
+		BaseVO result;
+		if (vo instanceof InstructorVO) {
 			log.info("validate instructor on update");
 			result = instructorService.findById(vo.getId());
 			
@@ -134,21 +141,19 @@ public class BusinessValidator {
 				log.error("result.notPresent");
 				throw new ValidatorException(ValidatorCodes.ERROR_CODE_INSTRUCTOR_INVALID);
 			}
-//		} else if (vo instanceof StudentVO) {
-//			log.info("validate student on update");
-//			result = studentService.findById(vo.getId());
-//			
-//			if (result != null) {
-//				// id found
-//				log.info("instructor id found");
-//			} else {
-//				// id not found
-//				log.error("result.notPresent");
-//				throw new ValidatorException(ValidatorCodes.ERROR_CODE_STUDENT_INVALID);
-//			}
-//			
-//		}
-		
+		} else if (vo instanceof StudentVO) {
+			log.info("validate student on update");
+			result = studentService.findById(vo.getId());
+			
+			if (result != null) {
+				// id found
+				log.info("student id found");
+			} else {
+				// id not found
+				log.error("result.notPresent");
+				throw new ValidatorException(ValidatorCodes.ERROR_CODE_STUDENT_INVALID);
+			}
+		}
 	}
 
 	/**
@@ -164,18 +169,24 @@ public class BusinessValidator {
 
 	/**
 	 * @param id
+	 * @param validatorType
 	 * @return
 	 * @throws ObjectNotFoundException
 	 */
-	public InstructorVO objectExists(int id) throws ObjectNotFoundException {
+	public BaseVO objectExists(int id, ValidatorType validatorType) throws ObjectNotFoundException {
 		
-		InstructorVO dbVO = instructorService.findById(id);
+		BaseVO dbVO = null;
 		
-//		if (dbVO == null) {
-//			String message = String.format("Instructor with id=%s not found.", id);
-//			log.warn(message);
-//			throw new ObjectNotFoundException(message);
-//		}
+		switch (validatorType) {
+		case STUDENT:
+			dbVO = studentService.findById(id);
+			break;
+		case INSTRUCTOR:
+			dbVO = instructorService.findById(id);
+			break;
+		default:
+			break;
+		} 
 		
 		return dbVO;
 	}
