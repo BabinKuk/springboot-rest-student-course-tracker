@@ -35,9 +35,6 @@ public class InstructorServiceImpl implements InstructorService {
 	private InstructorRepository instructorRepository;
 	
 	@Autowired
-	JmsTemplate jmsTemplate;
-	
-	@Autowired
 	private ObjectMapper mapper;
 		
 	@Autowired

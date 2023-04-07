@@ -1,6 +1,6 @@
 package org.babinkuk.controller;
 
-//import org.babinkuk.service.CourseService;
+import org.babinkuk.service.CourseService;
 import org.babinkuk.validator.ActionType;
 import org.babinkuk.validator.ValidatorFactory;
 import org.babinkuk.validator.ValidatorRole;
@@ -40,8 +40,8 @@ public class CourseController {
 	
 	private final Logger log = LogManager.getLogger(getClass());
 	
-//	// service
-//	private CourseService courseService;
+	// service
+	private CourseService courseService;
 	
 	@Autowired
 	private ValidatorFactory validatorFactory;
@@ -53,10 +53,10 @@ public class CourseController {
 		// TODO Auto-generated constructor stub
 	}
 
-//	@Autowired
-//	public CourseController(CourseService courseService) {
-//		this.courseService = courseService;
-//	}
+	@Autowired
+	public CourseController(CourseService courseService) {
+		this.courseService = courseService;
+	}
 
 	/**
 	 * get course list
@@ -68,8 +68,7 @@ public class CourseController {
 	public ResponseEntity<Iterable<CourseVO>> getAllCourses() {
 		log.info("Called CourseController.getAllCourses");
 
-//		return ResponseEntity.of(Optional.ofNullable(courseService.getAllCourses()));
-		return null;
+		return ResponseEntity.of(Optional.ofNullable(courseService.getAllCourses()));
 	}
 	
 	/**
@@ -82,8 +81,7 @@ public class CourseController {
 	public ResponseEntity<CourseVO> getCourse(@PathVariable int courseId) {
 		log.info("Called CourseController.getCourse(courseId={})", courseId);
 		
-//		return ResponseEntity.of(Optional.ofNullable(courseService.findById(courseId)));
-		return null;
+		return ResponseEntity.of(Optional.ofNullable(courseService.findById(courseId)));
 	}
 	
 	/**
@@ -105,8 +103,7 @@ public class CourseController {
 		
 //		courseVO = (CourseVO) validatorFactory.getValidator(validationRole).validate(courseVO, true, ActionType.CREATE, ValidatorType.STUDENT);
 		
-//		return ResponseEntity.of(Optional.ofNullable(courseService.saveCourse(courseVO)));
-		return null;
+		return ResponseEntity.of(Optional.ofNullable(courseService.saveCourse(courseVO)));
 	}
 	
 	/**
@@ -142,8 +139,7 @@ public class CourseController {
 		
 //		CourseVO courseVO = (CourseVO) validatorFactory.getValidator(validationRole).validate(courseId, ActionType.DELETE, ValidatorType.STUDENT);
 		
-//		return ResponseEntity.of(Optional.ofNullable(courseService.deleteCourse(courseId)));
-		return null;
+		return ResponseEntity.of(Optional.ofNullable(courseService.deleteCourse(courseId)));
 	}
 
 	@ExceptionHandler
