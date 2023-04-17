@@ -120,16 +120,16 @@ public class CourseServiceImpl implements CourseService {
 			log.info("entity ({})", entity);
 			log.info("mapping for update");
 			
-//			// mapping
-//			course = courseMapper.toEntity(courseVO, course);
-//			log.info("course ({})", course);
+			// mapping
+			course = courseMapper.toEntity(courseVO, course);
+			log.info("course ({})", course);
 		} else {
 			// course not found
 			log.info("mapping for insert");
 			
-//			// mapping
-//			course = courseMapper.toEntity(courseVO);
-//			log.info("course ({})", course);
+			// mapping
+			course = courseMapper.toEntity(courseVO);
+			log.info("course ({})", course);
 		}
 		
 		courseRepository.save(course);

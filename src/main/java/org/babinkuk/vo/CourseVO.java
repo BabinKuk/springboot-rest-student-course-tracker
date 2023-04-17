@@ -15,7 +15,7 @@ public class CourseVO {
 	private String title;
 	
 	@DiffField
-	private int instructorId;
+	private InstructorVO instructorVO;
 	
 	@DiffField
 	private List<ReviewVO> reviewsVO = new ArrayList<ReviewVO>();
@@ -47,12 +47,12 @@ public class CourseVO {
 		this.title = title;
 	}
 
-	public int getInstructorId() {
-		return instructorId;
+	public InstructorVO getInstructorVO() {
+		return instructorVO;
 	}
 
-	public void setInstructorId(int instructorId) {
-		this.instructorId = instructorId;
+	public void setInstructorVO(InstructorVO instructorVO) {
+		this.instructorVO = instructorVO;
 	}
 	
 	public List<ReviewVO> getReviewsVO() {
@@ -90,6 +90,6 @@ public class CourseVO {
 	
 	@Override
 	public String toString() {
-		return "CourseVO [id=" + id + ", title=" + title + "]";
+		return "CourseVO [id=" + id + ", title=" + title + ", instructorVO=" + instructorVO + "]";
 	}	
 }

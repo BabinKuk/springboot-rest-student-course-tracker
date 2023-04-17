@@ -1,11 +1,11 @@
 package org.babinkuk.controller;
 
-import org.babinkuk.service.CourseService;
+import org.babinkuk.service.ReviewService;
 import org.babinkuk.validator.ActionType;
 import org.babinkuk.validator.ValidatorFactory;
 import org.babinkuk.validator.ValidatorRole;
 import org.babinkuk.validator.ValidatorType;
-import org.babinkuk.vo.CourseVO;
+import org.babinkuk.vo.ReviewVO;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.babinkuk.common.ApiResponse;
@@ -32,16 +32,16 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import java.util.Optional;
 
 import static org.babinkuk.controller.Api.ROOT;
-import static org.babinkuk.controller.Api.COURSES;
+import static org.babinkuk.controller.Api.REVIEWS;
 
 @RestController
-@RequestMapping(ROOT + COURSES)
-public class CourseController {
+@RequestMapping(ROOT + REVIEWS)
+public class ReviewController {
 	
 	private final Logger log = LogManager.getLogger(getClass());
 	
 	// service
-	private CourseService courseService;
+	private ReviewService reviewService;
 	
 	@Autowired
 	private ValidatorFactory validatorFactory;
@@ -49,96 +49,96 @@ public class CourseController {
 	@Autowired
 	private ObjectMapper mapper;
 	
-	public CourseController() {
+	public ReviewController() {
 		// TODO Auto-generated constructor stub
 	}
 
 	@Autowired
-	public CourseController(CourseService courseService) {
-		this.courseService = courseService;
+	public ReviewController(ReviewService reviewService) {
+		this.reviewService = reviewService;
 	}
 
 	/**
-	 * get course list
+	 * get review list
 	 *
 	 * @param 
 	 * @return ResponseEntity
 	 */
 	@GetMapping("/get")
-	public ResponseEntity<Iterable<CourseVO>> getAllCourses() {
-		log.info("Called CourseController.getAllCourses");
+	public ResponseEntity<Iterable<ReviewVO>> getAllReviews() {
+		log.info("Called ReviewController.getAllReviews");
 
-		return ResponseEntity.of(Optional.ofNullable(courseService.getAllCourses()));
+		return ResponseEntity.of(Optional.ofNullable(reviewService.getAllReviews()));
 	}
 	
 	/**
-	 * expose GET "/courses/get/{courseId}"
+	 * expose GET "/reviews/get/{reviewId}"
 	 *
 	 * @param 
 	 * @return ResponseEntity
 	 */
-	@GetMapping("/get/{courseId}")
-	public ResponseEntity<CourseVO> getCourse(@PathVariable int courseId) {
-		log.info("Called CourseController.getCourse(courseId={})", courseId);
+	@GetMapping("/get/{reviewId}")
+	public ResponseEntity<ReviewVO> getReview(@PathVariable int reviewId) {
+		log.info("Called ReviewController.getReview(reviewId={})", reviewId);
 		
-		return ResponseEntity.of(Optional.ofNullable(courseService.findById(courseId)));
+		return ResponseEntity.of(Optional.ofNullable(reviewService.findById(reviewId)));
 	}
 	
 	/**
-	 * expose POST "/courses"
+	 * expose POST "/reviews"
 	 * 
-	 * @param courseVO
+	 * @param reviewVO
 	 * @return
 	 * @throws JsonProcessingException
 	 */
 	@PostMapping("")
-	public ResponseEntity<ApiResponse> addCourse(
-			@RequestBody CourseVO courseVO,
+	public ResponseEntity<ApiResponse> addReview(
+			@RequestBody ReviewVO reviewVO,
 			@RequestParam(name="validationRole", required = false) ValidatorRole validationRole) throws JsonProcessingException {
-		log.info("Called CourseController.addCourse({})", mapper.writeValueAsString(courseVO));
+		log.info("Called ReviewController.addReview({})", mapper.writeValueAsString(reviewVO));
 		
 		// in case id is passed in json, set to 0
 		// this is to force a save of new item ... instead of update
-		courseVO.setId(0);
+		reviewVO.setId(0);
 		
-//		courseVO = (CourseVO) validatorFactory.getValidator(validationRole).validate(courseVO, true, ActionType.CREATE, ValidatorType.STUDENT);
+//		reviewVO = (ReviewVO) validatorFactory.getValidator(validationRole).validate(reviewVO, true, ActionType.CREATE, ValidatorType.STUDENT);
 		
-		return ResponseEntity.of(Optional.ofNullable(courseService.saveCourse(courseVO)));
+		return ResponseEntity.of(Optional.ofNullable(reviewService.saveReview(reviewVO)));
 	}
 	
 	/**
-	 * expose PUT "/courses"
+	 * expose PUT "/reviews"
 	 * 
-	 * @param courseVO
+	 * @param reviewVO
 	 * @return
 	 * @throws JsonProcessingException
 	 */
 	@PutMapping("")
-	public ResponseEntity<ApiResponse> updateCourse(
-			@RequestBody CourseVO courseVO,
+	public ResponseEntity<ApiResponse> updateReview(
+			@RequestBody ReviewVO reviewVO,
 			@RequestParam(name="validationRole", required = false) ValidatorRole validationRole) throws JsonProcessingException {
-		log.info("Called CourseController.updateCourse({})", mapper.writeValueAsString(courseVO));
+		log.info("Called ReviewController.updateReview({})", mapper.writeValueAsString(reviewVO));
 
-//		courseVO = (CourseVO) validatorFactory.getValidator(validationRole).validate(courseVO, false, ActionType.UPDATE, ValidatorType.STUDENT);
+//		reviewVO = (ReviewVO) validatorFactory.getValidator(validationRole).validate(reviewVO, false, ActionType.UPDATE, ValidatorType.STUDENT);
 
-		return ResponseEntity.of(Optional.ofNullable(courseService.saveCourse(courseVO)));
+		return ResponseEntity.of(Optional.ofNullable(reviewService.saveReview(reviewVO)));
 	}
 	
 	/**
-	 * expose DELETE "/{courseId}"
+	 * expose DELETE "/{reviewId}"
 	 * 
-	 * @param courseId
+	 * @param reviewId
 	 * @return
 	 */
-	@DeleteMapping("/{courseId}")
-	public ResponseEntity<ApiResponse> deleteCourse(
-			@PathVariable int courseId, 
+	@DeleteMapping("/{reviewId}")
+	public ResponseEntity<ApiResponse> deleteReview(
+			@PathVariable int reviewId, 
 			@RequestParam(name="validationRole", required = false) ValidatorRole validationRole) {
-		log.info("Called CourseController.deleteCourse(courseId={}, validationType={})", courseId, validationRole);
+		log.info("Called ReviewController.deleteReview(reviewId={}, validationType={})", reviewId, validationRole);
 		
-//		CourseVO courseVO = (CourseVO) validatorFactory.getValidator(validationRole).validate(courseId, ActionType.DELETE, ValidatorType.STUDENT);
+//		ReviewVO reviewVO = (ReviewVO) validatorFactory.getValidator(validationRole).validate(reviewId, ActionType.DELETE, ValidatorType.STUDENT);
 		
-		return ResponseEntity.of(Optional.ofNullable(courseService.deleteCourse(courseId)));
+		return ResponseEntity.of(Optional.ofNullable(reviewService.deleteReview(reviewId)));
 	}
 
 	@ExceptionHandler

@@ -35,17 +35,20 @@ import org.springframework.util.CollectionUtils;
 (
 	componentModel = "spring",
 	unmappedSourcePolicy = ReportingPolicy.WARN,
-	imports = {StringUtils.class, Objects.class}
-	//if needed add uses = {add different classes for complex objects} 
+	imports = {StringUtils.class, Objects.class},
+	//if needed add uses = {add different classes for complex objects}
+	uses = {ReviewMapper.class, InstructorMapper.class, StudentMapper.class} 
 )
 public interface CourseMapper {
 	
 	public CourseMapper courseMapperInstance = Mappers.getMapper(CourseMapper.class);
 	public ReviewMapper reviewMapperInstance = Mappers.getMapper(ReviewMapper.class);
 	public StudentMapper studentMapperInstance = Mappers.getMapper(StudentMapper.class);
+	public InstructorMapper instructorMapperInstance = Mappers.getMapper(InstructorMapper.class);
 	
 //	@BeforeMapping
 //	default void beforeMapReviews(@MappingTarget Course entity, CourseVO courseVO) {
+//		System.out.println("beforeMapReviews");
 //		// reviews
 //		if (!CollectionUtils.isEmpty(courseVO.getReviewsVO())) {
 //			List<Review> list = new ArrayList<Review>();
@@ -59,6 +62,7 @@ public interface CourseMapper {
 //	
 //	@BeforeMapping
 //	default void beforeMapStudents(@MappingTarget Course entity, CourseVO courseVO) {
+//		System.out.println("beforeMapStudents");
 //		// students
 //		if (!CollectionUtils.isEmpty(courseVO.getStudentsVO())) {
 //			List<Student> list = new ArrayList<Student>();
@@ -70,14 +74,57 @@ public interface CourseMapper {
 //		}
 //	}
 	
+	@BeforeMapping
+	default void beforeMap(@MappingTarget Course entity, CourseVO courseVO) {
+		System.out.println("beforeMapInstructor");
+		// instructor
+		if (courseVO.getInstructorVO() != null) {
+			System.out.println("set Instructor");
+			Instructor instructor = instructorMapperInstance.toEntity(courseVO.getInstructorVO());
+//			instructorDetail.setInstructor(entity);	
+			entity.setInstructor(instructor);
+			System.out.println(entity.toString());
+		}
+		
+		System.out.println("beforeMapStudents");
+//		// students
+//		if (!CollectionUtils.isEmpty(courseVO.getStudentsVO())) {
+//			List<Student> list = new ArrayList<Student>();
+//			for (StudentVO studentVO : courseVO.getStudentsVO()) {
+//				Student student = studentMapperInstance.toEntity(studentVO);
+//				list.add(student);
+//			}
+//			entity.setStudents(list);
+//		}
+		
+		System.out.println("beforeMapReviews");
+//		// reviews
+//		if (!CollectionUtils.isEmpty(courseVO.getReviewsVO())) {
+//			List<Review> list = new ArrayList<Review>();
+//			for (ReviewVO reviewVO : courseVO.getReviewsVO()) {
+//				Review review = reviewMapperInstance.toEntity(reviewVO);
+//				list.add(review);
+//			}
+//			entity.setReviews(list);
+//		}
+	}
+	
+	// for insert
 	@Named("toEntity")
-	@Mapping(source = "instructorId", target = "instructor.id")
+	@Mapping(source = "instructorVO", target = "instructor")
 	@Mapping(source = "reviewsVO", target = "reviews")
 	@Mapping(source = "studentsVO", target = "students")
 	Course toEntity(CourseVO courseVO);
 	
+	// for update
+	@Named("toEntity")
+	@Mapping(source = "instructorVO", target = "instructor")
+	@Mapping(source = "reviewsVO", target = "reviews")
+	@Mapping(source = "studentsVO", target = "students")
+	Course toEntity(CourseVO courseVO, @MappingTarget Course course);
+	
 	@Named("toVO")
-	@Mapping(source = "instructor.id", target = "instructorId")
+	@Mapping(source = "instructor", target = "instructorVO")
 	@Mapping(source = "reviews", target = "reviewsVO")
 	@Mapping(source = "students", target = "studentsVO")
 	CourseVO toVO(Course course);
