@@ -63,7 +63,7 @@ public class CourseServiceImpl implements CourseService {
 		
 		if (result.isPresent()) {
 			course = result.get();
-			log.info("inst ({})", course);
+			log.info("course ({})", course);
 			
 			// mapping
 			courseVO = courseMapper.toVO(course);
@@ -77,31 +77,6 @@ public class CourseServiceImpl implements CourseService {
 			throw new ObjectNotFoundException(message);
 		}
 	}
-	
-//	@Override
-//	public CourseVO findByEmail(String email) {
-//		
-//		CourseVO courseVO = null;
-//		
-//		Optional<Course> result = courseRepository.findByEmail(email);
-//		
-//		Course course = null;
-//		
-//		if (result.isPresent()) {
-//			course = result.get();
-//			
-//			// mapping
-//			courseVO = courseMapper.toVO(course);
-//			log.info("instVO ({})", courseVO);
-//		} else {
-//			// not found
-//			String message = String.format(getMessage("error_code_course_email_not_found"), email);
-//			log.warn(message);
-//			//throw new ObjectNotFoundException(message);
-//		}
-//
-//		return courseVO;
-//	}
 		
 	@Override
 	public ApiResponse saveCourse(CourseVO courseVO) throws ObjectException {

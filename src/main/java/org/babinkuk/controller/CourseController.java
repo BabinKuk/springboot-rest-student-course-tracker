@@ -1,11 +1,14 @@
 package org.babinkuk.controller;
 
 import org.babinkuk.service.CourseService;
+import org.babinkuk.service.StudentService;
 import org.babinkuk.validator.ActionType;
 import org.babinkuk.validator.ValidatorFactory;
 import org.babinkuk.validator.ValidatorRole;
 import org.babinkuk.validator.ValidatorType;
 import org.babinkuk.vo.CourseVO;
+import org.babinkuk.vo.ReviewVO;
+import org.babinkuk.vo.StudentVO;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.babinkuk.common.ApiResponse;
@@ -43,6 +46,8 @@ public class CourseController {
 	// service
 	private CourseService courseService;
 	
+	private StudentService studentService;
+	
 	@Autowired
 	private ValidatorFactory validatorFactory;
 	
@@ -54,8 +59,9 @@ public class CourseController {
 	}
 
 	@Autowired
-	public CourseController(CourseService courseService) {
+	public CourseController(CourseService courseService, StudentService studentService) {
 		this.courseService = courseService;
+		this.studentService = studentService;
 	}
 
 	/**
@@ -139,6 +145,34 @@ public class CourseController {
 //		CourseVO courseVO = (CourseVO) validatorFactory.getValidator(validationRole).validate(courseId, ActionType.DELETE, ValidatorType.STUDENT);
 		
 		return ResponseEntity.of(Optional.ofNullable(courseService.deleteCourse(courseId)));
+	}
+	
+	/**
+	 * enroll student to the course
+	 * expose PUT "/{courseId}/student/{studentId}"
+	 * 
+	 * @param courseId
+	 *@param studentId
+	 * @return
+	 */
+	@PutMapping("/{courseId}/student/{studentId}")
+	public ResponseEntity<ApiResponse> enrollStudent(
+			@PathVariable int courseId,
+			@PathVariable int studentId,
+			@RequestParam(name="validationRole", required = false) ValidatorRole validationRole) throws JsonProcessingException {
+		log.info("Called ReviewController.enrollStudent(id={}) for courseId={}", studentId, courseId);
+		
+		// first find course
+		CourseVO courseVO = courseService.findById(courseId);
+		
+		// next find student
+		StudentVO studentVO = studentService.findById(studentId);
+		
+		courseVO.addStudentVO(studentVO);
+		
+//		reviewVO = (ReviewVO) validatorFactory.getValidator(validationRole).validate(reviewVO, true, ActionType.CREATE, ValidatorType.STUDENT);
+		
+		return ResponseEntity.of(Optional.ofNullable(courseService.saveCourse(courseVO)));
 	}
 
 	@ExceptionHandler

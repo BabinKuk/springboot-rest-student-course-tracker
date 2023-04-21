@@ -131,8 +131,8 @@ public class ReviewController {
 			@RequestParam(name="validationRole", required = false) ValidatorRole validationRole) throws JsonProcessingException {
 		log.info("Called ReviewController.updateReview({})", mapper.writeValueAsString(reviewVO));
 		
-//		// first find course
-//		CourseVO courseVO = courseService.findById(reviewVO.getCourseId());
+		// first find review
+//		Review courseVO = courseService.findById(reviewVO.getCourseId());
 		
 //		reviewVO = (ReviewVO) validatorFactory.getValidator(validationRole).validate(reviewVO, false, ActionType.UPDATE, ValidatorType.STUDENT);
 

@@ -15,6 +15,7 @@ import org.babinkuk.vo.CourseVO;
 import org.babinkuk.vo.InstructorVO;
 import org.babinkuk.vo.ReviewVO;
 import org.babinkuk.vo.StudentVO;
+import org.mapstruct.AfterMapping;
 import org.mapstruct.BeanMapping;
 import org.mapstruct.BeforeMapping;
 import org.mapstruct.IterableMapping;
@@ -87,15 +88,15 @@ public interface CourseMapper {
 		}
 		
 		System.out.println("beforeMapStudents");
-//		// students
-//		if (!CollectionUtils.isEmpty(courseVO.getStudentsVO())) {
-//			List<Student> list = new ArrayList<Student>();
-//			for (StudentVO studentVO : courseVO.getStudentsVO()) {
-//				Student student = studentMapperInstance.toEntity(studentVO);
-//				list.add(student);
-//			}
-//			entity.setStudents(list);
-//		}
+		// students
+		if (!CollectionUtils.isEmpty(courseVO.getStudentsVO())) {
+			List<Student> studentlist = new ArrayList<Student>();
+			for (StudentVO studentVO : courseVO.getStudentsVO()) {
+				Student student = studentMapperInstance.toEntity(studentVO);
+				studentlist.add(student);
+			}
+			entity.setStudents(studentlist);
+		}
 		
 		System.out.println("beforeMapReviews");
 		// reviews
@@ -107,6 +108,42 @@ public interface CourseMapper {
 			}
 			entity.setReviews(reviewList);
 		}
+	}
+	
+	@AfterMapping
+	default void beforeMap(@MappingTarget CourseVO courseVO, Course entity) {
+		System.out.println("@AfterMapping");
+		System.out.println("beforeMapInstructor");
+		// instructor
+		if (entity.getInstructor() != null) {
+			System.out.println("set Instructor");
+			InstructorVO instructorVO = instructorMapperInstance.toVO(entity.getInstructor());
+//			instructorDetail.setInstructor(entity);	
+			courseVO.setInstructorVO(instructorVO);
+			System.out.println(courseVO.toString());
+		}
+		
+		System.out.println("beforeMapStudents");
+		// students
+		if (!CollectionUtils.isEmpty(entity.getStudents())) {
+			List<StudentVO> studentlist = new ArrayList<StudentVO>();
+			for (Student student : entity.getStudents()) {
+				StudentVO studentVO = studentMapperInstance.toVO(student);
+				studentlist.add(studentVO);
+			}
+			courseVO.setStudentsVO(studentlist);
+		}
+		
+//		System.out.println("beforeMapReviews");
+//		// reviews
+//		if (!CollectionUtils.isEmpty(entity.getReviews())) {
+//			List<Review> reviewList = new ArrayList<Review>();
+//			for (ReviewVO reviewVO : courseVO.getReviewsVO()) {
+//				Review review = reviewMapperInstance.toEntity(reviewVO);
+//				reviewList.add(review);
+//			}
+//			entity.setReviews(reviewList);
+//		}
 	}
 	
 	// for insert

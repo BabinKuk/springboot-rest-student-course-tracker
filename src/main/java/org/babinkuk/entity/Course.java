@@ -127,7 +127,7 @@ public class Course {
 	
 	@Override
 	public String toString() {
-		return "Course [id=" + id + ", title=" + title + ", instructor=" + instructor + "]";
+		return "Course [id=" + id + ", title=" + title + ", instructor=" + instructor + ", students=" + students + "]";
 	}
 		
 }
