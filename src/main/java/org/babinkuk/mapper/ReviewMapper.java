@@ -4,6 +4,7 @@ import java.util.Objects;
 
 import org.apache.commons.lang.StringUtils;
 import org.babinkuk.entity.Course;
+import org.babinkuk.entity.Instructor;
 import org.babinkuk.entity.Review;
 import org.babinkuk.vo.CourseVO;
 import org.babinkuk.vo.ReviewVO;
@@ -26,16 +27,27 @@ import org.mapstruct.factory.Mappers;
 (
 	componentModel = "spring",
 	unmappedSourcePolicy = ReportingPolicy.WARN,
-	imports = {StringUtils.class, Objects.class}
-	//if needed add uses = {add different classes for complex objects} 
+	imports = {StringUtils.class, Objects.class},
+	//if needed add uses = {add different classes for complex objects}
+	uses = {CourseMapper.class} 
 )
 public interface ReviewMapper {
 	
 	public ReviewMapper reviewMapperInstance = Mappers.getMapper(ReviewMapper.class);
+	public CourseMapper courseMapperInstance = Mappers.getMapper(CourseMapper.class);
 	
 	@BeforeMapping
-	default void beforeMap(@MappingTarget Review entity, ReviewVO reviewVO) {
+	default void beforeMap(@MappingTarget Review entity, ReviewVO reviewVO, CourseVO courseVO) {
 		System.out.println("beforeMap");
+		
+//		// course
+//		if (courseVO != null) {
+//			System.out.println("set Course");
+//			Course course = courseMapperInstance.toEntity(courseVO);
+//////			instructorDetail.setInstructor(entity);	
+//			entity.setCourse(course);
+//			System.out.println(entity.toString());
+//		}
 	}
 		
 	// for insert

@@ -98,15 +98,15 @@ public interface CourseMapper {
 //		}
 		
 		System.out.println("beforeMapReviews");
-//		// reviews
-//		if (!CollectionUtils.isEmpty(courseVO.getReviewsVO())) {
-//			List<Review> list = new ArrayList<Review>();
-//			for (ReviewVO reviewVO : courseVO.getReviewsVO()) {
-//				Review review = reviewMapperInstance.toEntity(reviewVO);
-//				list.add(review);
-//			}
-//			entity.setReviews(list);
-//		}
+		// reviews
+		if (!CollectionUtils.isEmpty(courseVO.getReviewsVO())) {
+			List<Review> reviewList = new ArrayList<Review>();
+			for (ReviewVO reviewVO : courseVO.getReviewsVO()) {
+				Review review = reviewMapperInstance.toEntity(reviewVO);
+				reviewList.add(review);
+			}
+			entity.setReviews(reviewList);
+		}
 	}
 	
 	// for insert

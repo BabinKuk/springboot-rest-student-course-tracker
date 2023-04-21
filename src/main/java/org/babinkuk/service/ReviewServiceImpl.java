@@ -5,11 +5,14 @@ import java.util.Optional;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.babinkuk.common.ApiResponse;
+import org.babinkuk.dao.CourseRepository;
 import org.babinkuk.dao.ReviewRepository;
+import org.babinkuk.entity.Course;
 import org.babinkuk.entity.Review;
 import org.babinkuk.exception.ObjectException;
 import org.babinkuk.exception.ObjectNotFoundException;
 import org.babinkuk.mapper.ReviewMapper;
+import org.babinkuk.vo.CourseVO;
 import org.babinkuk.vo.ReviewVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
@@ -39,6 +42,9 @@ public class ReviewServiceImpl implements ReviewService {
 	
 	@Autowired
 	private MessageSource messageSource;
+	
+	@Autowired
+	private CourseService courseService;
 	
 	@Autowired
 	public ReviewServiceImpl(ReviewRepository reviewRepository) {
@@ -78,31 +84,6 @@ public class ReviewServiceImpl implements ReviewService {
 		}
 	}
 	
-//	@Override
-//	public ReviewVO findByEmail(String email) {
-//		
-//		ReviewVO reviewVO = null;
-//		
-//		Optional<Review> result = reviewRepository.findByEmail(email);
-//		
-//		Review review = null;
-//		
-//		if (result.isPresent()) {
-//			review = result.get();
-//			
-//			// mapping
-//			reviewVO = reviewMapper.toVO(review);
-//			log.info("instVO ({})", reviewVO);
-//		} else {
-//			// not found
-//			String message = String.format(getMessage("error_code_review_email_not_found"), email);
-//			log.warn(message);
-//			//throw new ObjectNotFoundException(message);
-//		}
-//
-//		return reviewVO;
-//	}
-		
 	@Override
 	public ApiResponse saveReview(ReviewVO reviewVO) throws ObjectException {
 		
@@ -133,6 +114,19 @@ public class ReviewServiceImpl implements ReviewService {
 		log.info("review ({})", review);
 
 		reviewRepository.save(review);
+		
+		return response;
+	}
+	
+	@Override
+	public ApiResponse saveReview(CourseVO courseVO) throws ObjectException {
+		
+		ApiResponse response = new ApiResponse();
+		
+		response.setStatus(HttpStatus.OK);
+		response.setMessage(getMessage(REVIEW_SAVE_SUCCESS));
+		
+		courseService.saveCourse(courseVO);
 		
 		return response;
 	}

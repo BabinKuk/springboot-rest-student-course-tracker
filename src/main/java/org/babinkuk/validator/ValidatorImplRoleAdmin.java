@@ -16,7 +16,7 @@ import org.springframework.stereotype.Component;
 
 /**
  * for future purpose 
- * if special valdations are required depending on the role 
+ * if special validations are required depending on the role 
  * 
  * @author Nikola
  *
@@ -30,7 +30,7 @@ private final Logger log = LogManager.getLogger(getClass());
 	private MessageSource messageSource;
 	
 	@Autowired
-	private InstructorValidatorHelper validatorHelper;
+	private ValidatorHelper validatorHelper;
 	
 	@Override
 	public BaseVO validate(BaseVO vo, boolean isInsert, ActionType action, ValidatorType validatorType) throws ObjectValidationException {

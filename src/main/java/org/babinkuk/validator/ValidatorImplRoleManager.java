@@ -30,7 +30,7 @@ private final Logger log = LogManager.getLogger(getClass());
 	private MessageSource messageSource;
 	
 	@Autowired
-	private InstructorValidatorHelper validatorHelper;
+	private ValidatorHelper validatorHelper;
 	
 	@Override
 	public BaseVO validate(BaseVO vo, boolean isInsert, ActionType action, ValidatorType validatorType) throws ObjectValidationException {

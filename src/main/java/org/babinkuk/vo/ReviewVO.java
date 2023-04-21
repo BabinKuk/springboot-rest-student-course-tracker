@@ -34,7 +34,7 @@ public class ReviewVO {
 	public void setComment(String comment) {
 		this.comment = comment;
 	}
-
+		
 	@Override
 	public String toString() {
 		return "ReviewVO [id=" + id + ", comment=" + comment + "]";

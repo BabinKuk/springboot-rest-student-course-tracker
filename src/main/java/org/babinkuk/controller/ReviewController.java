@@ -1,10 +1,12 @@
 package org.babinkuk.controller;
 
+import org.babinkuk.service.CourseService;
 import org.babinkuk.service.ReviewService;
 import org.babinkuk.validator.ActionType;
 import org.babinkuk.validator.ValidatorFactory;
 import org.babinkuk.validator.ValidatorRole;
 import org.babinkuk.validator.ValidatorType;
+import org.babinkuk.vo.CourseVO;
 import org.babinkuk.vo.ReviewVO;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -43,6 +45,9 @@ public class ReviewController {
 	// service
 	private ReviewService reviewService;
 	
+	// service
+	private CourseService courseService;
+	
 	@Autowired
 	private ValidatorFactory validatorFactory;
 	
@@ -54,8 +59,9 @@ public class ReviewController {
 	}
 
 	@Autowired
-	public ReviewController(ReviewService reviewService) {
+	public ReviewController(ReviewService reviewService, CourseService courseService) {
 		this.reviewService = reviewService;
+		this.courseService = courseService;
 	}
 
 	/**
@@ -91,19 +97,25 @@ public class ReviewController {
 	 * @return
 	 * @throws JsonProcessingException
 	 */
-	@PostMapping("")
+	@PostMapping("/{courseId}")
 	public ResponseEntity<ApiResponse> addReview(
+			@PathVariable int courseId,
 			@RequestBody ReviewVO reviewVO,
 			@RequestParam(name="validationRole", required = false) ValidatorRole validationRole) throws JsonProcessingException {
-		log.info("Called ReviewController.addReview({})", mapper.writeValueAsString(reviewVO));
+		log.info("Called ReviewController.addReview({}) for courseId={}", mapper.writeValueAsString(reviewVO), courseId);
+		
+		// first find course
+		CourseVO courseVO = courseService.findById(courseId);
 		
 		// in case id is passed in json, set to 0
 		// this is to force a save of new item ... instead of update
 		reviewVO.setId(0);
 		
+		courseVO.addReviewVO(reviewVO);
+		
 //		reviewVO = (ReviewVO) validatorFactory.getValidator(validationRole).validate(reviewVO, true, ActionType.CREATE, ValidatorType.STUDENT);
 		
-		return ResponseEntity.of(Optional.ofNullable(reviewService.saveReview(reviewVO)));
+		return ResponseEntity.of(Optional.ofNullable(reviewService.saveReview(courseVO)));
 	}
 	
 	/**
@@ -118,7 +130,10 @@ public class ReviewController {
 			@RequestBody ReviewVO reviewVO,
 			@RequestParam(name="validationRole", required = false) ValidatorRole validationRole) throws JsonProcessingException {
 		log.info("Called ReviewController.updateReview({})", mapper.writeValueAsString(reviewVO));
-
+		
+//		// first find course
+//		CourseVO courseVO = courseService.findById(reviewVO.getCourseId());
+		
 //		reviewVO = (ReviewVO) validatorFactory.getValidator(validationRole).validate(reviewVO, false, ActionType.UPDATE, ValidatorType.STUDENT);
 
 		return ResponseEntity.of(Optional.ofNullable(reviewService.saveReview(reviewVO)));

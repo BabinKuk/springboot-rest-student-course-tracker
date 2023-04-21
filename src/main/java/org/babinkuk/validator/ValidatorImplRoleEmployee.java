@@ -27,7 +27,7 @@ public class ValidatorImplRoleEmployee implements Validator {
 private final Logger log = LogManager.getLogger(getClass());
 	
 	@Autowired
-	private InstructorValidatorHelper validatorHelper;
+	private ValidatorHelper validatorHelper;
 	
 	@Autowired
 	private MessageSource messageSource;
