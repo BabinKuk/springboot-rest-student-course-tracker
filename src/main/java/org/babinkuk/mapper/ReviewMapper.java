@@ -36,20 +36,6 @@ public interface ReviewMapper {
 	public ReviewMapper reviewMapperInstance = Mappers.getMapper(ReviewMapper.class);
 	public CourseMapper courseMapperInstance = Mappers.getMapper(CourseMapper.class);
 	
-	@BeforeMapping
-	default void beforeMap(@MappingTarget Review entity, ReviewVO reviewVO, CourseVO courseVO) {
-		System.out.println("beforeMap");
-		
-//		// course
-//		if (courseVO != null) {
-//			System.out.println("set Course");
-//			Course course = courseMapperInstance.toEntity(courseVO);
-//////			instructorDetail.setInstructor(entity);	
-//			entity.setCourse(course);
-//			System.out.println(entity.toString());
-//		}
-	}
-		
 	// for insert
 	@Named("toEntity")
 	Review toEntity(ReviewVO reviewVO);

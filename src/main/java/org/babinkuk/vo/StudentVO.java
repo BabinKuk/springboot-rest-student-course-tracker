@@ -1,6 +1,9 @@
 package org.babinkuk.vo;
 
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
+
+import org.babinkuk.entity.Student;
 
 /**
  * instance of this class is used to represent student data
@@ -18,7 +21,7 @@ public class StudentVO extends BaseVO {
 	
 	private String emailAddress;
 	
-	private List<CourseVO> coursesVO;
+	private Set<CourseVO> coursesVO = new HashSet<CourseVO>();
 	
 	public StudentVO() {
 		// TODO Auto-generated constructor stub
@@ -62,17 +65,17 @@ public class StudentVO extends BaseVO {
 		this.emailAddress = emailAddress;
 	}
 
-	public List<CourseVO> getCoursesVO() {
+	public Set<CourseVO> getCoursesVO() {
 		return coursesVO;
 	}
 
-	public void setCoursesVO(List<CourseVO> coursesVO) {
+	public void setCoursesVO(Set<CourseVO> coursesVO) {
 		this.coursesVO = coursesVO;
 	}
 	
 	@Override
 	public String toString() {
-		return "StudentVO [firstName=" + firstName + ", lastName=" + lastName + ", emailAddress=" + emailAddress + "]";
+		return "StudentVO [firstName=" + firstName + ", lastName=" + lastName + ", emailAddress=" + emailAddress + ", courses=" + coursesVO + "]";
 	}
 
 }

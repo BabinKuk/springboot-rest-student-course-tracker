@@ -41,9 +41,9 @@ public interface InstructorMapper {
 	public InstructorMapper instructorMapperInstance = Mappers.getMapper(InstructorMapper.class);
 	public InstructorDetailMapper instructorDetailMapperInstance = Mappers.getMapper(InstructorDetailMapper.class);
 	
-	@BeforeMapping
-	default void beforeMapInstructorDetail(@MappingTarget Instructor entity, InstructorVO instructorVO) {
-		System.out.println("beforeMapInstructorDetail");
+//	@BeforeMapping
+//	default void beforeMapInstructorDetail(@MappingTarget Instructor entity, InstructorVO instructorVO) {
+//		System.out.println("beforeMapInstructorDetail");
 //		if (StringUtils.isNotBlank(instructorVO.getYoutubeChannel()) && StringUtils.isNotBlank(instructorVO.getHobby())) {
 //			InstructorDetail instructorDetail = instructorDetailMapperInstance.toEntity(instructorVO);
 //			instructorDetail.setInstructor(entity);
@@ -51,7 +51,7 @@ public interface InstructorMapper {
 //		}
 //		System.out.println(instructorDetail.toString());
 //		System.out.println(entity.toString());
-	}
+//	}
 	
 //	@Named("setDetails")
 //	default InstructorDetail setDetails(InstructorVO instructorVO) {
@@ -67,15 +67,15 @@ public interface InstructorMapper {
 	
 	@AfterMapping
 	default void afterMapInstructor(@MappingTarget Instructor entity, InstructorVO instructorVO) {
-		System.out.println("afterMapInstructor");
+//		System.out.println("toEntity afterMapInstructor");
 		//System.out.println(instructorDetail.toString());
-		 System.out.println(entity.toString());
+//		System.out.println(instructorVO.toString());
 
 		// instructor details
 		InstructorDetail instructorDetail = instructorDetailMapperInstance.toEntity(instructorVO, entity);
 		instructorDetail.setInstructor(entity);
 		entity.setInstructorDetail(instructorDetail);
-		System.out.println(entity.toString());
+//		System.out.println(entity.toString());
 	}
 	
 	// for insert
@@ -93,9 +93,13 @@ public interface InstructorMapper {
 	@Mapping(source = "email", target = "emailAddress")
 	InstructorVO toVO(Instructor instructor);
 	
+	@IterableMapping(qualifiedByName = "toVO")
+	@BeanMapping(ignoreByDefault = true)
+	Iterable<InstructorVO> toVO(Iterable<Instructor> instructorLst);
+	
 	@AfterMapping
 	default void setDetails(@MappingTarget InstructorVO instructorVO, Instructor entity) {
-		System.out.println("toVO aftermapping setDetails");
+//		System.out.println("toVO aftermapping setDetails");
 		// instructor details
 		if (entity.getInstructorDetail() != null) {
 			System.out.println(entity.getInstructorDetail());
@@ -103,9 +107,5 @@ public interface InstructorMapper {
 			instructorVO.setHobby(entity.getInstructorDetail().getHobby());
 		}
 	}
-	
-	@IterableMapping(qualifiedByName = "toVO")
-	@BeanMapping(ignoreByDefault = true)
-	Iterable<InstructorVO> toVO(Iterable<Instructor> instructorLst);
 	
 }

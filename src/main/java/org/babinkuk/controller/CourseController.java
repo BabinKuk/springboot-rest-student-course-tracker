@@ -1,12 +1,14 @@
 package org.babinkuk.controller;
 
 import org.babinkuk.service.CourseService;
+import org.babinkuk.service.InstructorService;
 import org.babinkuk.service.StudentService;
 import org.babinkuk.validator.ActionType;
 import org.babinkuk.validator.ValidatorFactory;
 import org.babinkuk.validator.ValidatorRole;
 import org.babinkuk.validator.ValidatorType;
 import org.babinkuk.vo.CourseVO;
+import org.babinkuk.vo.InstructorVO;
 import org.babinkuk.vo.ReviewVO;
 import org.babinkuk.vo.StudentVO;
 import org.apache.logging.log4j.LogManager;
@@ -48,6 +50,8 @@ public class CourseController {
 	
 	private StudentService studentService;
 	
+	private InstructorService instructorService;
+	
 	@Autowired
 	private ValidatorFactory validatorFactory;
 	
@@ -59,9 +63,10 @@ public class CourseController {
 	}
 
 	@Autowired
-	public CourseController(CourseService courseService, StudentService studentService) {
+	public CourseController(CourseService courseService, StudentService studentService, InstructorService instructorService) {
 		this.courseService = courseService;
 		this.studentService = studentService;
+		this.instructorService = instructorService;
 	}
 
 	/**
@@ -113,18 +118,27 @@ public class CourseController {
 	}
 	
 	/**
-	 * expose PUT "/courses"
+	 * expose PUT "/courses/{courseId}"
+	 * update course title
 	 * 
 	 * @param courseVO
 	 * @return
 	 * @throws JsonProcessingException
 	 */
-	@PutMapping("")
+	@PutMapping("/{courseId}")
 	public ResponseEntity<ApiResponse> updateCourse(
-			@RequestBody CourseVO courseVO,
+			//@RequestBody CourseVO courseVO,
+			@PathVariable int courseId,
+			@RequestParam(name="title", required = true) String courseTitle,
 			@RequestParam(name="validationRole", required = false) ValidatorRole validationRole) throws JsonProcessingException {
-		log.info("Called CourseController.updateCourse({})", mapper.writeValueAsString(courseVO));
+		log.info("Called CourseController.updateCourse(id={}) newTitle={}", courseId, courseTitle);
 
+		// first find course
+		CourseVO courseVO = courseService.findById(courseId);
+		
+		// next set new title
+		courseVO.setTitle(courseTitle);
+		
 //		courseVO = (CourseVO) validatorFactory.getValidator(validationRole).validate(courseVO, false, ActionType.UPDATE, ValidatorType.STUDENT);
 
 		return ResponseEntity.of(Optional.ofNullable(courseService.saveCourse(courseVO)));
@@ -148,7 +162,7 @@ public class CourseController {
 	}
 	
 	/**
-	 * enroll student to the course
+	 * enroll student on a course
 	 * expose PUT "/{courseId}/student/{studentId}"
 	 * 
 	 * @param courseId
@@ -168,7 +182,36 @@ public class CourseController {
 		// next find student
 		StudentVO studentVO = studentService.findById(studentId);
 		
+		System.out.println("in controller " + studentVO.toString());
 		courseVO.addStudentVO(studentVO);
+		
+//		reviewVO = (ReviewVO) validatorFactory.getValidator(validationRole).validate(reviewVO, true, ActionType.CREATE, ValidatorType.STUDENT);
+		
+		return ResponseEntity.of(Optional.ofNullable(courseService.saveCourse(courseVO)));
+	}
+
+	/**
+	 * enroll instructor on a course
+	 * expose PUT "/{courseId}/instructor/{instructorId}"
+	 * 
+	 * @param courseId
+	 *@param studentId
+	 * @return
+	 */
+	@PutMapping("/{courseId}/instructor/{instructorId}")
+	public ResponseEntity<ApiResponse> enrollInstructor(
+			@PathVariable int courseId,
+			@PathVariable int instructorId,
+			@RequestParam(name="validationRole", required = false) ValidatorRole validationRole) throws JsonProcessingException {
+		log.info("Called ReviewController.enrollInstructor(id={}) for courseId={}", instructorId, courseId);
+		
+		// first find course
+		CourseVO courseVO = courseService.findById(courseId);
+		
+		// next find instructor
+		InstructorVO instructorVO = instructorService.findById(instructorId);
+		
+		courseVO.setInstructorVO(instructorVO);
 		
 //		reviewVO = (ReviewVO) validatorFactory.getValidator(validationRole).validate(reviewVO, true, ActionType.CREATE, ValidatorType.STUDENT);
 		

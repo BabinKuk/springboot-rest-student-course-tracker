@@ -11,8 +11,6 @@ public interface CourseService {
 	
 	public CourseVO findById(int id) throws ObjectNotFoundException;
 	
-	//public CourseVO findByEmail(String email) throws ObjectNotFoundException;
-	
 	public ApiResponse saveCourse(CourseVO courseVO) throws ObjectException;
 	
 	public ApiResponse deleteCourse(int id) throws ObjectNotFoundException;

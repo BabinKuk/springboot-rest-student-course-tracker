@@ -1,6 +1,8 @@
 package org.babinkuk.entity;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -33,17 +35,17 @@ public class Student {
 	private String email;
 	
 	@ManyToMany(
-			fetch = FetchType.LAZY,
+			fetch = FetchType.LAZY/*,
 			cascade = {
 				CascadeType.PERSIST,
 				CascadeType.DETACH,
 				CascadeType.MERGE,
-				CascadeType.REFRESH})
+				CascadeType.REFRESH}*/)
 	@JoinTable(
 			name = "course_student",
 			joinColumns = @JoinColumn(name = "student_id"),
 			inverseJoinColumns = @JoinColumn(name = "course_id")) // Course is other side/class
-	private List<Course> courses;
+	private Set<Course> courses = new HashSet<Course>();
 	
 	public Student() {
 		// TODO Auto-generated constructor stub
@@ -87,17 +89,21 @@ public class Student {
 		this.email = email;
 	}
 	
-	public List<Course> getCourses() {
+	public Set<Course> getCourses() {
 		return courses;
 	}
 
-	public void setCourses(List<Course> courses) {
+	public void setCourses(Set<Course> courses) {
 		this.courses = courses;
+	}
+	
+	public void addCourse(Course course) {
+		courses.add(course);
 	}
 
 	@Override
 	public String toString() {
-		return "Student [id=" + id + ", firstName=" + firstName + ", lastName=" + lastName + ", email=" + email + "]";
+		return "Student [id=" + id + ", firstName=" + firstName + ", lastName=" + lastName + ", email=" + email/* + ", courses=" + getCourses()*/ + "]";
 	}
 
 }

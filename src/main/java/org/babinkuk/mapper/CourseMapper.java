@@ -1,9 +1,11 @@
 package org.babinkuk.mapper;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Objects;
+import java.util.Set;
 
 import org.apache.commons.lang.StringUtils;
 import org.babinkuk.entity.Course;
@@ -47,55 +49,36 @@ public interface CourseMapper {
 	public StudentMapper studentMapperInstance = Mappers.getMapper(StudentMapper.class);
 	public InstructorMapper instructorMapperInstance = Mappers.getMapper(InstructorMapper.class);
 	
-//	@BeforeMapping
-//	default void beforeMapReviews(@MappingTarget Course entity, CourseVO courseVO) {
-//		System.out.println("beforeMapReviews");
-//		// reviews
-//		if (!CollectionUtils.isEmpty(courseVO.getReviewsVO())) {
-//			List<Review> list = new ArrayList<Review>();
-//			for (ReviewVO reviewVO : courseVO.getReviewsVO()) {
-//				Review review = reviewMapperInstance.toEntity(reviewVO);
-//				list.add(review);
-//			}
-//			entity.setReviews(list);
-//		}
-//	}
-//	
-//	@BeforeMapping
-//	default void beforeMapStudents(@MappingTarget Course entity, CourseVO courseVO) {
-//		System.out.println("beforeMapStudents");
-//		// students
-//		if (!CollectionUtils.isEmpty(courseVO.getStudentsVO())) {
-//			List<Student> list = new ArrayList<Student>();
-//			for (StudentVO studentVO : courseVO.getStudentsVO()) {
-//				Student student = studentMapperInstance.toEntity(studentVO);
-//				list.add(student);
-//			}
-//			entity.setStudents(list);
-//		}
-//	}
-	
 	@BeforeMapping
 	default void beforeMap(@MappingTarget Course entity, CourseVO courseVO) {
+//		System.out.println("beforeMap(@MappingTarget Course entity, CourseVO courseVO)");
+//		System.out.println(entity.toString());
+//		System.out.println(courseVO.toString());
+//		System.out.println("\n");
 		System.out.println("beforeMapInstructor");
 		// instructor
 		if (courseVO.getInstructorVO() != null) {
-			System.out.println("set Instructor");
-			Instructor instructor = instructorMapperInstance.toEntity(courseVO.getInstructorVO());
-//			instructorDetail.setInstructor(entity);	
-			entity.setInstructor(instructor);
-			System.out.println(entity.toString());
+//			System.out.println("set Instructor");
+			Instructor instructor = instructorMapperInstance.toEntity(courseVO.getInstructorVO(), entity.getInstructor());
+			//Instructor instructor = new Instructor();
+			//instructor.setId(courseVO.getInstructorVO().getId());	
+//			entity.setInstructor(instructor);
 		}
+//		System.out.println(entity.toString());
 		
 		System.out.println("beforeMapStudents");
 		// students
 		if (!CollectionUtils.isEmpty(courseVO.getStudentsVO())) {
-			List<Student> studentlist = new ArrayList<Student>();
+			Set<Student> students = new HashSet<Student>();
 			for (StudentVO studentVO : courseVO.getStudentsVO()) {
-				Student student = studentMapperInstance.toEntity(studentVO);
-				studentlist.add(student);
+				Student student = new Student();
+				student.setId(studentVO.getId());
+				student.addCourse(entity);
+				students.add(student);
 			}
-			entity.setStudents(studentlist);
+			entity.setStudents(students);
+//			System.out.println(entity.getStudents());
+//			System.out.println(entity.toString());
 		}
 		
 		System.out.println("beforeMapReviews");
@@ -107,31 +90,36 @@ public interface CourseMapper {
 				reviewList.add(review);
 			}
 			entity.setReviews(reviewList);
+//			System.out.println(entity.toString());
 		}
+		System.out.println(entity.toString());
 	}
 	
 	@AfterMapping
 	default void beforeMap(@MappingTarget CourseVO courseVO, Course entity) {
 		System.out.println("@AfterMapping");
-		System.out.println("beforeMapInstructor");
+//		System.out.println("mapInstructor");
 		// instructor
 		if (entity.getInstructor() != null) {
-			System.out.println("set Instructor");
+//			System.out.println("set Instructor");
 			InstructorVO instructorVO = instructorMapperInstance.toVO(entity.getInstructor());
 //			instructorDetail.setInstructor(entity);	
 			courseVO.setInstructorVO(instructorVO);
-			System.out.println(courseVO.toString());
+//			System.out.println(courseVO.toString());
 		}
 		
-		System.out.println("beforeMapStudents");
+		System.out.println("mapStudents");
 		// students
 		if (!CollectionUtils.isEmpty(entity.getStudents())) {
-			List<StudentVO> studentlist = new ArrayList<StudentVO>();
+//			System.out.println(entity.getStudents());
+			Set<StudentVO> students = new HashSet<StudentVO>();
 			for (Student student : entity.getStudents()) {
+//				System.out.println(student.toString());
 				StudentVO studentVO = studentMapperInstance.toVO(student);
-				studentlist.add(studentVO);
+				students.add(studentVO);
 			}
-			courseVO.setStudentsVO(studentlist);
+//			System.out.println(students);
+			courseVO.setStudentsVO(students);
 		}
 		
 //		System.out.println("beforeMapReviews");

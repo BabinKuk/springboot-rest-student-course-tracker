@@ -17,7 +17,6 @@ import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 @Service
@@ -92,7 +91,7 @@ public class CourseServiceImpl implements CourseService {
 		
 		if (entity.isPresent()) {
 			course = entity.get();
-			log.info("entity ({})", entity);
+			log.info("courseVO ({})", courseVO);
 			log.info("mapping for update");
 			
 			// mapping

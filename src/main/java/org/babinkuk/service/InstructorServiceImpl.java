@@ -15,10 +15,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.http.HttpStatus;
-import org.springframework.jms.core.JmsTemplate;
 import org.springframework.stereotype.Service;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 @Service
@@ -26,8 +24,6 @@ public class InstructorServiceImpl implements InstructorService {
 	
 	private final Logger log = LogManager.getLogger(getClass());
 	
-	private static String MESSAGE_SUCCESS = "message_success";
-	private static String MESSAGE_FAILED = "message_failure";
 	private static String INSTRUCTOR_SAVE_SUCCESS = "instructor_save_success";
 	private static String INSTRUCTOR_DELETE_SUCCESS = "instructor_delete_success";
 	
@@ -120,7 +116,7 @@ public class InstructorServiceImpl implements InstructorService {
 		
 		if (entity.isPresent()) {
 			instructor = entity.get();
-			log.info("entity ({})", entity);
+			log.info("instructor ({})", entity);
 			log.info("mapping for update");
 			
 			// mapping

@@ -32,10 +32,21 @@ public interface InstructorDetailMapper {
 	public InstructorDetailMapper instructorDetailMapperInstance = Mappers.getMapper(InstructorDetailMapper.class);
 	
 	@Named("toEntity")
-	@Mapping(target = "id", source = "instructor.instructorDetail.id"/*,
-			ignore = "java((java(instructor.getInstructorDetail().getId())))"*/)
+	@Mapping(source = "instructor.instructorDetail.id", target = "id")
 	@Mapping(source = "instructorVO.youtubeChannel", target = "youtubeChannel")
 	@Mapping(source = "instructorVO.hobby", target = "hobby")
-	InstructorDetail toEntity(InstructorVO instructorVO, Instructor instructor);	
+	InstructorDetail toEntity(InstructorVO instructorVO, Instructor instructor);
+	
+	@Named("toEntity")
+	@Mapping(source = "instructorVO.id", target = "id")
+	@Mapping(source = "instructorVO.youtubeChannel", target = "youtubeChannel")
+	@Mapping(source = "instructorVO.hobby", target = "hobby")
+	InstructorDetail toEntity(InstructorVO instructorVO);
+	
+//	@Named("toVO")
+//	@Mapping(source = "id", target = "instructor.instructorDetail.id")
+//	@Mapping(surce = "youtubeChannel", target = "instructorVO.youtubeChannel")
+//	@Mapping(source = "hobby", target = "instructorVO.hobby")
+//	InstructorVO toVO(InstructorDetail entity);
 	
 }

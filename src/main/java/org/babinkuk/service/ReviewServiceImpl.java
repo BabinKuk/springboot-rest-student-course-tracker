@@ -69,7 +69,7 @@ public class ReviewServiceImpl implements ReviewService {
 		
 		if (result.isPresent()) {
 			review = result.get();
-			log.info("inst ({})", review);
+			log.info("review ({})", review);
 			
 			// mapping
 			reviewVO = reviewMapper.toVO(review);
@@ -98,7 +98,7 @@ public class ReviewServiceImpl implements ReviewService {
 		
 		if (entity.isPresent()) {
 			review = entity.get();
-			log.info("entity ({})", entity);
+			log.info("review ({})", entity);
 			log.info("mapping for update");
 			
 			// mapping

@@ -66,9 +66,10 @@ public class StudentServiceImpl implements StudentService {
 		if (result.isPresent()) {
 			student = result.get();
 			log.info("student ({})", student);
+			log.info("student.getCourses() ({})", student.getCourses().size());
 			
 			// mapping
-			studentVO = studentMapper.toVO(student);
+			studentVO = studentMapper.toVODetails(student);
 			log.info("studentVO ({})", studentVO);
 			
 			return studentVO;
@@ -119,7 +120,7 @@ public class StudentServiceImpl implements StudentService {
 		
 		if (entity.isPresent()) {
 			student = entity.get();
-			log.info("entity ({})", entity);
+			log.info("student ({})", entity);
 			log.info("mapping for update");
 			
 			// mapping

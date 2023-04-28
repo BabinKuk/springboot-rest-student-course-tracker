@@ -1,7 +1,9 @@
 package org.babinkuk.entity;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -48,17 +50,17 @@ public class Course {
 	private List<Review> reviews;
 	
 	@ManyToMany(
-			fetch = FetchType.LAZY,
-			cascade = {
+			fetch = FetchType.LAZY
+			/*cascade = {
 				CascadeType.PERSIST,
 				CascadeType.DETACH,
 				CascadeType.MERGE,
-				CascadeType.REFRESH})
+				CascadeType.REFRESH}*/)
 	@JoinTable(
 			name = "course_student",
 			joinColumns = @JoinColumn(name = "course_id"),
 			inverseJoinColumns = @JoinColumn(name = "student_id")) // Student is other side/class
-	private List<Student> students;
+	private Set<Student> students = new HashSet<Student>();
 	
 	public Course() {
 		// TODO Auto-generated constructor stub
@@ -100,11 +102,11 @@ public class Course {
 		this.reviews = reviews;
 	}
 	
-	public List<Student> getStudents() {
+	public Set<Student> getStudents() {
 		return students;
 	}
 
-	public void setStudents(List<Student> students) {
+	public void setStudents(Set<Student> students) {
 		this.students = students;
 	}
 
@@ -118,10 +120,6 @@ public class Course {
 	}
 	
 	public void addStudent(Student student) {
-		if (students == null) {
-			students = new ArrayList<Student>();
-		}
-		
 		students.add(student);
 	}
 	

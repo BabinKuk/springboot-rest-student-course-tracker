@@ -1,7 +1,9 @@
 package org.babinkuk.vo;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import org.babinkuk.vo.diff.DiffField;
 import org.babinkuk.vo.diff.Diffable;
@@ -21,7 +23,7 @@ public class CourseVO {
 	private List<ReviewVO> reviewsVO = new ArrayList<ReviewVO>();
 	
 	@DiffField
-	private List<StudentVO> studentsVO;
+	private Set<StudentVO> studentsVO = new HashSet<StudentVO>();
 	
 	public CourseVO() {
 		// TODO Auto-generated constructor stub
@@ -63,15 +65,15 @@ public class CourseVO {
 		this.reviewsVO = reviewsVO;
 	}
 	
-	public List<StudentVO> getStudentsVO() {
+	public Set<StudentVO> getStudentsVO() {
 		return studentsVO;
 	}
 
-	public void setStudentsVO(List<StudentVO> students) {
+	public void setStudentsVO(Set<StudentVO> students) {
 		this.studentsVO = students;
 	}
 
-	// convenienca methods
+	// convenience methods
 	public void addReviewVO(ReviewVO review) {
 		if (reviewsVO == null) {
 			reviewsVO = new ArrayList<ReviewVO>();
@@ -82,7 +84,7 @@ public class CourseVO {
 	
 	public void addStudentVO(StudentVO student) {
 		if (studentsVO == null) {
-			studentsVO = new ArrayList<StudentVO>();
+			studentsVO = new HashSet<StudentVO>();
 		}
 		
 		studentsVO.add(student);
