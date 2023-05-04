@@ -83,15 +83,26 @@ public class CourseVO {
 	}
 	
 	public void addStudentVO(StudentVO student) {
-		if (studentsVO == null) {
-			studentsVO = new HashSet<StudentVO>();
-		}
-		
 		studentsVO.add(student);
+	}
+	
+	public void removeStudentVO(StudentVO student) {
+		System.out.println("studentsVO " + studentsVO);
+		
+		Set<StudentVO> tempStudentsVO = getStudentsVO();
+		for (StudentVO vo : tempStudentsVO) {
+			System.out.println(vo);
+			if (vo.getId() == student.getId()) {
+				System.out.println("remove " + vo);
+				tempStudentsVO.remove(vo);
+			}
+		}
+
+		setStudentsVO(tempStudentsVO);
 	}
 	
 	@Override
 	public String toString() {
-		return "CourseVO [id=" + id + ", title=" + title + ", instructorVO=" + instructorVO + "]";
+		return "CourseVO [id=" + id + ", title=" + title + ", instructorVO=" + instructorVO + ", studentsVO=" + studentsVO + "]";
 	}	
 }

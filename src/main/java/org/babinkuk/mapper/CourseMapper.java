@@ -59,10 +59,10 @@ public interface CourseMapper {
 		// instructor
 		if (courseVO.getInstructorVO() != null) {
 //			System.out.println("set Instructor");
-			Instructor instructor = instructorMapperInstance.toEntity(courseVO.getInstructorVO(), entity.getInstructor());
-			//Instructor instructor = new Instructor();
-			//instructor.setId(courseVO.getInstructorVO().getId());	
-//			entity.setInstructor(instructor);
+			Instructor instructor = new Instructor();
+			instructor.setId(courseVO.getInstructorVO().getId());	
+			entity.setInstructor(instructor);
+			instructor = instructorMapperInstance.toEntity(courseVO.getInstructorVO(), entity.getInstructor());
 		}
 //		System.out.println(entity.toString());
 		
