@@ -3,16 +3,18 @@ package org.babinkuk.validator;
 import java.util.Arrays;
 import java.util.regex.Pattern;
 
-import javax.persistence.criteria.CriteriaBuilder.Case;
-
 import org.apache.commons.lang.StringUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.babinkuk.exception.ObjectNotFoundException;
+import org.babinkuk.service.CourseService;
 import org.babinkuk.service.InstructorService;
+import org.babinkuk.service.ReviewService;
 import org.babinkuk.service.StudentService;
 import org.babinkuk.vo.BaseVO;
+import org.babinkuk.vo.CourseVO;
 import org.babinkuk.vo.InstructorVO;
+import org.babinkuk.vo.ReviewVO;
 import org.babinkuk.vo.StudentVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -27,6 +29,28 @@ public class BusinessValidator {
 	
 	@Autowired
 	private StudentService studentService;
+	
+	@Autowired
+	private CourseService courseService;
+	
+	@Autowired
+	private ReviewService reviewService;
+	
+	/**
+	 * @param title
+	 * @throws ValidationException
+	 */
+	public void validateTitle(String title) throws ValidatorException {
+		validateStringIsBlank(title, ValidatorCodes.ERROR_CODE_TITLE_EMPTY);
+	}
+	
+	/**
+	 * @param review
+	 * @throws ValidationException
+	 */
+	public void validateReview(String review) throws ValidatorException {
+		validateStringIsBlank(review, ValidatorCodes.ERROR_CODE_REVIEW_EMPTY);
+	}
 	
 	/**
 	 * @param name
@@ -126,12 +150,12 @@ public class BusinessValidator {
 	 * @return
 	 * @throws ValidatorException
 	 */
-	public void objectExists(BaseVO vo) throws ValidatorException {
+	public void objectExists(Object vo, ValidatorType validatorType) throws ValidatorException {
 		
-		BaseVO result;
+		Object result;
 		if (vo instanceof InstructorVO) {
 			log.info("validate instructor on update");
-			result = instructorService.findById(vo.getId());
+			result = objectExists(((BaseVO) vo).getId(), validatorType);
 			
 			if (result != null) {
 				// id found
@@ -143,7 +167,7 @@ public class BusinessValidator {
 			}
 		} else if (vo instanceof StudentVO) {
 			log.info("validate student on update");
-			result = studentService.findById(vo.getId());
+			result = objectExists(((BaseVO) vo).getId(), validatorType);
 			
 			if (result != null) {
 				// id found
@@ -152,6 +176,30 @@ public class BusinessValidator {
 				// id not found
 				log.error("result.notPresent");
 				throw new ValidatorException(ValidatorCodes.ERROR_CODE_STUDENT_INVALID);
+			}
+		} else if (vo instanceof CourseVO) {
+			log.info("validate course on update");
+			result = objectExists(((CourseVO) vo).getId(), validatorType);
+			
+			if (result != null) {
+				// id found
+				log.info("course id found");
+			} else {
+				// id not found
+				log.error("result.notPresent");
+				throw new ValidatorException(ValidatorCodes.ERROR_CODE_COURSE_INVALID);
+			}
+		} else if (vo instanceof ReviewVO) {
+			log.info("validate review on update");
+			result = objectExists(((ReviewVO) vo).getId(), validatorType);
+			
+			if (result != null) {
+				// id found
+				log.info("review id found");
+			} else {
+				// id not found
+				log.error("result.notPresent");
+				throw new ValidatorException(ValidatorCodes.ERROR_CODE_REVIEW_INVALID);
 			}
 		}
 	}
@@ -173,9 +221,9 @@ public class BusinessValidator {
 	 * @return
 	 * @throws ObjectNotFoundException
 	 */
-	public BaseVO objectExists(int id, ValidatorType validatorType) throws ObjectNotFoundException {
+	public Object objectExists(int id, ValidatorType validatorType) throws ObjectNotFoundException {
 		
-		BaseVO dbVO = null;
+		Object dbVO = null;
 		
 		switch (validatorType) {
 		case STUDENT:
@@ -183,6 +231,12 @@ public class BusinessValidator {
 			break;
 		case INSTRUCTOR:
 			dbVO = instructorService.findById(id);
+			break;
+		case COURSE:
+			dbVO = courseService.findById(id);
+			break;
+		case REVIEW:
+			dbVO = reviewService.findById(id);
 			break;
 		default:
 			break;

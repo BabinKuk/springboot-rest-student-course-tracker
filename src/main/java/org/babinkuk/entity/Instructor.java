@@ -1,7 +1,9 @@
 package org.babinkuk.entity;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -43,13 +45,13 @@ public class Instructor {
 	// refers to instructor field in courses class
 	@OneToMany(
 			fetch = FetchType.LAZY,
-			mappedBy = "instructor",
-			cascade = {
+			mappedBy = "instructor"
+			/*cascade = {
 					CascadeType.PERSIST,
 					CascadeType.DETACH,
 					CascadeType.MERGE,
-					CascadeType.REFRESH})
-	private List<Course> courses;
+					CascadeType.REFRESH}*/)
+	private Set<Course> courses = new HashSet<Course>();
 	
 	public Instructor() {
 		// TODO Auto-generated constructor stub
@@ -105,20 +107,16 @@ public class Instructor {
 		this.instructorDetail = instructorDetail;
 	}
 
-	public List<Course> getCourses() {
+	public Set<Course> getCourses() {
 		return courses;
 	}
 
-	public void setCourses(List<Course> courses) {
+	public void setCourses(Set<Course> courses) {
 		this.courses = courses;
 	}
 	
 	// convenience methods for bi-directional relationships
 	public void add(Course course) {
-		if (courses == null) {
-			courses = new ArrayList<Course>();
-		}
-		
 		courses.add(course);
 		
 		course.setInstructor(this);

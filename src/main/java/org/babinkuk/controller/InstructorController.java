@@ -101,7 +101,7 @@ public class InstructorController {
 		// this is to force a save of new item ... instead of update
 		instructorVO.setId(0);
 		
-		instructorVO = (InstructorVO) validatorFactory.getValidator(validationRole).validate(instructorVO, true, ActionType.CREATE, ValidatorType.INSTRUCTOR);
+		validatorFactory.getValidator(validationRole).validate(instructorVO, ActionType.CREATE, ValidatorType.INSTRUCTOR);
 		
 		return ResponseEntity.of(Optional.ofNullable(instructorService.saveInstructor(instructorVO)));
 	}
@@ -119,7 +119,7 @@ public class InstructorController {
 			@RequestParam(name="validationRole", required = false) ValidatorRole validationRole) throws JsonProcessingException {
 		log.info("Called InstructorController.updateInstructor({})", mapper.writeValueAsString(instructorVO));
 
-		instructorVO = (InstructorVO) validatorFactory.getValidator(validationRole).validate(instructorVO, false, ActionType.UPDATE, ValidatorType.INSTRUCTOR);
+		validatorFactory.getValidator(validationRole).validate(instructorVO, ActionType.UPDATE, ValidatorType.INSTRUCTOR);
 
 		return ResponseEntity.of(Optional.ofNullable(instructorService.saveInstructor(instructorVO)));
 	}
@@ -136,7 +136,7 @@ public class InstructorController {
 			@RequestParam(name="validationRole", required = false) ValidatorRole validationRole) {
 		log.info("Called InstructorController.deleteInstructor(InstructorId={}, validationRole={})", instructorId, validationRole);
 		
-		InstructorVO instructorVO = (InstructorVO) validatorFactory.getValidator(validationRole).validate(instructorId, ActionType.DELETE, ValidatorType.INSTRUCTOR);
+		validatorFactory.getValidator(validationRole).validate(instructorId, ActionType.DELETE, ValidatorType.INSTRUCTOR);
 		
 		return ResponseEntity.of(Optional.ofNullable(instructorService.deleteInstructor(instructorId)));
 	}

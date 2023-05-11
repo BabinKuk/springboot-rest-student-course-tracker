@@ -102,7 +102,7 @@ public class StudentController {
 		// this is to force a save of new item ... instead of update
 		studentVO.setId(0);
 		
-		studentVO = (StudentVO) validatorFactory.getValidator(validationRole).validate(studentVO, true, ActionType.CREATE, ValidatorType.STUDENT);
+		validatorFactory.getValidator(validationRole).validate(studentVO, ActionType.CREATE, ValidatorType.STUDENT);
 		
 		return ResponseEntity.of(Optional.ofNullable(studentService.saveStudent(studentVO)));
 	}
@@ -120,7 +120,7 @@ public class StudentController {
 			@RequestParam(name="validationRole", required = false) ValidatorRole validationRole) throws JsonProcessingException {
 		log.info("Called StudentController.updateStudent({})", mapper.writeValueAsString(studentVO));
 
-		studentVO = (StudentVO) validatorFactory.getValidator(validationRole).validate(studentVO, false, ActionType.UPDATE, ValidatorType.STUDENT);
+		validatorFactory.getValidator(validationRole).validate(studentVO, ActionType.UPDATE, ValidatorType.STUDENT);
 
 		return ResponseEntity.of(Optional.ofNullable(studentService.saveStudent(studentVO)));
 	}
@@ -137,7 +137,7 @@ public class StudentController {
 			@RequestParam(name="validationRole", required = false) ValidatorRole validationRole) {
 		log.info("Called StudentController.deleteStudent(studentId={}, validationType={})", studentId, validationRole);
 		
-		StudentVO studentVO = (StudentVO) validatorFactory.getValidator(validationRole).validate(studentId, ActionType.DELETE, ValidatorType.STUDENT);
+		validatorFactory.getValidator(validationRole).validate(studentId, ActionType.DELETE, ValidatorType.STUDENT);
 		
 		return ResponseEntity.of(Optional.ofNullable(studentService.deleteStudent(studentId)));
 	}

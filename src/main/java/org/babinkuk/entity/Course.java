@@ -34,11 +34,11 @@ public class Course {
 	// there can be multiple courses associated with one instructor
 	// course.instructor_id refers to instructor.id
 	// do not apply cascade delete/remove
-	@ManyToOne(cascade = {
+	@ManyToOne(/*cascade = {
 			CascadeType.PERSIST,
 			CascadeType.DETACH,
 			CascadeType.MERGE,
-			CascadeType.REFRESH})
+			CascadeType.REFRESH}*/)
 	@JoinColumn(name = "instructor_id")
 	private Instructor instructor;
 	

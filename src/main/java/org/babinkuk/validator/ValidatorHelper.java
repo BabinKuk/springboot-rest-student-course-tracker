@@ -7,6 +7,8 @@ import org.apache.logging.log4j.Logger;
 import org.babinkuk.exception.ObjectNotFoundException;
 import org.babinkuk.exception.ObjectValidationException;
 import org.babinkuk.vo.BaseVO;
+import org.babinkuk.vo.CourseVO;
+import org.babinkuk.vo.ReviewVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -18,7 +20,7 @@ public class ValidatorHelper {
 	@Autowired
 	private BusinessValidator validator;
 	
-	public List<ValidatorException> validate(BaseVO vo, boolean isInsert, ValidatorType validatorType) throws ObjectValidationException {
+	public List<ValidatorException> validate(BaseVO vo, ActionType action, ValidatorType validatorType) throws ObjectValidationException {
 		List<ValidatorException> exceptions = new LinkedList<ValidatorException>();
 		
 		try {
@@ -39,9 +41,9 @@ public class ValidatorHelper {
 			exceptions.add(e);
 		}
 		
-		if (!isInsert) {
+		if (action != ActionType.CREATE) {
 			try {
-				validator.objectExists(vo);
+				validator.objectExists(vo, validatorType);
 			} catch (ValidatorException e) {
 				exceptions.add(e);
 			}
@@ -50,16 +52,56 @@ public class ValidatorHelper {
 		return exceptions;
 	}
 	
-	public BaseVO validate(int id, ValidatorType validatorType) throws ObjectNotFoundException {
-		BaseVO vo = null;
+	public List<ValidatorException> validate(CourseVO vo, ActionType action, ValidatorType validatorType) throws ObjectValidationException {
+		List<ValidatorException> exceptions = new LinkedList<ValidatorException>();
 		
 		try {
-			vo = validator.objectExists(id, validatorType);
+			validator.validateTitle(vo.getTitle());
+		} catch (ValidatorException e) {
+			exceptions.add(e);
+		}
+		
+		if (action != ActionType.CREATE) {
+			try {
+				validator.objectExists(vo, validatorType);
+			} catch (ValidatorException e) {
+				exceptions.add(e);
+			}
+		}
+		
+		return exceptions;
+	}
+	
+	public List<ValidatorException> validate(ReviewVO vo, ActionType action, ValidatorType validatorType) throws ObjectValidationException {
+		List<ValidatorException> exceptions = new LinkedList<ValidatorException>();
+		
+		try {
+			validator.validateReview(vo.getComment());
+		} catch (ValidatorException e) {
+			exceptions.add(e);
+		}
+		
+		if (action != ActionType.CREATE) {
+			try {
+				validator.objectExists(vo, validatorType);
+			} catch (ValidatorException e) {
+				exceptions.add(e);
+			}
+		}
+		
+		return exceptions;
+	}
+	
+	public List<ValidatorException> validate(int id, ValidatorType validatorType) throws ObjectNotFoundException {
+		List<ValidatorException> exceptions = new LinkedList<ValidatorException>();
+		
+		try {
+			validator.objectExists(id, validatorType);
 		} catch (ObjectNotFoundException e) {
 			log.error(e.getMessage());
 			throw e;
 		}
 		
-		return vo;
+		return exceptions;
 	}
 }

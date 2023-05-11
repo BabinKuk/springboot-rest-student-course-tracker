@@ -2,7 +2,6 @@ package org.babinkuk.mapper;
 
 import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Objects;
 import java.util.Set;
@@ -10,7 +9,6 @@ import java.util.Set;
 import org.apache.commons.lang.StringUtils;
 import org.babinkuk.entity.Course;
 import org.babinkuk.entity.Instructor;
-import org.babinkuk.entity.InstructorDetail;
 import org.babinkuk.entity.Review;
 import org.babinkuk.entity.Student;
 import org.babinkuk.vo.CourseVO;
@@ -51,18 +49,14 @@ public interface CourseMapper {
 	
 	@BeforeMapping
 	default void beforeMap(@MappingTarget Course entity, CourseVO courseVO) {
-//		System.out.println("beforeMap(@MappingTarget Course entity, CourseVO courseVO)");
 //		System.out.println(entity.toString());
 //		System.out.println(courseVO.toString());
-//		System.out.println("\n");
 		System.out.println("beforeMapInstructor");
 		// instructor
 		if (courseVO.getInstructorVO() != null) {
-//			System.out.println("set Instructor");
-			Instructor instructor = new Instructor();
-			instructor.setId(courseVO.getInstructorVO().getId());	
+			Instructor instructor = instructorMapperInstance.toEntity(courseVO);
+			instructor.add(entity);
 			entity.setInstructor(instructor);
-			instructor = instructorMapperInstance.toEntity(courseVO.getInstructorVO(), entity.getInstructor());
 		}
 //		System.out.println(entity.toString());
 		

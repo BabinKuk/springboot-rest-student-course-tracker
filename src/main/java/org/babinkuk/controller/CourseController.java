@@ -114,7 +114,7 @@ public class CourseController {
 		// this is to force a save of new item ... instead of update
 		courseVO.setId(0);
 		
-//		courseVO = (CourseVO) validatorFactory.getValidator(validationRole).validate(courseVO, true, ActionType.CREATE, ValidatorType.STUDENT);
+		validatorFactory.getValidator(validationRole).validate(courseVO, ActionType.CREATE, ValidatorType.COURSE);
 		
 		return ResponseEntity.of(Optional.ofNullable(courseService.saveCourse(courseVO)));
 	}
@@ -141,7 +141,7 @@ public class CourseController {
 		// next set new title
 		courseVO.setTitle(courseTitle);
 		
-//		courseVO = (CourseVO) validatorFactory.getValidator(validationRole).validate(courseVO, false, ActionType.UPDATE, ValidatorType.STUDENT);
+		validatorFactory.getValidator(validationRole).validate(courseVO, ActionType.UPDATE, ValidatorType.COURSE);
 
 		return ResponseEntity.of(Optional.ofNullable(courseService.saveCourse(courseVO)));
 	}
@@ -156,9 +156,9 @@ public class CourseController {
 	public ResponseEntity<ApiResponse> deleteCourse(
 			@PathVariable int courseId, 
 			@RequestParam(name="validationRole", required = false) ValidatorRole validationRole) {
-		log.info("Called CourseController.deleteCourse(courseId={}, validationType={})", courseId, validationRole);
+		log.info("Called CourseController.deleteCourse(courseId={}, validationRole={})", courseId, validationRole);
 		
-//		CourseVO courseVO = (CourseVO) validatorFactory.getValidator(validationRole).validate(courseId, ActionType.DELETE, ValidatorType.STUDENT);
+		validatorFactory.getValidator(validationRole).validate(courseId, ActionType.DELETE, ValidatorType.COURSE);
 		
 		return ResponseEntity.of(Optional.ofNullable(courseService.deleteCourse(courseId)));
 	}
@@ -184,7 +184,7 @@ public class CourseController {
 		// next find student
 		StudentVO studentVO = studentService.findById(studentId);
 		
-//		reviewVO = (ReviewVO) validatorFactory.getValidator(validationRole).validate(reviewVO, true, ActionType.CREATE, ValidatorType.STUDENT);
+//		validatorFactory.getValidator(validationRole).validate(reviewVO, ActionType.CREATE, ValidatorType.STUDENT);
 		
 		courseVO.addStudentVO(studentVO);
 		
@@ -212,7 +212,7 @@ public class CourseController {
 		// next find student
 		StudentVO studentVO = studentService.findById(studentId);
 		
-//		reviewVO = (ReviewVO) validatorFactory.getValidator(validationRole).validate(reviewVO, true, ActionType.CREATE, ValidatorType.STUDENT);
+//		validatorFactory.getValidator(validationRole).validate(reviewVO, ActionType.CREATE, ValidatorType.STUDENT);
 
 		courseVO.removeStudentVO(studentVO);
 		
@@ -240,7 +240,7 @@ public class CourseController {
 		// next find instructor
 		InstructorVO instructorVO = instructorService.findById(instructorId);
 		
-//		reviewVO = (ReviewVO) validatorFactory.getValidator(validationRole).validate(reviewVO, true, ActionType.CREATE, ValidatorType.STUDENT);
+//		 validatorFactory.getValidator(validationRole).validate(reviewVO, ActionType.CREATE, ValidatorType.STUDENT);
 		
 		courseVO.setInstructorVO(instructorVO);
 		
@@ -268,7 +268,7 @@ public class CourseController {
 		// next find instructor
 		InstructorVO instructorVO = instructorService.findById(instructorId);
 
-//		reviewVO = (ReviewVO) validatorFactory.getValidator(validationRole).validate(reviewVO, true, ActionType.CREATE, ValidatorType.STUDENT);
+//		validatorFactory.getValidator(validationRole).validate(reviewVO, ActionType.CREATE, ValidatorType.STUDENT);
 
 		courseVO.setInstructorVO(null);
 		

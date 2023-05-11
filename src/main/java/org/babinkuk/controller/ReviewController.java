@@ -104,7 +104,7 @@ public class ReviewController {
 			@RequestParam(name="validationRole", required = false) ValidatorRole validationRole) throws JsonProcessingException {
 		log.info("Called ReviewController.addReview({}) for courseId={}", mapper.writeValueAsString(reviewVO), courseId);
 		
-		// first find course
+		// first find review
 		CourseVO courseVO = courseService.findById(courseId);
 		
 		// in case id is passed in json, set to 0
@@ -113,7 +113,7 @@ public class ReviewController {
 		
 		courseVO.addReviewVO(reviewVO);
 		
-//		reviewVO = (ReviewVO) validatorFactory.getValidator(validationRole).validate(reviewVO, true, ActionType.CREATE, ValidatorType.STUDENT);
+		validatorFactory.getValidator(validationRole).validate(reviewVO, ActionType.CREATE, ValidatorType.REVIEW);
 		
 		return ResponseEntity.of(Optional.ofNullable(reviewService.saveReview(courseVO)));
 	}
@@ -131,10 +131,7 @@ public class ReviewController {
 			@RequestParam(name="validationRole", required = false) ValidatorRole validationRole) throws JsonProcessingException {
 		log.info("Called ReviewController.updateReview({})", mapper.writeValueAsString(reviewVO));
 		
-		// first find review
-//		Review courseVO = courseService.findById(reviewVO.getCourseId());
-		
-//		reviewVO = (ReviewVO) validatorFactory.getValidator(validationRole).validate(reviewVO, false, ActionType.UPDATE, ValidatorType.STUDENT);
+		validatorFactory.getValidator(validationRole).validate(reviewVO, ActionType.UPDATE, ValidatorType.REVIEW);
 
 		return ResponseEntity.of(Optional.ofNullable(reviewService.saveReview(reviewVO)));
 	}
@@ -151,7 +148,7 @@ public class ReviewController {
 			@RequestParam(name="validationRole", required = false) ValidatorRole validationRole) {
 		log.info("Called ReviewController.deleteReview(reviewId={}, validationType={})", reviewId, validationRole);
 		
-//		ReviewVO reviewVO = (ReviewVO) validatorFactory.getValidator(validationRole).validate(reviewId, ActionType.DELETE, ValidatorType.STUDENT);
+		validatorFactory.getValidator(validationRole).validate(reviewId, ActionType.DELETE, ValidatorType.REVIEW);
 		
 		return ResponseEntity.of(Optional.ofNullable(reviewService.deleteReview(reviewId)));
 	}

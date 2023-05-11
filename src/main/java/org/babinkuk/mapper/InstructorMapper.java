@@ -1,21 +1,15 @@
 package org.babinkuk.mapper;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Objects;
 
 import org.apache.commons.lang.StringUtils;
-import org.aspectj.util.IStructureModel;
 import org.babinkuk.entity.Instructor;
 import org.babinkuk.entity.InstructorDetail;
-import org.babinkuk.entity.Student;
+import org.babinkuk.vo.CourseVO;
 //import org.babinkuk.vo.InstructorDetailVO;
 import org.babinkuk.vo.InstructorVO;
-import org.babinkuk.vo.StudentVO;
 import org.mapstruct.AfterMapping;
 import org.mapstruct.BeanMapping;
-import org.mapstruct.BeforeMapping;
-import org.mapstruct.InheritInverseConfiguration;
 import org.mapstruct.IterableMapping;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
@@ -67,15 +61,15 @@ public interface InstructorMapper {
 	
 	@AfterMapping
 	default void afterMapInstructor(@MappingTarget Instructor entity, InstructorVO instructorVO) {
-//		System.out.println("toEntity afterMapInstructor");
-		//System.out.println(instructorDetail.toString());
-//		System.out.println(instructorVO.toString());
+		System.out.println("toEntity afterMapInstructor");
+		System.out.println(entity.toString());
+		System.out.println(instructorVO.toString());
 
 		// instructor details
 		InstructorDetail instructorDetail = instructorDetailMapperInstance.toEntity(instructorVO, entity);
 		instructorDetail.setInstructor(entity);
 		entity.setInstructorDetail(instructorDetail);
-//		System.out.println(entity.toString());
+		System.out.println(entity.toString());
 	}
 	
 	// for insert
@@ -88,6 +82,14 @@ public interface InstructorMapper {
 	@Named("toEntity")
 	@Mapping(source = "emailAddress", target = "email")
 	Instructor toEntity(InstructorVO instructorVO, @MappingTarget Instructor instructor);
+	
+	// when saving course
+	@Named("toEntity")
+	@Mapping(target = "firstName", ignore= true)
+	@Mapping(target = "lastName", ignore= true)
+	@Mapping(target = "email", ignore= true)
+	@Mapping(target = "instructorDetail", ignore= true)
+	Instructor toEntity(CourseVO courseVO);
     
 	@Named("toVO")
 	@Mapping(source = "email", target = "emailAddress")
@@ -107,5 +109,4 @@ public interface InstructorMapper {
 			instructorVO.setHobby(entity.getInstructorDetail().getHobby());
 		}
 	}
-	
 }
