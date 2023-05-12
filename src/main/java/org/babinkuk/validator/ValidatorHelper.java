@@ -41,7 +41,7 @@ public class ValidatorHelper {
 			exceptions.add(e);
 		}
 		
-		if (action != ActionType.CREATE) {
+		if (action == ActionType.UPDATE || action == ActionType.DELETE || action == ActionType.READ) {
 			try {
 				validator.objectExists(vo, validatorType);
 			} catch (ValidatorException e) {
@@ -61,7 +61,7 @@ public class ValidatorHelper {
 			exceptions.add(e);
 		}
 		
-		if (action != ActionType.CREATE) {
+		if (action == ActionType.UPDATE || action == ActionType.DELETE || action == ActionType.READ) {
 			try {
 				validator.objectExists(vo, validatorType);
 			} catch (ValidatorException e) {
@@ -81,7 +81,7 @@ public class ValidatorHelper {
 			exceptions.add(e);
 		}
 		
-		if (action != ActionType.CREATE) {
+		if (action == ActionType.UPDATE || action == ActionType.DELETE || action == ActionType.READ) {
 			try {
 				validator.objectExists(vo, validatorType);
 			} catch (ValidatorException e) {

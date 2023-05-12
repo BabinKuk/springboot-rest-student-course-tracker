@@ -46,7 +46,7 @@ public interface InstructorMapper {
 //		System.out.println(instructorDetail.toString());
 //		System.out.println(entity.toString());
 //	}
-	
+//	
 //	@Named("setDetails")
 //	default InstructorDetail setDetails(InstructorVO instructorVO) {
 //		System.out.println("default setDetails");

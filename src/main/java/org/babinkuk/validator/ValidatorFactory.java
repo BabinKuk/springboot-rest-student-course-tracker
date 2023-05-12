@@ -17,7 +17,7 @@ public class ValidatorFactory {
 	public Validator getValidator(ValidatorRole type) {
 		
 		log.info("validatorType={}", type);
-		String beanName = "validator." + (type != null ? type : ValidatorRole.ROLE_EMPLOYEE);
+		String beanName = "validator." + (type != null ? type : ValidatorRole.ROLE_STUDENT);
 		
 		Validator validator = applicationContext.getBean(beanName, Validator.class);
 		

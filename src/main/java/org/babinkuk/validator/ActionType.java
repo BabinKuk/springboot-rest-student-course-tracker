@@ -7,7 +7,9 @@ public enum ActionType {
 	CREATE,
 	READ,
 	UPDATE,
-	DELETE;
+	DELETE,
+	ENROLL,
+	WITHDRAW;
 	
 	public static ActionType valueOfIgnoreCase(String str) {
 		return Arrays.stream(ActionType.values())

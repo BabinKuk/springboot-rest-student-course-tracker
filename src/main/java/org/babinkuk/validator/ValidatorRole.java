@@ -4,9 +4,9 @@ import java.util.Arrays;
 
 public enum ValidatorRole {
 	
-	ROLE_EMPLOYEE,
+	ROLE_STUDENT,
 	ROLE_ADMIN,
-	ROLE_MANAGER;
+	ROLE_INSTRUCTOR;
 	
 	public static ValidatorRole valueOfIgnoreCase(String str) {
 		return Arrays.stream(ValidatorRole.values())

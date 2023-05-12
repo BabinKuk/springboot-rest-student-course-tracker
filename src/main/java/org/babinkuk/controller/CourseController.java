@@ -184,7 +184,7 @@ public class CourseController {
 		// next find student
 		StudentVO studentVO = studentService.findById(studentId);
 		
-//		validatorFactory.getValidator(validationRole).validate(reviewVO, ActionType.CREATE, ValidatorType.STUDENT);
+		validatorFactory.getValidator(validationRole).validate(courseVO, ActionType.ENROLL, ValidatorType.STUDENT);
 		
 		courseVO.addStudentVO(studentVO);
 		
@@ -212,8 +212,8 @@ public class CourseController {
 		// next find student
 		StudentVO studentVO = studentService.findById(studentId);
 		
-//		validatorFactory.getValidator(validationRole).validate(reviewVO, ActionType.CREATE, ValidatorType.STUDENT);
-
+		validatorFactory.getValidator(validationRole).validate(courseVO, ActionType.WITHDRAW, ValidatorType.STUDENT);
+		
 		courseVO.removeStudentVO(studentVO);
 		
 		return ResponseEntity.of(Optional.ofNullable(courseService.saveCourse(courseVO)));
@@ -240,7 +240,7 @@ public class CourseController {
 		// next find instructor
 		InstructorVO instructorVO = instructorService.findById(instructorId);
 		
-//		 validatorFactory.getValidator(validationRole).validate(reviewVO, ActionType.CREATE, ValidatorType.STUDENT);
+		validatorFactory.getValidator(validationRole).validate(courseVO, ActionType.ENROLL, ValidatorType.INSTRUCTOR);
 		
 		courseVO.setInstructorVO(instructorVO);
 		
@@ -268,7 +268,7 @@ public class CourseController {
 		// next find instructor
 		InstructorVO instructorVO = instructorService.findById(instructorId);
 
-//		validatorFactory.getValidator(validationRole).validate(reviewVO, ActionType.CREATE, ValidatorType.STUDENT);
+		validatorFactory.getValidator(validationRole).validate(courseVO, ActionType.WITHDRAW, ValidatorType.INSTRUCTOR);
 
 		courseVO.setInstructorVO(null);
 		

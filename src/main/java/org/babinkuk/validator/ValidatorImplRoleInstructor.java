@@ -23,26 +23,31 @@ import org.springframework.stereotype.Component;
  * @author Nikola
  *
  */
-@Component("validator.ROLE_EMPLOYEE")
-public class ValidatorImplRoleEmployee implements Validator {
+@Component("validator.ROLE_INSTRUCTOR")
+public class ValidatorImplRoleInstructor implements Validator {
 
 private final Logger log = LogManager.getLogger(getClass());
 	
 	@Autowired
-	private ValidatorHelper validatorHelper;
+	private MessageSource messageSource;
 	
 	@Autowired
-	private MessageSource messageSource;
+	private ValidatorHelper validatorHelper;
 	
 	@Override
 	public BaseVO validate(BaseVO vo, ActionType action, ValidatorType validatorType) throws ObjectValidationException {
-		log.info("ROLE_EMPLOYEE Validating {} {} (vo={})", action, validatorType, vo);
-				
+		log.info("ROLE_INSTRUCTOR Validating {} {} (vo={})", action, validatorType, vo);
+		
 		List<ValidatorException> exceptionList = new LinkedList<ValidatorException>();
 		
-		// only READ action enabled
-		if (ActionType.READ == action) {
-			log.info("read action only");
+		if (ActionType.DELETE == action) {
+			log.info("delete action disabled");
+			
+			String message = String.format(messageSource.getMessage(ValidatorCodes.ERROR_CODE_ACTION_INVALID.getMessage(), new Object[] {}, LocaleContextHolder.getLocale()), action);
+			ObjectValidationException e = new ObjectValidationException(message);
+			throw e;
+		
+		} else {
 			exceptionList.addAll(validatorHelper.validate(vo, action, validatorType));
 			
 			ObjectValidationException e = new ObjectValidationException("Validation failed");
@@ -55,27 +60,20 @@ private final Logger log = LogManager.getLogger(getClass());
 			if (e.hasErrors()) {
 				throw e;
 			}
-
-		} else {
-			//String message = String.format("Employee with id=%s not found.", id);
-			//String message = String.format(ValidatorCodes.ERROR_CODE_ACTION_INVALID.getMessage(), action);
-			String message = String.format(messageSource.getMessage(ValidatorCodes.ERROR_CODE_ACTION_INVALID.getMessage(), new Object[] {}, LocaleContextHolder.getLocale()), action);
-			ObjectValidationException e = new ObjectValidationException(message);
-			throw e;
 		}
 		
 		return vo;
 	}
-
+	
 	@Override
 	public void validate(CourseVO vo, ActionType action, ValidatorType validatorType) throws ObjectValidationException {
-		log.info("ROLE_EMPLOYEE Validating course {} {} (vo={})", action, validatorType, vo);
+		log.info("ROLE_INSTRUCTOR Validating {} {} (vo={})", action, validatorType, vo);
 		
 		List<ValidatorException> exceptionList = new LinkedList<ValidatorException>();
 		
-		// only READ action enabled
-		if (ActionType.READ == action) {
-			log.info("read action only");
+		// READ/CREATE/UPDATE actions enabled
+		if (ActionType.READ == action || ActionType.CREATE == action || ActionType.UPDATE == action) {
+			log.info("read/create/update actions only");
 			exceptionList.addAll(validatorHelper.validate(vo, action, validatorType));
 			
 			ObjectValidationException e = new ObjectValidationException("Validation failed");
@@ -88,9 +86,14 @@ private final Logger log = LogManager.getLogger(getClass());
 			if (e.hasErrors()) {
 				throw e;
 			}
-
+		
+		// ENROLL/WITHDRAW STUDENT actions enabled
+		} else if (ValidatorType.STUDENT == validatorType && (ActionType.ENROLL == action || ActionType.WITHDRAW == action)) {
+			// intentionally empty
+			log.info("intentionally empty {} {}", action, validatorType);
+		
+		// DELETE, ENROLL/WITHDRAW INSTRUCTOR actions disabled
 		} else {
-			//String message = String.format("Employee with id=%s not found.", id);
 			//String message = String.format(ValidatorCodes.ERROR_CODE_ACTION_INVALID.getMessage(), action);
 			String message = String.format(messageSource.getMessage(ValidatorCodes.ERROR_CODE_ACTION_INVALID.getMessage(), new Object[] {}, LocaleContextHolder.getLocale()), action);
 			ObjectValidationException e = new ObjectValidationException(message);
@@ -100,13 +103,13 @@ private final Logger log = LogManager.getLogger(getClass());
 
 	@Override
 	public void validate(ReviewVO vo, ActionType action, ValidatorType validatorType) throws ObjectValidationException {
-		log.info("ROLE_EMPLOYEE Validating review {} {} (vo={})", action, validatorType, vo);
+		log.info("ROLE_INSTRUCTOR Validating {} {} (vo={})", action, validatorType, vo);
 		
 		List<ValidatorException> exceptionList = new LinkedList<ValidatorException>();
 		
-		// only READ and CREATE actions enabled
-		if (ActionType.READ == action || ActionType.CREATE == action) {
-			log.info("read/create actions only");
+		// READ/CREATE/UPDATE actions enabled
+		if (ActionType.READ == action || ActionType.CREATE == action || ActionType.UPDATE == action) {
+			log.info("read/create/update actions only");
 			exceptionList.addAll(validatorHelper.validate(vo, action, validatorType));
 			
 			ObjectValidationException e = new ObjectValidationException("Validation failed");
@@ -121,7 +124,6 @@ private final Logger log = LogManager.getLogger(getClass());
 			}
 
 		} else {
-			//String message = String.format("Employee with id=%s not found.", id);
 			//String message = String.format(ValidatorCodes.ERROR_CODE_ACTION_INVALID.getMessage(), action);
 			String message = String.format(messageSource.getMessage(ValidatorCodes.ERROR_CODE_ACTION_INVALID.getMessage(), new Object[] {}, LocaleContextHolder.getLocale()), action);
 			ObjectValidationException e = new ObjectValidationException(message);
@@ -131,14 +133,19 @@ private final Logger log = LogManager.getLogger(getClass());
 	
 	@Override
 	public void validate(int id, ActionType action, ValidatorType validatorType) throws ObjectNotFoundException {
-		log.info("ROLE_EMPLOYEE Validating {} {} (id={})", action, validatorType, id);
+		log.info("ROLE_INSTRUCTOR Validating {} {} (id={})", action, validatorType, id);
 		
 		List<ValidatorException> exceptionList = new LinkedList<ValidatorException>();
 		
-		// only READ action enabled
-		if (ActionType.READ == action) {
-			log.info("read action only");
+		// DELETE action disabled
+		if (ActionType.DELETE == action) {
+			log.info("delete action disabled");
 			
+			String message = String.format(messageSource.getMessage(ValidatorCodes.ERROR_CODE_ACTION_INVALID.getMessage(), new Object[] {}, LocaleContextHolder.getLocale()), action);
+			ObjectValidationException e = new ObjectValidationException(message);
+			throw e;
+		
+		} else {
 			exceptionList.addAll(validatorHelper.validate(id, validatorType));
 			
 			ObjectValidationException e = new ObjectValidationException("Validation failed");
@@ -151,12 +158,6 @@ private final Logger log = LogManager.getLogger(getClass());
 			if (e.hasErrors()) {
 				throw e;
 			}
-		
-		} else {
-			//String message = String.format(ValidatorCodes.ERROR_CODE_ACTION_INVALID.getMessage(), action);
-			String message = String.format(messageSource.getMessage(ValidatorCodes.ERROR_CODE_ACTION_INVALID.getMessage(), new Object[] {}, LocaleContextHolder.getLocale()), action);
-			ObjectValidationException e = new ObjectValidationException(message);
-			throw e;
 		}
 	}
 
