@@ -5,9 +5,7 @@ import java.util.Optional;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.babinkuk.common.ApiResponse;
-import org.babinkuk.dao.CourseRepository;
 import org.babinkuk.dao.ReviewRepository;
-import org.babinkuk.entity.Course;
 import org.babinkuk.entity.Review;
 import org.babinkuk.exception.ObjectException;
 import org.babinkuk.exception.ObjectNotFoundException;
@@ -20,7 +18,6 @@ import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 @Service
@@ -69,7 +66,7 @@ public class ReviewServiceImpl implements ReviewService {
 		
 		if (result.isPresent()) {
 			review = result.get();
-			log.info("review ({})", review);
+			//log.info("review ({})", review);
 			
 			// mapping
 			reviewVO = reviewMapper.toVO(review);
@@ -99,13 +96,13 @@ public class ReviewServiceImpl implements ReviewService {
 		if (entity.isPresent()) {
 			review = entity.get();
 			log.info("review ({})", entity);
-			log.info("mapping for update");
+			//log.info("mapping for update");
 			
 			// mapping
 			review = reviewMapper.toEntity(reviewVO, review);
 		} else {
 			// review not found
-			log.info("mapping for insert");
+			//log.info("mapping for insert");
 			
 			// mapping
 			review = reviewMapper.toEntity(reviewVO);
@@ -148,5 +145,4 @@ public class ReviewServiceImpl implements ReviewService {
 	public Iterable<ReviewVO> getAllReviews() {
 		return reviewMapper.toVO(reviewRepository.findAll());
 	}
-
 }

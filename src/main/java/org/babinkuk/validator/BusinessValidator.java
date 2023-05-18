@@ -19,6 +19,12 @@ import org.babinkuk.vo.StudentVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+/**
+ * implementation class for different field validations
+ *  
+ * @author Nikola
+ *
+ */
 @Component
 public class BusinessValidator {
 	
@@ -107,11 +113,11 @@ public class BusinessValidator {
 			// if empty return true
 			return true;
 		}
-		
 	}
 
 	/**
 	 * validate if email already exist must be unique (call repository findByEmail)
+	 * 
 	 * @param vo
 	 * @param isInsert
 	 * @return
@@ -162,7 +168,7 @@ public class BusinessValidator {
 				log.info("instructor id found");
 			} else {
 				// id not found
-				log.error("result.notPresent");
+				//log.error("result.notPresent");
 				throw new ValidatorException(ValidatorCodes.ERROR_CODE_INSTRUCTOR_INVALID);
 			}
 		} else if (vo instanceof StudentVO) {
@@ -174,7 +180,7 @@ public class BusinessValidator {
 				log.info("student id found");
 			} else {
 				// id not found
-				log.error("result.notPresent");
+				//log.error("result.notPresent");
 				throw new ValidatorException(ValidatorCodes.ERROR_CODE_STUDENT_INVALID);
 			}
 		} else if (vo instanceof CourseVO) {
@@ -186,7 +192,7 @@ public class BusinessValidator {
 				log.info("course id found");
 			} else {
 				// id not found
-				log.error("result.notPresent");
+				//log.error("result.notPresent");
 				throw new ValidatorException(ValidatorCodes.ERROR_CODE_COURSE_INVALID);
 			}
 		} else if (vo instanceof ReviewVO) {
@@ -198,7 +204,7 @@ public class BusinessValidator {
 				log.info("review id found");
 			} else {
 				// id not found
-				log.error("result.notPresent");
+				//log.error("result.notPresent");
 				throw new ValidatorException(ValidatorCodes.ERROR_CODE_REVIEW_INVALID);
 			}
 		}

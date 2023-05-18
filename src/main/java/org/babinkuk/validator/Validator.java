@@ -4,7 +4,6 @@ import org.babinkuk.exception.ObjectNotFoundException;
 import org.babinkuk.exception.ObjectValidationException;
 import org.babinkuk.vo.BaseVO;
 import org.babinkuk.vo.CourseVO;
-import org.babinkuk.vo.InstructorVO;
 import org.babinkuk.vo.ReviewVO;
 
 public interface Validator {

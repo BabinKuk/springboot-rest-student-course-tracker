@@ -24,7 +24,7 @@ public class InstructorDetail {
 	@Column(name = "hobby")
 	private String hobby;
 	
-	// refers to instructorDetail filed in Instructor class
+	// refers to instructorDetail field in Instructor class
 	//@OneToOne(mappedBy = "instructorDetail", cascade = CascadeType.ALL)
 	@OneToOne(mappedBy = "instructorDetail", 
 			cascade = {
@@ -80,5 +80,4 @@ public class InstructorDetail {
 	public String toString() {
 		return "InstructorDetail [id=" + id + ", youtubeChannel=" + youtubeChannel + ", hobby=" + hobby + "]";
 	}
-
 }

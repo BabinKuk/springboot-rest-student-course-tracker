@@ -47,7 +47,7 @@ public class CourseController {
 	
 	private final Logger log = LogManager.getLogger(getClass());
 	
-	// service
+	// services
 	private CourseService courseService;
 	
 	private StudentService studentService;
@@ -72,6 +72,7 @@ public class CourseController {
 	}
 
 	/**
+	 * expose GET "/courses/get"
 	 * get course list
 	 *
 	 * @param 
@@ -86,7 +87,8 @@ public class CourseController {
 	
 	/**
 	 * expose GET "/courses/get/{courseId}"
-	 *
+	 * get specific course
+	 * 
 	 * @param 
 	 * @return ResponseEntity
 	 */
@@ -99,8 +101,10 @@ public class CourseController {
 	
 	/**
 	 * expose POST "/courses"
+	 * add new course
 	 * 
 	 * @param courseVO
+	 * @param validationRole
 	 * @return
 	 * @throws JsonProcessingException
 	 */
@@ -123,7 +127,9 @@ public class CourseController {
 	 * expose PUT "/courses/{courseId}"
 	 * update course title
 	 * 
-	 * @param courseVO
+	 * @param courseId
+	 * @param courseTitle
+	 * @param validationRole
 	 * @return
 	 * @throws JsonProcessingException
 	 */
@@ -150,6 +156,7 @@ public class CourseController {
 	 * expose DELETE "/{courseId}"
 	 * 
 	 * @param courseId
+	 * @param validationRole
 	 * @return
 	 */
 	@DeleteMapping("/{courseId}")
@@ -165,11 +172,13 @@ public class CourseController {
 	
 	/**
 	 * enroll student on a course
-	 * expose PUT "/{courseId}/student/{studentId}"
+	 * expose PUT "/{courseId}/student/{studentId}/enroll"
 	 * 
 	 * @param courseId
-	 *@param studentId
+	 * @param studentId
+	 * @param validationRole
 	 * @return
+	 * @throws JsonProcessingException
 	 */
 	@PutMapping("/{courseId}/student/{studentId}/enroll")
 	public ResponseEntity<ApiResponse> enrollStudent(
@@ -196,8 +205,10 @@ public class CourseController {
 	 * expose PUT "/{courseId}/student/{studentId}/withdraw"
 	 * 
 	 * @param courseId
-	 *@param studentId
+	 * @param studentId
+	 * @param validationRole
 	 * @return
+	 * @throws JsonProcessingException
 	 */
 	@PutMapping("/{courseId}/student/{studentId}/withdraw")
 	public ResponseEntity<ApiResponse> withdrawStudent(
@@ -221,11 +232,13 @@ public class CourseController {
 	
 	/**
 	 * enroll instructor on a course
-	 * expose PUT "/{courseId}/instructor/{instructorId}"
+	 * expose PUT "/{courseId}/instructor/{instructorId}/enroll"
 	 * 
 	 * @param courseId
-	 *@param studentId
+	 * @param instructorId
+	 * @param validationRole
 	 * @return
+	 * @throws JsonProcessingException
 	 */
 	@PutMapping("/{courseId}/instructor/{instructorId}/enroll")
 	public ResponseEntity<ApiResponse> enrollInstructor(
@@ -252,8 +265,10 @@ public class CourseController {
 	 * expose PUT "/{courseId}/instructor/{instructorId}/withdraw"
 	 * 
 	 * @param courseId
-	 *@param studentId
+	 * @param instructorId
+	 * @param validationRole
 	 * @return
+	 * @throws JsonProcessingException
 	 */
 	@PutMapping("/{courseId}/instructor/{instructorId}/withdraw")
 	public ResponseEntity<ApiResponse> withdrawInstructor(

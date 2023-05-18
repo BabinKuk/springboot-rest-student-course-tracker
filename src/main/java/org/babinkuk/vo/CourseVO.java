@@ -8,6 +8,12 @@ import java.util.Set;
 import org.babinkuk.vo.diff.DiffField;
 import org.babinkuk.vo.diff.Diffable;
 
+/**
+ * instance of this class is used to represent course data
+ * 
+ * @author Nikola
+ *
+ */
 @Diffable(id = "id")
 public class CourseVO {
 

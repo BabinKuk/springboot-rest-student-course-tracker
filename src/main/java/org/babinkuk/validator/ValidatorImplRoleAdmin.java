@@ -17,8 +17,8 @@ import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.stereotype.Component;
 
 /**
- * for future purpose 
- * if special validations are required depending on the role 
+ * special validations are required depending on the role
+ * implementation class for Admin role
  * 
  * @author Nikola
  *

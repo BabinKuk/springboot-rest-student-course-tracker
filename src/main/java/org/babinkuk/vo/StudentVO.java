@@ -3,8 +3,6 @@ package org.babinkuk.vo;
 import java.util.HashSet;
 import java.util.Set;
 
-import org.babinkuk.entity.Student;
-
 /**
  * instance of this class is used to represent student data
  * 

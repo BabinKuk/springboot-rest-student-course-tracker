@@ -62,9 +62,7 @@ public interface InstructorMapper {
 	@AfterMapping
 	default void afterMapInstructor(@MappingTarget Instructor entity, InstructorVO instructorVO) {
 		System.out.println("toEntity afterMapInstructor");
-		System.out.println(entity.toString());
-		System.out.println(instructorVO.toString());
-
+		
 		// instructor details
 		InstructorDetail instructorDetail = instructorDetailMapperInstance.toEntity(instructorVO, entity);
 		instructorDetail.setInstructor(entity);
@@ -101,7 +99,6 @@ public interface InstructorMapper {
 	
 	@AfterMapping
 	default void setDetails(@MappingTarget InstructorVO instructorVO, Instructor entity) {
-//		System.out.println("toVO aftermapping setDetails");
 		// instructor details
 		if (entity.getInstructorDetail() != null) {
 			System.out.println(entity.getInstructorDetail());

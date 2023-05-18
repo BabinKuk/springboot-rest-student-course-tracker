@@ -60,6 +60,7 @@ public class StudentController {
 	}
 
 	/**
+	 * expose GET "/students/get"
 	 * get student list
 	 *
 	 * @param 
@@ -74,9 +75,10 @@ public class StudentController {
 	
 	/**
 	 * expose GET "/students/get/{studentId}"
-	 *
-	 * @param 
-	 * @return ResponseEntity
+	 * get student
+	 * 			
+	 * @param studentId
+	 * @return
 	 */
 	@GetMapping("/get/{studentId}")
 	public ResponseEntity<StudentVO> getStudent(@PathVariable int studentId) {
@@ -87,8 +89,10 @@ public class StudentController {
 	
 	/**
 	 * expose POST "/students"
+	 * add new student
 	 * 
 	 * @param studentVO
+	 * @param validationRole
 	 * @return
 	 * @throws JsonProcessingException
 	 */
@@ -109,8 +113,10 @@ public class StudentController {
 	
 	/**
 	 * expose PUT "/students"
+	 * update student
 	 * 
 	 * @param studentVO
+	 * @param validationRole
 	 * @return
 	 * @throws JsonProcessingException
 	 */
@@ -129,6 +135,7 @@ public class StudentController {
 	 * expose DELETE "/{studentId}"
 	 * 
 	 * @param studentId
+	 * @param validationRole
 	 * @return
 	 */
 	@DeleteMapping("/{studentId}")
@@ -165,6 +172,5 @@ public class StudentController {
 		ApiResponse apiResponse = new ApiResponse(HttpStatus.BAD_REQUEST, exc.getMessage());
 		apiResponse.setErrors(exc.getValidationErrors());
 		return apiResponse.toEntity();
-	}
-	
+	}	
 }

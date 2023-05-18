@@ -42,10 +42,9 @@ public class ReviewController {
 	
 	private final Logger log = LogManager.getLogger(getClass());
 	
-	// service
+	// services
 	private ReviewService reviewService;
 	
-	// service
 	private CourseService courseService;
 	
 	@Autowired
@@ -65,6 +64,7 @@ public class ReviewController {
 	}
 
 	/**
+	 * expose GET "/reviews/get"
 	 * get review list
 	 *
 	 * @param 
@@ -79,6 +79,7 @@ public class ReviewController {
 	
 	/**
 	 * expose GET "/reviews/get/{reviewId}"
+	 * get specific review
 	 *
 	 * @param 
 	 * @return ResponseEntity
@@ -92,8 +93,11 @@ public class ReviewController {
 	
 	/**
 	 * expose POST "/reviews"
+	 * add new review
 	 * 
+	 * @param courseId
 	 * @param reviewVO
+	 * @param validationRole
 	 * @return
 	 * @throws JsonProcessingException
 	 */
@@ -120,8 +124,10 @@ public class ReviewController {
 	
 	/**
 	 * expose PUT "/reviews"
+	 * update existing review
 	 * 
 	 * @param reviewVO
+	 * @param validationRole
 	 * @return
 	 * @throws JsonProcessingException
 	 */
@@ -140,6 +146,7 @@ public class ReviewController {
 	 * expose DELETE "/{reviewId}"
 	 * 
 	 * @param reviewId
+	 * @param validationRole
 	 * @return
 	 */
 	@DeleteMapping("/{reviewId}")
@@ -177,5 +184,4 @@ public class ReviewController {
 		apiResponse.setErrors(exc.getValidationErrors());
 		return apiResponse.toEntity();
 	}
-	
 }

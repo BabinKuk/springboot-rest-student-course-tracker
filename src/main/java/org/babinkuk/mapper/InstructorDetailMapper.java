@@ -43,10 +43,4 @@ public interface InstructorDetailMapper {
 	@Mapping(source = "instructorVO.hobby", target = "hobby")
 	InstructorDetail toEntity(InstructorVO instructorVO);
 	
-//	@Named("toVO")
-//	@Mapping(source = "id", target = "instructor.instructorDetail.id")
-//	@Mapping(surce = "youtubeChannel", target = "instructorVO.youtubeChannel")
-//	@Mapping(source = "hobby", target = "instructorVO.hobby")
-//	InstructorVO toVO(InstructorDetail entity);
-	
 }

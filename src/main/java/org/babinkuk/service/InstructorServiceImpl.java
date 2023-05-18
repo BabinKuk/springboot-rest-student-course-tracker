@@ -62,11 +62,11 @@ public class InstructorServiceImpl implements InstructorService {
 		
 		if (result.isPresent()) {
 			instructor = result.get();
-			log.info("inst ({})", instructor);
+			//log.info("instructor ({})", instructor);
 			
 			// mapping
 			instructorVO = instructorMapper.toVO(instructor);
-			log.info("instVO ({})", instructorVO);
+			log.info("instructorVO ({})", instructorVO);
 			
 			return instructorVO;
 		} else {
@@ -91,7 +91,7 @@ public class InstructorServiceImpl implements InstructorService {
 			
 			// mapping
 			instructorVO = instructorMapper.toVO(instructor);
-			log.info("instVO ({})", instructorVO);
+			log.info("instructorVO ({})", instructorVO);
 		} else {
 			// not found
 			String message = String.format(getMessage("error_code_instructor_email_not_found"), email);
@@ -101,7 +101,7 @@ public class InstructorServiceImpl implements InstructorService {
 
 		return instructorVO;
 	}
-		
+	
 	@Override
 	public ApiResponse saveInstructor(InstructorVO instructorVO) throws ObjectException {
 		
@@ -117,21 +117,20 @@ public class InstructorServiceImpl implements InstructorService {
 		if (entity.isPresent()) {
 			instructor = entity.get();
 			log.info("instructor ({})", entity);
-			log.info("mapping for update");
+			//log.info("mapping for update");
 			
 			// mapping
 			instructor = instructorMapper.toEntity(instructorVO, instructor);
-			log.info("inst ({})", instructor);
-
 		} else {
 			// instructor not found
-			log.info("mapping for insert");
+			//log.info("mapping for insert");
 			
 			// mapping
 			instructor = instructorMapper.toEntity(instructorVO);
-			log.info("Instructor ({})", instructor);
 		}
 		
+		log.info("instructor ({})", instructor);
+
 		instructorRepository.save(instructor);
 		
 		return response;
@@ -154,5 +153,4 @@ public class InstructorServiceImpl implements InstructorService {
 	public Iterable<InstructorVO> getAllInstructors() {
 		return instructorMapper.toVO(instructorRepository.findAll());
 	}
-
 }

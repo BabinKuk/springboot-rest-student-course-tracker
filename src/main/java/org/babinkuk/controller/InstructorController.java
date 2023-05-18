@@ -40,7 +40,7 @@ public class InstructorController {
 	
 	private final Logger log = LogManager.getLogger(getClass());
 	
-	// Instructor service
+	// service
 	private InstructorService instructorService;
 	
 	@Autowired
@@ -60,9 +60,9 @@ public class InstructorController {
 
 	/**
 	 * get instructor list
+	 * expose GET "/instructors/get"
 	 *
 	 * @param 
-	 * 
 	 * @return ResponseEntity
 	 */
 	@GetMapping("/get")
@@ -73,7 +73,8 @@ public class InstructorController {
 	}
 	
 	/**
-	 * expose GET "/instructors/get/{InstructorId}"
+	 * get instructor
+	 * expose GET "/instructors/get/{instructorId}"
 	 *
 	 * @param 
 	 * @return ResponseEntity
@@ -87,8 +88,10 @@ public class InstructorController {
 	
 	/**
 	 * expose POST "/instructors"
+	 * add new instructor
 	 * 
-	 * @param InstructorVO
+	 * @param instructorVO
+	 * @param validationRole
 	 * @return
 	 * @throws JsonProcessingException
 	 */
@@ -108,8 +111,10 @@ public class InstructorController {
 	
 	/**
 	 * expose PUT "/instructors"
+	 * update instructor
 	 * 
 	 * @param instructorVO
+	 * @param validationRole
 	 * @return
 	 * @throws JsonProcessingException
 	 */
@@ -128,6 +133,7 @@ public class InstructorController {
 	 * expose DELETE "instructors/{instructorId}"
 	 * 
 	 * @param instructorId
+	 * @param validationRole
 	 * @return
 	 */
 	@DeleteMapping("/{instructorId}")
@@ -165,5 +171,4 @@ public class InstructorController {
 		apiResponse.setErrors(exc.getValidationErrors());
 		return apiResponse.toEntity();
 	}
-	
 }

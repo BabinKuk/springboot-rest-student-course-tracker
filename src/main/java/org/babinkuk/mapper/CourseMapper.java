@@ -49,8 +49,6 @@ public interface CourseMapper {
 	
 	@BeforeMapping
 	default void beforeMap(@MappingTarget Course entity, CourseVO courseVO) {
-//		System.out.println(entity.toString());
-//		System.out.println(courseVO.toString());
 		System.out.println("beforeMapInstructor");
 		// instructor
 		if (courseVO.getInstructorVO() != null) {
@@ -58,7 +56,6 @@ public interface CourseMapper {
 			instructor.add(entity);
 			entity.setInstructor(instructor);
 		}
-//		System.out.println(entity.toString());
 		
 		System.out.println("beforeMapStudents");
 		// students
@@ -71,8 +68,6 @@ public interface CourseMapper {
 				students.add(student);
 			}
 			entity.setStudents(students);
-//			System.out.println(entity.getStudents());
-//			System.out.println(entity.toString());
 		}
 		
 		System.out.println("beforeMapReviews");
@@ -84,48 +79,29 @@ public interface CourseMapper {
 				reviewList.add(review);
 			}
 			entity.setReviews(reviewList);
-//			System.out.println(entity.toString());
 		}
 		System.out.println(entity.toString());
 	}
 	
 	@AfterMapping
-	default void beforeMap(@MappingTarget CourseVO courseVO, Course entity) {
-		System.out.println("@AfterMapping");
-//		System.out.println("mapInstructor");
+	default void afterMap(@MappingTarget CourseVO courseVO, Course entity) {
+		System.out.println("@AfterMapping mapInstructor");
 		// instructor
 		if (entity.getInstructor() != null) {
-//			System.out.println("set Instructor");
 			InstructorVO instructorVO = instructorMapperInstance.toVO(entity.getInstructor());
-//			instructorDetail.setInstructor(entity);	
 			courseVO.setInstructorVO(instructorVO);
-//			System.out.println(courseVO.toString());
 		}
 		
-		System.out.println("mapStudents");
+		System.out.println("AfterMapping mapStudents");
 		// students
 		if (!CollectionUtils.isEmpty(entity.getStudents())) {
-//			System.out.println(entity.getStudents());
 			Set<StudentVO> students = new HashSet<StudentVO>();
 			for (Student student : entity.getStudents()) {
-//				System.out.println(student.toString());
 				StudentVO studentVO = studentMapperInstance.toVO(student);
 				students.add(studentVO);
 			}
-//			System.out.println(students);
 			courseVO.setStudentsVO(students);
 		}
-		
-//		System.out.println("beforeMapReviews");
-//		// reviews
-//		if (!CollectionUtils.isEmpty(entity.getReviews())) {
-//			List<Review> reviewList = new ArrayList<Review>();
-//			for (ReviewVO reviewVO : courseVO.getReviewsVO()) {
-//				Review review = reviewMapperInstance.toEntity(reviewVO);
-//				reviewList.add(review);
-//			}
-//			entity.setReviews(reviewList);
-//		}
 	}
 	
 	// for insert

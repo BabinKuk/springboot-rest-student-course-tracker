@@ -92,20 +92,20 @@ public class CourseServiceImpl implements CourseService {
 		if (entity.isPresent()) {
 			course = entity.get();
 			log.info("courseVO ({})", courseVO);
-			log.info("mapping for update");
+			//log.info("mapping for update");
 			
 			// mapping
 			course = courseMapper.toEntity(courseVO, course);
-			log.info("course ({})", course);
 		} else {
 			// course not found
-			log.info("mapping for insert");
+			//log.info("mapping for insert");
 			
 			// mapping
 			course = courseMapper.toEntity(courseVO);
-			log.info("course ({})", course);
 		}
-		
+
+		log.info("course ({})", course);
+
 		courseRepository.save(course);
 		
 		return response;
@@ -128,5 +128,4 @@ public class CourseServiceImpl implements CourseService {
 	public Iterable<CourseVO> getAllCourses() {
 		return courseMapper.toVO(courseRepository.findAll());
 	}
-
 }

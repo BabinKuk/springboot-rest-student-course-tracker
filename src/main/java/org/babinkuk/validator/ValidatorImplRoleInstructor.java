@@ -9,7 +9,6 @@ import org.babinkuk.exception.ObjectNotFoundException;
 import org.babinkuk.exception.ObjectValidationException;
 import org.babinkuk.vo.BaseVO;
 import org.babinkuk.vo.CourseVO;
-import org.babinkuk.vo.InstructorVO;
 import org.babinkuk.vo.ReviewVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
@@ -17,8 +16,8 @@ import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.stereotype.Component;
 
 /**
- * for future purpose 
- * if special valdations are required depending on the role 
+ * if special validations are required depending on the role
+ * implementation class for Instructor role
  * 
  * @author Nikola
  *
@@ -94,7 +93,6 @@ private final Logger log = LogManager.getLogger(getClass());
 		
 		// DELETE, ENROLL/WITHDRAW INSTRUCTOR actions disabled
 		} else {
-			//String message = String.format(ValidatorCodes.ERROR_CODE_ACTION_INVALID.getMessage(), action);
 			String message = String.format(messageSource.getMessage(ValidatorCodes.ERROR_CODE_ACTION_INVALID.getMessage(), new Object[] {}, LocaleContextHolder.getLocale()), action);
 			ObjectValidationException e = new ObjectValidationException(message);
 			throw e;
@@ -124,7 +122,6 @@ private final Logger log = LogManager.getLogger(getClass());
 			}
 
 		} else {
-			//String message = String.format(ValidatorCodes.ERROR_CODE_ACTION_INVALID.getMessage(), action);
 			String message = String.format(messageSource.getMessage(ValidatorCodes.ERROR_CODE_ACTION_INVALID.getMessage(), new Object[] {}, LocaleContextHolder.getLocale()), action);
 			ObjectValidationException e = new ObjectValidationException(message);
 			throw e;

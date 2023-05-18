@@ -3,6 +3,12 @@ package org.babinkuk.vo;
 import org.babinkuk.vo.diff.DiffField;
 import org.babinkuk.vo.diff.Diffable;
 
+/**
+ * instance of this class is used to represent review data
+ * 
+ * @author Nikola
+ *
+ */
 @Diffable(id = "id")
 public class ReviewVO {
 

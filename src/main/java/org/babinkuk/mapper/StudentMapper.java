@@ -24,7 +24,7 @@ import org.mapstruct.factory.Mappers;
 import org.springframework.util.CollectionUtils;
 
 /**
- * mapper for the entity @link {@link Employee} and its DTO {@link EmployeeVO}
+ * mapper for the entity @link {@link Student} and its DTO {@link StudentVO}
  * 
  * @author Nikola
  */
@@ -68,13 +68,6 @@ public interface StudentMapper {
 	@Mapping(source = "student", target= "coursesVO", qualifiedByName = "setCourses")
 	StudentVO toVODetails(Student student);
 	
-//	@AfterMapping
-//	default void afterMapStudent(@MappingTarget StudentVO studentVO, Student entity) {
-//		System.out.println("toVO afterMapStudent");
-//		System.out.println(studentVO.toString());
-//		System.out.println(entity.toString());
-//	}
-	
 	@IterableMapping(qualifiedByName = "toEntity")
 	@BeanMapping(ignoreByDefault = true)
 	Iterable<Student> toEntity(Iterable<StudentVO> studentList);
@@ -95,7 +88,6 @@ public interface StudentMapper {
 				courseVO.setTitle(course.getTitle());
 				coursesVO.add(courseVO);
 			}
-//			System.out.println(coursesVO);
 		}
 		return coursesVO;
 	}

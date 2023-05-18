@@ -6,7 +6,6 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.babinkuk.common.ApiResponse;
 import org.babinkuk.dao.StudentRepository;
-import org.babinkuk.entity.Instructor;
 import org.babinkuk.entity.Student;
 import org.babinkuk.exception.ObjectException;
 import org.babinkuk.exception.ObjectNotFoundException;
@@ -16,10 +15,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.http.HttpStatus;
-import org.springframework.jms.core.JmsTemplate;
 import org.springframework.stereotype.Service;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 @Service
@@ -66,7 +63,6 @@ public class StudentServiceImpl implements StudentService {
 		if (result.isPresent()) {
 			student = result.get();
 			log.info("student ({})", student);
-			log.info("student.getCourses() ({})", student.getCourses().size());
 			
 			// mapping
 			studentVO = studentMapper.toVODetails(student);
@@ -84,11 +80,10 @@ public class StudentServiceImpl implements StudentService {
 	@Override
 	public StudentVO findByEmail(String email) {
 		
-		StudentVO studentVO = null;
-		
 		Optional<Student> result = studentRepository.findByEmail(email);
 		
 		Student student = null;
+		StudentVO studentVO = null;
 		
 		if (result.isPresent()) {
 			student = result.get();
@@ -120,14 +115,13 @@ public class StudentServiceImpl implements StudentService {
 		
 		if (entity.isPresent()) {
 			student = entity.get();
-			log.info("student ({})", entity);
-			log.info("mapping for update");
+			//log.info("mapping for update");
 			
 			// mapping
 			student = studentMapper.toEntity(studentVO, student);
 		} else {
 			// instructor not found
-			log.info("mapping for insert");
+			//log.info("mapping for insert");
 			
 			// mapping
 			student = studentMapper.toEntity(studentVO);
@@ -157,5 +151,4 @@ public class StudentServiceImpl implements StudentService {
 	public Iterable<StudentVO> getAllStudents() {
 		return studentMapper.toVO(studentRepository.findAll());
 	}
-
 }

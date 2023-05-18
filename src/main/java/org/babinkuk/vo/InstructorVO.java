@@ -1,11 +1,14 @@
 package org.babinkuk.vo;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import org.babinkuk.vo.diff.DiffField;
 import org.babinkuk.vo.diff.Diffable;
 
+/**
+ * instance of this class is used to represent instructor data
+ * 
+ * @author Nikola
+ *
+ */
 @Diffable(id = "id")
 public class InstructorVO extends BaseVO {
 
@@ -25,11 +28,6 @@ public class InstructorVO extends BaseVO {
 	
 	@DiffField
 	private String hobby;
-	
-//	@DiffField
-//	private InstructorDetailVO instructorDetailVO;
-	
-//	private List<CourseVO> coursesVO;
 	
 	public InstructorVO() {
 		// TODO Auto-generated constructor stub
@@ -97,39 +95,10 @@ public class InstructorVO extends BaseVO {
 		this.hobby = hobby;
 	}
 	
-//	public InstructorDetailVO getInstructorDetailVO() {
-//		return instructorDetailVO;
-//	}
-//
-//	public void setInstructorDetailVO(InstructorDetailVO instructorDetailVO) {
-//		this.instructorDetailVO = instructorDetailVO;
-//	}
-//
-//	public List<CourseVO> getCoursesVO() {
-//		return coursesVO;
-//	}
-//
-//	public void setCoursesVO(List<CourseVO> coursesVO) {
-//		this.coursesVO = coursesVO;
-//	}
-//	
-//	// convenience methods for bi-directional relationships
-//	public void add(CourseVO courseVO) {
-//		if (coursesVO == null) {
-//			coursesVO = new ArrayList<CourseVO>();
-//		}
-//		
-//		coursesVO.add(courseVO);
-//		
-//		courseVO.setInstructorId(this.id);
-//	}
-
 	@Override
 	public String toString() {
 		return "Instructor [id=" + id + ", firstName=" + firstName + ", lastName=" + lastName + ", emailAddress=" + emailAddress
-				+ ", youtubeChannel=" + youtubeChannel+ ", hobby=" + hobby
-				//+ ", instructorDetailVO=" + instructorDetailVO
-				+ "]";
+				+ ", youtubeChannel=" + youtubeChannel+ ", hobby=" + hobby + "]";
 	}
 
 }
