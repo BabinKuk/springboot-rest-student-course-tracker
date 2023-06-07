@@ -54,11 +54,17 @@ spring:
 sql:
   script:
     review:
-      insert: INSERT INTO review(id,comment,course_id) values (1,'test review',1)
+      insert: INSERT INTO review(id,comment,course_id) values(1,'test review',1)
       delete: DELETE FROM review
     course:
-      insert: INSERT INTO course(id,title,instructor_id) values (1,'test course',null)
+      insert: INSERT INTO course(id,title,instructor_id) values(1,'test course',null)
       delete: DELETE FROM course
     instructor:
-      insert: INSERT INTO instructor(id,first_name,last_name,email,instructor_detail_id) values (1,'firstName','lastName','firstName@babinuk.com',null)
+      insert: INSERT INTO instructor(id,first_name,last_name,email,instructor_detail_id) values(1,'firstNameInstr','lastNameInstr','firstNameInstr@babinuk.com',null)
       delete: DELETE FROM instructor
+    student:
+      insert: INSERT INTO student(id,first_name,last_name,email) values(1,'firstNameStudent','lastNameStudent','firstNameStudent@babinuk.com')
+      delete: DELETE FROM student
+    course-student:
+      insert: INSERT INTO course_student(course_id,student_id) values(1,1)
+      delete: DELETE FROM course_student
