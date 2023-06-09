@@ -81,7 +81,7 @@ public class ReviewServiceTest {
 	@BeforeEach
     public void setupDatabase() {
 		log.info("BeforeEach");
-		// todo setup database insert data etc...
+
 		jdbc.execute(sqlAddInstructor);
 		jdbc.execute(sqlAddCourse);
 		jdbc.execute(sqlAddReview);
@@ -136,8 +136,6 @@ public class ReviewServiceTest {
 		for (ReviewVO reVo : courseVO.getReviewsVO()) {
 			assertNotNull(reVo.getComment());
 		}
-		
-		// TODO exceptions
 	}	
 	
 	@Test
@@ -157,8 +155,6 @@ public class ReviewServiceTest {
 		
 		// assert
 		assertEquals(newComment, reviewVO.getComment(), "find by id after update");
-		
-		// TODO exceptions
 	}
 	
 	@Test
@@ -238,7 +234,7 @@ public class ReviewServiceTest {
 	@AfterEach
 	public void setupAfterTransaction() {
 		log.info("AfterEach");
-		// todo delete database, data etc...
+
 		jdbc.execute(sqlDeleteCourseStudent);
 		jdbc.execute(sqlDeleteStudent);
 		jdbc.execute(sqlDeleteReview);

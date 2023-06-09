@@ -60,8 +60,11 @@ sql:
       insert: INSERT INTO course(id,title,instructor_id) values(1,'test course',null)
       delete: DELETE FROM course
     instructor:
-      insert: INSERT INTO instructor(id,first_name,last_name,email,instructor_detail_id) values(1,'firstNameInstr','lastNameInstr','firstNameInstr@babinuk.com',null)
+      insert: INSERT INTO instructor(id,first_name,last_name,email,instructor_detail_id) values(1,'firstNameInstr','lastNameInstr','firstNameInstr@babinuk.com',1)
       delete: DELETE FROM instructor
+    instructor-detail:
+      insert: INSERT INTO instructor_detail(id,youtube_channel,hobby) values(1,'ytb test','test hobby')
+      delete: DELETE FROM instructor_detail
     student:
       insert: INSERT INTO student(id,first_name,last_name,email) values(1,'firstNameStudent','lastNameStudent','firstNameStudent@babinuk.com')
       delete: DELETE FROM student
