@@ -1,11 +1,9 @@
-package org.babinkuk;
+package org.babinkuk.service;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.babinkuk.dao.ReviewRepository;
 import org.babinkuk.exception.ObjectNotFoundException;
-import org.babinkuk.service.CourseService;
-import org.babinkuk.service.ReviewService;
 import org.babinkuk.vo.CourseVO;
 import org.babinkuk.vo.ReviewVO;
 import org.junit.jupiter.api.AfterEach;
@@ -22,8 +20,6 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Collection;
-import java.util.Optional;
-
 import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
@@ -66,6 +62,12 @@ public class ReviewServiceTest {
 	@Value("${sql.script.instructor.delete}")
 	private String sqlDeleteInstructor;
 	
+	@Value("${sql.script.instructor-detail.insert}")
+	private String sqlAddInstructorDetail;
+	
+	@Value("${sql.script.instructor-detail.delete}")
+	private String sqlDeleteInstructorDetail;
+	
 	@Value("${sql.script.student.insert}")
 	private String sqlAddStudent;
 	
@@ -82,6 +84,7 @@ public class ReviewServiceTest {
     public void setupDatabase() {
 		log.info("BeforeEach");
 
+		jdbc.execute(sqlAddInstructorDetail);
 		jdbc.execute(sqlAddInstructor);
 		jdbc.execute(sqlAddCourse);
 		jdbc.execute(sqlAddReview);
@@ -240,6 +243,7 @@ public class ReviewServiceTest {
 		jdbc.execute(sqlDeleteReview);
 		jdbc.execute(sqlDeleteCourse);
 		jdbc.execute(sqlDeleteInstructor);
+		jdbc.execute(sqlDeleteInstructorDetail);
 	}
 	
 	private String getMessage(String str) {

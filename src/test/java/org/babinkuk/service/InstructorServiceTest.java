@@ -1,11 +1,9 @@
-package org.babinkuk;
+package org.babinkuk.service;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.babinkuk.dao.InstructorRepository;
 import org.babinkuk.exception.ObjectNotFoundException;
-import org.babinkuk.service.CourseService;
-import org.babinkuk.service.InstructorService;
 import org.babinkuk.vo.InstructorVO;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -39,9 +37,6 @@ public class InstructorServiceTest {
 	
 	@Autowired
 	private InstructorService instructorService;
-	
-	@Autowired
-	private CourseService courseService;
 	
 	@Autowired
 	private InstructorRepository instructorRepository;
@@ -102,7 +97,7 @@ public class InstructorServiceTest {
 		
 		//log.info(instructorVO.toString());
 		
-		assertNotNull(instructorVO,"reviewVO null");
+		assertNotNull(instructorVO,"instructorVO null");
 		assertEquals(1, instructorVO.getId());
 		assertNotNull(instructorVO.getFirstName(),"instructorVO.getFirstName() null");
 		assertNotNull(instructorVO.getLastName(),"instructorVO.getLastName() null");
@@ -136,7 +131,7 @@ public class InstructorServiceTest {
 		
 		log.info(instructorVO.toString());
 		
-		assertNotNull(instructorVO,"reviewVO null");
+		assertNotNull(instructorVO,"instructorVO null");
 		assertEquals(1, instructorVO.getId());
 		assertNotNull(instructorVO.getFirstName(),"instructorVO.getFirstName() null");
 		assertNotNull(instructorVO.getLastName(),"instructorVO.getLastName() null");
@@ -250,7 +245,7 @@ public class InstructorServiceTest {
 		
 		// assert
 		if (instructors instanceof Collection<?>) {
-			assertEquals(1, ((Collection<?>) instructors).size(), "reviews size not 1");
+			assertEquals(1, ((Collection<?>) instructors).size(), "instructors size not 1");
 		}
 		
 		// create instructor
@@ -264,7 +259,7 @@ public class InstructorServiceTest {
 		
 		// assert
 		if (instructors instanceof Collection<?>) {
-			assertEquals(2, ((Collection<?>) instructors).size(), "reviews size not 2 after insert");
+			assertEquals(2, ((Collection<?>) instructors).size(), "instructors size not 2 after insert");
 		}
 		
 		// delete instructor
@@ -275,7 +270,7 @@ public class InstructorServiceTest {
 		
 		// assert
 		if (instructors instanceof Collection<?>) {
-			assertEquals(1, ((Collection<?>) instructors).size(), "reviews size not 1 after delete");
+			assertEquals(1, ((Collection<?>) instructors).size(), "instructors size not 1 after delete");
 		}
 	}
 	
