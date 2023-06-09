@@ -2,7 +2,6 @@ package org.babinkuk.service;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.babinkuk.dao.ReviewRepository;
 import org.babinkuk.exception.ObjectNotFoundException;
 import org.babinkuk.vo.CourseVO;
 import org.babinkuk.vo.ReviewVO;
@@ -40,9 +39,6 @@ public class ReviewServiceTest {
 	
 	@Autowired
 	private CourseService courseService;
-	
-	@Autowired
-	private ReviewRepository reviewRepository;
 	
 	@Value("${sql.script.review.insert}")
 	private String sqlAddReview;

@@ -2,10 +2,7 @@ package org.babinkuk.service;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.babinkuk.dao.InstructorRepository;
-import org.babinkuk.dao.StudentRepository;
 import org.babinkuk.exception.ObjectNotFoundException;
-import org.babinkuk.vo.InstructorVO;
 import org.babinkuk.vo.StudentVO;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -39,9 +36,6 @@ public class StudentServiceTest {
 	
 	@Autowired
 	private StudentService studentService;
-	
-	@Autowired
-	private StudentRepository studentRepository;
 	
 	@Value("${sql.script.review.insert}")
 	private String sqlAddReview;
@@ -197,7 +191,7 @@ public class StudentServiceTest {
 	void deleteStudent() {
 		log.info("deleteStudent");
 		
-		// first get instructor
+		// first get student
 		StudentVO studentVO = studentService.findById(1);
 		
 		// assert

@@ -2,7 +2,6 @@ package org.babinkuk.service;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.babinkuk.dao.InstructorRepository;
 import org.babinkuk.exception.ObjectNotFoundException;
 import org.babinkuk.vo.InstructorVO;
 import org.junit.jupiter.api.AfterEach;
@@ -37,9 +36,6 @@ public class InstructorServiceTest {
 	
 	@Autowired
 	private InstructorService instructorService;
-	
-	@Autowired
-	private InstructorRepository instructorRepository;
 	
 	@Value("${sql.script.review.insert}")
 	private String sqlAddReview;
