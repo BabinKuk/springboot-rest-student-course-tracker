@@ -25,8 +25,8 @@ public class ReviewServiceImpl implements ReviewService {
 	
 	private final Logger log = LogManager.getLogger(getClass());
 	
-	private static String REVIEW_SAVE_SUCCESS = "review_save_success";
-	private static String REVIEW_DELETE_SUCCESS = "review_delete_success";
+	public static String REVIEW_SAVE_SUCCESS = "review_save_success";
+	public static String REVIEW_DELETE_SUCCESS = "review_delete_success";
 	
 	@Autowired
 	private ReviewRepository reviewRepository;

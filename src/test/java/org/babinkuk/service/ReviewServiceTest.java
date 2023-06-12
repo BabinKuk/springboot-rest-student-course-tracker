@@ -116,7 +116,7 @@ public class ReviewServiceTest {
 	void addReview() {
 		log.info("addReview");
 		
-		// first find review
+		// first find course
 		CourseVO courseVO = courseService.findById(1);
 		
 		// create review
