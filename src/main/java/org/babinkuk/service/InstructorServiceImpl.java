@@ -24,8 +24,8 @@ public class InstructorServiceImpl implements InstructorService {
 	
 	private final Logger log = LogManager.getLogger(getClass());
 	
-	private static String INSTRUCTOR_SAVE_SUCCESS = "instructor_save_success";
-	private static String INSTRUCTOR_DELETE_SUCCESS = "instructor_delete_success";
+	public static String INSTRUCTOR_SAVE_SUCCESS = "instructor_save_success";
+	public static String INSTRUCTOR_DELETE_SUCCESS = "instructor_delete_success";
 	
 	@Autowired
 	private InstructorRepository instructorRepository;
