@@ -123,6 +123,7 @@ public class ReviewControllerTest {
 		// init
 		request = new MockHttpServletRequest();
 	}
+	
 	@BeforeEach
     public void setupDatabase() {
 		log.info("BeforeEach");

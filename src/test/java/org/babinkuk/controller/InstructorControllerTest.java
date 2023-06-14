@@ -5,17 +5,11 @@ import javax.persistence.PersistenceContext;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.babinkuk.service.CourseService;
 import org.babinkuk.service.InstructorService;
 import org.babinkuk.service.InstructorServiceImpl;
-import org.babinkuk.service.ReviewService;
-import org.babinkuk.service.ReviewServiceImpl;
 import org.babinkuk.validator.ActionType;
 import org.babinkuk.validator.ValidatorCodes;
-import org.babinkuk.validator.ValidatorRole;
-import org.babinkuk.vo.CourseVO;
 import org.babinkuk.vo.InstructorVO;
-import org.babinkuk.vo.ReviewVO;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
@@ -126,6 +120,7 @@ public class InstructorControllerTest {
 		// init
 		request = new MockHttpServletRequest();
 	}
+	
 	@BeforeEach
     public void setupDatabase() {
 		log.info("BeforeEach");
@@ -283,7 +278,7 @@ public class InstructorControllerTest {
 			.andExpect(jsonPath("$.message", is(String.format(getMessage("error_code_instructor_id_not_found"), 2)))) // verify json element
 			;
 		
-		// get review with id=1 (non existing) (without validationRole param)
+		// get instructor with id=1 (non existing) (without validationRole param)
 		mockMvc.perform(MockMvcRequestBuilders.get(ROOT + INSTRUCTORS + "/get/{id}", 1)
 				.param("validationRole", ROLE_NOT_EXIST)
 			).andDo(MockMvcResultHandlers.print())
@@ -293,7 +288,7 @@ public class InstructorControllerTest {
 			.andExpect(jsonPath("$.hobby", is("test hobby"))) // verify json element
 			;
 	
-		// get review with id=2 (non existing) (not existing validationRole param)
+		// get instructor with id=2 (non existing) (not existing validationRole param)
 		mockMvc.perform(MockMvcRequestBuilders.get(ROOT + INSTRUCTORS + "/get/{id}", 2)
 				.param("validationRole", ROLE_NOT_EXIST)
 			).andDo(MockMvcResultHandlers.print())
@@ -454,7 +449,7 @@ public class InstructorControllerTest {
 			;
 		
 		// additional check
-		// get all reviews
+		// get all instructors
 		mockMvc.perform(MockMvcRequestBuilders.get(ROOT + INSTRUCTORS + "/get")
 				.param("validationRole", ROLE_NOT_EXIST)
 			).andDo(MockMvcResultHandlers.print())
@@ -472,12 +467,12 @@ public class InstructorControllerTest {
 		InstructorVO instructorVO = instructorService.findById(1);
 		log.info(instructorVO.toString());
 		
-		assertNotNull(instructorVO,"reviewVO null");
+		assertNotNull(instructorVO,"instructorVO null");
 		assertEquals(1, instructorVO.getId());
 		assertNotNull(instructorVO.getFirstName(),"instructorVO.getFirstName() null");
 		assertEquals("firstNameInstr", instructorVO.getFirstName(),"assertEquals instructorVO.getFirstName() failure");
 		
-		// update review
+		// update instructor
 		instructorVO.setFirstName("firstName");
 		instructorVO.setLastName("lastName");
 		instructorVO.setEmailAddress("email@email.com");
@@ -516,12 +511,12 @@ public class InstructorControllerTest {
 		InstructorVO instructorVO = instructorService.findById(1);
 		log.info(instructorVO.toString());
 		
-		assertNotNull(instructorVO,"reviewVO null");
+		assertNotNull(instructorVO,"instructorVO null");
 		assertEquals(1, instructorVO.getId());
 		assertNotNull(instructorVO.getFirstName(),"instructorVO.getFirstName() null");
 		assertEquals("firstNameInstr", instructorVO.getFirstName(),"assertEquals instructorVO.getFirstName() failure");
 		
-		// update review
+		// update instructor
 		instructorVO.setFirstName("firstName");
 		instructorVO.setLastName("lastName");
 		instructorVO.setEmailAddress("email@email.com");
@@ -560,12 +555,12 @@ public class InstructorControllerTest {
 		InstructorVO instructorVO = instructorService.findById(1);
 		log.info(instructorVO.toString());
 		
-		assertNotNull(instructorVO,"reviewVO null");
+		assertNotNull(instructorVO,"instructorVO null");
 		assertEquals(1, instructorVO.getId());
 		assertNotNull(instructorVO.getFirstName(),"instructorVO.getFirstName() null");
 		assertEquals("firstNameInstr", instructorVO.getFirstName(),"assertEquals instructorVO.getFirstName() failure");
 		
-		// update review
+		// update instructor
 		instructorVO.setFirstName("firstName");
 		instructorVO.setLastName("lastName");
 		instructorVO.setEmailAddress("email@email.com");
@@ -605,12 +600,12 @@ public class InstructorControllerTest {
 		InstructorVO instructorVO = instructorService.findById(1);
 		log.info(instructorVO.toString());
 		
-		assertNotNull(instructorVO,"reviewVO null");
+		assertNotNull(instructorVO,"instructorVO null");
 		assertEquals(1, instructorVO.getId());
 		assertNotNull(instructorVO.getFirstName(),"instructorVO.getFirstName() null");
 		assertEquals("firstNameInstr", instructorVO.getFirstName(),"assertEquals instructorVO.getFirstName() failure");
 		
-		// update review
+		// update instructor
 		instructorVO.setFirstName("firstName");
 		instructorVO.setLastName("lastName");
 		instructorVO.setEmailAddress("email@email.com");
@@ -650,12 +645,12 @@ public class InstructorControllerTest {
 		InstructorVO instructorVO = instructorService.findById(1);
 		log.info(instructorVO.toString());
 		
-		assertNotNull(instructorVO,"reviewVO null");
+		assertNotNull(instructorVO,"instructorVO null");
 		assertEquals(1, instructorVO.getId());
 		assertNotNull(instructorVO.getFirstName(),"instructorVO.getFirstName() null");
 		assertEquals("firstNameInstr", instructorVO.getFirstName(),"assertEquals instructorVO.getFirstName() failure");
 		
-		// update review
+		// update instructor
 		instructorVO.setFirstName("firstName");
 		instructorVO.setLastName("lastName");
 		instructorVO.setEmailAddress("email@email.com");
@@ -690,12 +685,12 @@ public class InstructorControllerTest {
 	void deleteInstructorRoleAdmin() throws Exception {
 		log.info("deleteInstructorRoleAdmin");
 		
-		// check if review id 1 exists
+		// check if instructor id 1 exists
 		int id = 1;
 		InstructorVO instructorVO = instructorService.findById(id);
 		log.info(instructorVO.toString());
 		
-		assertNotNull(instructorVO,"reviewVO null");
+		assertNotNull(instructorVO,"instructorVO null");
 		assertEquals(1, instructorVO.getId());
 		assertNotNull(instructorVO.getFirstName(),"instructorVO.getFirstName() null");
 		assertEquals("firstNameInstr", instructorVO.getFirstName(),"assertEquals instructorVO.getFirstName() failure");
@@ -709,7 +704,7 @@ public class InstructorControllerTest {
 			.andExpect(jsonPath("$.message", is(getMessage(InstructorServiceImpl.INSTRUCTOR_DELETE_SUCCESS)))) // verify json element
 			;
 		
-		// get review with id=1 (non existing)
+		// get instructor with id=1 (non existing)
 		mockMvc.perform(MockMvcRequestBuilders.get(ROOT + INSTRUCTORS + "/get/{id}", id)
 				.param("validationRole", ROLE_ADMIN)
 			).andDo(MockMvcResultHandlers.print())
@@ -723,12 +718,12 @@ public class InstructorControllerTest {
 	void deleteInstructorRoleInstructor() throws Exception {
 		log.info("deleteInstructorRoleInstructor");
 		
-		// check if review id 1 exists
+		// check if instructor id 1 exists
 		int id = 1;
 		InstructorVO instructorVO = instructorService.findById(id);
 		log.info(instructorVO.toString());
 		
-		assertNotNull(instructorVO,"reviewVO null");
+		assertNotNull(instructorVO,"instructorVO null");
 		assertEquals(1, instructorVO.getId());
 		assertNotNull(instructorVO.getFirstName(),"instructorVO.getFirstName() null");
 		assertEquals("firstNameInstr", instructorVO.getFirstName(),"assertEquals instructorVO.getFirstName() failure");
@@ -747,12 +742,12 @@ public class InstructorControllerTest {
 	void deleteInstructorRoleStudent() throws Exception {
 		log.info("deleteInstructorRoleStudent");
 		
-		// check if review id 1 exists
+		// check if instructor id 1 exists
 		int id = 1;
 		InstructorVO instructorVO = instructorService.findById(id);
 		log.info(instructorVO.toString());
 		
-		assertNotNull(instructorVO,"reviewVO null");
+		assertNotNull(instructorVO,"instructorVO null");
 		assertEquals(1, instructorVO.getId());
 		assertNotNull(instructorVO.getFirstName(),"instructorVO.getFirstName() null");
 		assertEquals("firstNameInstr", instructorVO.getFirstName(),"assertEquals instructorVO.getFirstName() failure");
@@ -771,12 +766,12 @@ public class InstructorControllerTest {
 	void deleteInstructorNoRole() throws Exception {
 		log.info("deleteInstructorNoRole");
 		
-		// check if review id 1 exists
+		// check if instructor id 1 exists
 		int id = 1;
 		InstructorVO instructorVO = instructorService.findById(id);
 		log.info(instructorVO.toString());
 		
-		assertNotNull(instructorVO,"reviewVO null");
+		assertNotNull(instructorVO,"instructorVO null");
 		assertEquals(1, instructorVO.getId());
 		assertNotNull(instructorVO.getFirstName(),"instructorVO.getFirstName() null");
 		assertEquals("firstNameInstr", instructorVO.getFirstName(),"assertEquals instructorVO.getFirstName() failure");
@@ -795,12 +790,12 @@ public class InstructorControllerTest {
 	void deleteInstructorRoleNotExist() throws Exception {
 		log.info("deleteInstructorRoleNotExist");
 		
-		// check if review id 1 exists
+		// check if instructor id 1 exists
 		int id = 1;
 		InstructorVO instructorVO = instructorService.findById(id);
 		log.info(instructorVO.toString());
 		
-		assertNotNull(instructorVO,"reviewVO null");
+		assertNotNull(instructorVO,"instructorVO null");
 		assertEquals(1, instructorVO.getId());
 		assertNotNull(instructorVO.getFirstName(),"instructorVO.getFirstName() null");
 		assertEquals("firstNameInstr", instructorVO.getFirstName(),"assertEquals instructorVO.getFirstName() failure");
