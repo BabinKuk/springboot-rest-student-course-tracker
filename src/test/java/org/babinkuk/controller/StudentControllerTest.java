@@ -37,7 +37,7 @@ import static org.hamcrest.Matchers.is;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 import static org.babinkuk.controller.Api.ROOT;
-import static org.babinkuk.controller.Api.STUDENTS;;
+import static org.babinkuk.controller.Api.STUDENTS;
 
 @SpringBootTest
 @ActiveProfiles("test")
