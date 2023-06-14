@@ -6,6 +6,7 @@ import javax.persistence.PersistenceContext;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.babinkuk.service.StudentService;
+import org.babinkuk.service.StudentServiceImpl;
 import org.babinkuk.validator.ActionType;
 import org.babinkuk.validator.ValidatorCodes;
 import org.babinkuk.vo.StudentVO;
@@ -296,516 +297,496 @@ public class StudentControllerTest {
 			;
 	}
 	
-//	@Test
-//	void addStudentRoleAdmin() throws Exception {
-//		log.info("addStudentRoleAdmin");
-//		
-//		// create student
-//		StudentVO studentVO = new StudentVO("firstName", "lastName", "emailAddress@email.hr", "youtubeChannel", "hobby");
-//		
-//		mockMvc.perform(MockMvcRequestBuilders.post(ROOT + STUDENTS)
-//				.param("validationRole", ROLE_ADMIN)
-//				.contentType(APPLICATION_JSON_UTF8)
-//				.content(objectMApper.writeValueAsString(studentVO)) // generate json from java object
-//			).andDo(MockMvcResultHandlers.print())
-//			.andExpect(status().isOk())
-//			.andExpect(jsonPath("$.message", is(getMessage(StudentServiceImpl.INSTRUCTOR_SAVE_SUCCESS)))) // verify json element
-//			;
-//		
-//		// additional check
-//		// get all students
-//		mockMvc.perform(MockMvcRequestBuilders.get(ROOT + STUDENTS + "/get")
-//				.param("validationRole", ROLE_ADMIN)
-//			).andDo(MockMvcResultHandlers.print())
-//			.andExpect(status().isOk())
-//			.andExpect(content().contentType(APPLICATION_JSON_UTF8))
-//			.andExpect(jsonPath("$", hasSize(2))) // verify that json root element $ is now size 2
-//			;
-//		
-//		// additional check
-//		studentVO = studentService.findByEmail("emailAddress@email.hr");
-//		
-//		log.info(studentVO.toString());
-//		
-//		assertNotNull(studentVO,"studentVO null");
-//		assertNotNull(studentVO.getFirstName(),"studentVO.getFirstName() null");
-//		assertNotNull(studentVO.getLastName(),"studentVO.getLastName() null");
-//		assertNotNull(studentVO.getEmailAddress(),"studentVO.getEmailAddress() null");
-//		assertEquals("firstName", studentVO.getFirstName(),"studentVO.getFirstName() NOK");
-//		assertEquals("lastName", studentVO.getLastName(),"studentVO.getLastName() NOK");
-//	}
-//
-//	@Test
-//	void addStudentRoleStudent() throws Exception {
-//		log.info("addStudentRoleStudent");
-//		
-//		// create student
-//		StudentVO studentVO = new StudentVO("firstName", "lastName", "emailAddress@email.hr", "youtubeChannel", "hobby");
-//		
-//		mockMvc.perform(MockMvcRequestBuilders.post(ROOT + STUDENTS)
-//				.param("validationRole", ROLE_INSTRUCTOR)
-//				.contentType(APPLICATION_JSON_UTF8)
-//				.content(objectMApper.writeValueAsString(studentVO)) // generate json from java object
-//			).andDo(MockMvcResultHandlers.print())
-//			.andExpect(status().isOk())
-//			.andExpect(jsonPath("$.message", is(getMessage(StudentServiceImpl.INSTRUCTOR_SAVE_SUCCESS)))) // verify json element
-//			;
-//		
-//		// additional check
-//		// get all students
-//		mockMvc.perform(MockMvcRequestBuilders.get(ROOT + STUDENTS + "/get")
-//				.param("validationRole", ROLE_INSTRUCTOR)
-//			).andDo(MockMvcResultHandlers.print())
-//			.andExpect(status().isOk())
-//			.andExpect(content().contentType(APPLICATION_JSON_UTF8))
-//			.andExpect(jsonPath("$", hasSize(2))) // verify that json root element $ is now size 2
-//			;
-//		
-//		// additional check
-//		studentVO = studentService.findByEmail("emailAddress@email.hr");
-//		
-//		log.info(studentVO.toString());
-//		
-//		assertNotNull(studentVO,"studentVO null");
-//		assertNotNull(studentVO.getFirstName(),"studentVO.getFirstName() null");
-//		assertNotNull(studentVO.getLastName(),"studentVO.getLastName() null");
-//		assertNotNull(studentVO.getEmailAddress(),"studentVO.getEmailAddress() null");
-//		assertEquals("firstName", studentVO.getFirstName(),"studentVO.getFirstName() NOK");
-//		assertEquals("lastName", studentVO.getLastName(),"studentVO.getLastName() NOK");
-//	}
-//	
-//	@Test
-//	void addStudentRoleStudent() throws Exception {
-//		log.info("addStudentRoleStudent");
-//		
-//		// create student
-//		StudentVO studentVO = new StudentVO("firstName", "lastName", "emailAddress@email.hr", "youtubeChannel", "hobby");
-//		
-//		mockMvc.perform(MockMvcRequestBuilders.post(ROOT + STUDENTS)
-//				.param("validationRole", ROLE_STUDENT)
-//				.contentType(APPLICATION_JSON_UTF8)
-//				.content(objectMApper.writeValueAsString(studentVO)) // generate json from java object
-//			).andDo(MockMvcResultHandlers.print())
-//			.andExpect(status().is4xxClientError())
-//			.andExpect(status().isBadRequest()) // verify json root element status $ is 400 BAD_REQUEST
-//			.andExpect(jsonPath("$.message", is(String.format(messageSource.getMessage(ValidatorCodes.ERROR_CODE_ACTION_INVALID.getMessage(), new Object[] {}, LocaleContextHolder.getLocale()), ActionType.CREATE)))) // verify json root element message
-//			;
-//		
-//		// additional check
-//		// get all students
-//		mockMvc.perform(MockMvcRequestBuilders.get(ROOT + STUDENTS + "/get")
-//				.param("validationRole", ROLE_STUDENT)
-//			).andDo(MockMvcResultHandlers.print())
-//			.andExpect(status().isOk())
-//			.andExpect(content().contentType(APPLICATION_JSON_UTF8))
-//			.andExpect(jsonPath("$", hasSize(1))) // verify that json root element $ is still size 1
-//			;
-//	}
-//	
-//	@Test
-//	void addStudentNoRole() throws Exception {
-//		log.info("addStudentNoRole");
-//		
-//		// create student
-//		StudentVO studentVO = new StudentVO("firstName", "lastName", "emailAddress@email.hr", "youtubeChannel", "hobby");
-//		
-//		mockMvc.perform(MockMvcRequestBuilders.post(ROOT + STUDENTS)
-//				//.param("validationRole", ROLE_STUDENT)
-//				.contentType(APPLICATION_JSON_UTF8)
-//				.content(objectMApper.writeValueAsString(studentVO)) // generate json from java object
-//			).andDo(MockMvcResultHandlers.print())
-//			.andExpect(status().is4xxClientError())
-//			.andExpect(status().isBadRequest()) // verify json root element status $ is 400 BAD_REQUEST
-//			.andExpect(jsonPath("$.message", is(String.format(messageSource.getMessage(ValidatorCodes.ERROR_CODE_ACTION_INVALID.getMessage(), new Object[] {}, LocaleContextHolder.getLocale()), ActionType.CREATE)))) // verify json root element message
-//			;
-//		
-//		// additional check
-//		// get all students
-//		mockMvc.perform(MockMvcRequestBuilders.get(ROOT + STUDENTS + "/get")
-//				//.param("validationRole", ROLE_STUDENT)
-//			).andDo(MockMvcResultHandlers.print())
-//			.andExpect(status().isOk())
-//			.andExpect(content().contentType(APPLICATION_JSON_UTF8))
-//			.andExpect(jsonPath("$", hasSize(1))) // verify that json root element $ is still size 1
-//			;
-//	}
-//	
-//	@Test
-//	void addStudentRoleNotExist() throws Exception {
-//		log.info("addStudentRoleNotExist");
-//		
-//		// create student
-//		StudentVO studentVO = new StudentVO("firstName", "lastName", "emailAddress@email.hr", "youtubeChannel", "hobby");
-//		
-//		mockMvc.perform(MockMvcRequestBuilders.post(ROOT + STUDENTS)
-//				.param("validationRole", ROLE_NOT_EXIST)
-//				.contentType(APPLICATION_JSON_UTF8)
-//				.content(objectMApper.writeValueAsString(studentVO)) // generate json from java object
-//			).andDo(MockMvcResultHandlers.print())
-//			.andExpect(status().is4xxClientError())
-//			.andExpect(status().isBadRequest()) // verify json root element status $ is 400 BAD_REQUEST
-//			;
-//		
-//		// additional check
-//		// get all students
-//		mockMvc.perform(MockMvcRequestBuilders.get(ROOT + STUDENTS + "/get")
-//				.param("validationRole", ROLE_NOT_EXIST)
-//			).andDo(MockMvcResultHandlers.print())
-//			.andExpect(status().isOk())
-//			.andExpect(content().contentType(APPLICATION_JSON_UTF8))
-//			.andExpect(jsonPath("$", hasSize(1))) // verify that json root element $ is stil size 1
-//			;
-//	}
+	@Test
+	void addStudentRoleAdmin() throws Exception {
+		log.info("addStudentRoleAdmin");
+		
+		// create student
+		StudentVO studentVO = new StudentVO("firstName", "lastName", "emailAddress@email.hr");
+		
+		mockMvc.perform(MockMvcRequestBuilders.post(ROOT + STUDENTS)
+				.param("validationRole", ROLE_ADMIN)
+				.contentType(APPLICATION_JSON_UTF8)
+				.content(objectMApper.writeValueAsString(studentVO)) // generate json from java object
+			).andDo(MockMvcResultHandlers.print())
+			.andExpect(status().isOk())
+			.andExpect(jsonPath("$.message", is(getMessage(StudentServiceImpl.STUDENT_SAVE_SUCCESS)))) // verify json element
+			;
+		
+		// additional check
+		// get all students
+		mockMvc.perform(MockMvcRequestBuilders.get(ROOT + STUDENTS + "/get")
+				.param("validationRole", ROLE_ADMIN)
+			).andDo(MockMvcResultHandlers.print())
+			.andExpect(status().isOk())
+			.andExpect(content().contentType(APPLICATION_JSON_UTF8))
+			.andExpect(jsonPath("$", hasSize(2))) // verify that json root element $ is now size 2
+			;
+		
+		// additional check
+		studentVO = studentService.findByEmail("emailAddress@email.hr");
+		
+		log.info(studentVO.toString());
+		
+		assertNotNull(studentVO,"studentVO null");
+		assertNotNull(studentVO.getFirstName(),"studentVO.getFirstName() null");
+		assertNotNull(studentVO.getLastName(),"studentVO.getLastName() null");
+		assertNotNull(studentVO.getEmailAddress(),"studentVO.getEmailAddress() null");
+		assertEquals("firstName", studentVO.getFirstName(),"studentVO.getFirstName() NOK");
+		assertEquals("lastName", studentVO.getLastName(),"studentVO.getLastName() NOK");
+	}
+
+	@Test
+	void addStudentRoleInstructor() throws Exception {
+		log.info("addStudentRoleInstructor");
+		
+		// create student
+		StudentVO studentVO = new StudentVO("firstName", "lastName", "emailAddress@email.hr");
+		
+		mockMvc.perform(MockMvcRequestBuilders.post(ROOT + STUDENTS)
+				.param("validationRole", ROLE_INSTRUCTOR)
+				.contentType(APPLICATION_JSON_UTF8)
+				.content(objectMApper.writeValueAsString(studentVO)) // generate json from java object
+			).andDo(MockMvcResultHandlers.print())
+			.andExpect(status().isOk())
+			.andExpect(jsonPath("$.message", is(getMessage(StudentServiceImpl.STUDENT_SAVE_SUCCESS)))) // verify json element
+			;
+		
+		// additional check
+		// get all students
+		mockMvc.perform(MockMvcRequestBuilders.get(ROOT + STUDENTS + "/get")
+				.param("validationRole", ROLE_INSTRUCTOR)
+			).andDo(MockMvcResultHandlers.print())
+			.andExpect(status().isOk())
+			.andExpect(content().contentType(APPLICATION_JSON_UTF8))
+			.andExpect(jsonPath("$", hasSize(2))) // verify that json root element $ is now size 2
+			;
+		
+		// additional check
+		studentVO = studentService.findByEmail("emailAddress@email.hr");
+		
+		log.info(studentVO.toString());
+		
+		assertNotNull(studentVO,"studentVO null");
+		assertNotNull(studentVO.getFirstName(),"studentVO.getFirstName() null");
+		assertNotNull(studentVO.getLastName(),"studentVO.getLastName() null");
+		assertNotNull(studentVO.getEmailAddress(),"studentVO.getEmailAddress() null");
+		assertEquals("firstName", studentVO.getFirstName(),"studentVO.getFirstName() NOK");
+		assertEquals("lastName", studentVO.getLastName(),"studentVO.getLastName() NOK");
+	}
+	
+	@Test
+	void addStudentRoleStudent() throws Exception {
+		log.info("addStudentRoleStudent");
+		
+		// create student
+		StudentVO studentVO = new StudentVO("firstName", "lastName", "emailAddress@email.hr");
+		
+		mockMvc.perform(MockMvcRequestBuilders.post(ROOT + STUDENTS)
+				.param("validationRole", ROLE_STUDENT)
+				.contentType(APPLICATION_JSON_UTF8)
+				.content(objectMApper.writeValueAsString(studentVO)) // generate json from java object
+			).andDo(MockMvcResultHandlers.print())
+			.andExpect(status().is4xxClientError())
+			.andExpect(status().isBadRequest()) // verify json root element status $ is 400 BAD_REQUEST
+			.andExpect(jsonPath("$.message", is(String.format(messageSource.getMessage(ValidatorCodes.ERROR_CODE_ACTION_INVALID.getMessage(), new Object[] {}, LocaleContextHolder.getLocale()), ActionType.CREATE)))) // verify json root element message
+			;
+		
+		// additional check
+		// get all students
+		mockMvc.perform(MockMvcRequestBuilders.get(ROOT + STUDENTS + "/get")
+				.param("validationRole", ROLE_STUDENT)
+			).andDo(MockMvcResultHandlers.print())
+			.andExpect(status().isOk())
+			.andExpect(content().contentType(APPLICATION_JSON_UTF8))
+			.andExpect(jsonPath("$", hasSize(1))) // verify that json root element $ is still size 1
+			;
+	}
+	
+	@Test
+	void addStudentNoRole() throws Exception {
+		log.info("addStudentNoRole");
+		
+		// create student
+		StudentVO studentVO = new StudentVO("firstName", "lastName", "emailAddress@email.hr");
+		
+		mockMvc.perform(MockMvcRequestBuilders.post(ROOT + STUDENTS)
+				//.param("validationRole", ROLE_STUDENT)
+				.contentType(APPLICATION_JSON_UTF8)
+				.content(objectMApper.writeValueAsString(studentVO)) // generate json from java object
+			).andDo(MockMvcResultHandlers.print())
+			.andExpect(status().is4xxClientError())
+			.andExpect(status().isBadRequest()) // verify json root element status $ is 400 BAD_REQUEST
+			.andExpect(jsonPath("$.message", is(String.format(messageSource.getMessage(ValidatorCodes.ERROR_CODE_ACTION_INVALID.getMessage(), new Object[] {}, LocaleContextHolder.getLocale()), ActionType.CREATE)))) // verify json root element message
+			;
+		
+		// additional check
+		// get all students
+		mockMvc.perform(MockMvcRequestBuilders.get(ROOT + STUDENTS + "/get")
+				//.param("validationRole", ROLE_STUDENT)
+			).andDo(MockMvcResultHandlers.print())
+			.andExpect(status().isOk())
+			.andExpect(content().contentType(APPLICATION_JSON_UTF8))
+			.andExpect(jsonPath("$", hasSize(1))) // verify that json root element $ is still size 1
+			;
+	}
+	
+	@Test
+	void addStudentRoleNotExist() throws Exception {
+		log.info("addStudentRoleNotExist");
+		
+		// create student
+		StudentVO studentVO = new StudentVO("firstName", "lastName", "emailAddress@email.hr");
+		
+		mockMvc.perform(MockMvcRequestBuilders.post(ROOT + STUDENTS)
+				.param("validationRole", ROLE_NOT_EXIST)
+				.contentType(APPLICATION_JSON_UTF8)
+				.content(objectMApper.writeValueAsString(studentVO)) // generate json from java object
+			).andDo(MockMvcResultHandlers.print())
+			.andExpect(status().is4xxClientError())
+			.andExpect(status().isBadRequest()) // verify json root element status $ is 400 BAD_REQUEST
+			;
+		
+		// additional check
+		// get all students
+		mockMvc.perform(MockMvcRequestBuilders.get(ROOT + STUDENTS + "/get")
+				.param("validationRole", ROLE_NOT_EXIST)
+			).andDo(MockMvcResultHandlers.print())
+			.andExpect(status().isOk())
+			.andExpect(content().contentType(APPLICATION_JSON_UTF8))
+			.andExpect(jsonPath("$", hasSize(1))) // verify that json root element $ is stil size 1
+			;
+	}
+	
+	@Test
+	void updateStudentRoleAdmin() throws Exception {
+		log.info("updateStudentRoleAdmin");
+		
+		// check if student id 1 exists
+		StudentVO studentVO = studentService.findById(1);
+		log.info(studentVO.toString());
+		
+		assertNotNull(studentVO,"studentVO null");
+		assertEquals(1, studentVO.getId());
+		assertNotNull(studentVO.getFirstName(),"studentVO.getFirstName() null");
+		assertEquals("firstNameStudent", studentVO.getFirstName(),"assertEquals studentVO.getFirstName() failure");
+		
+		// update student
+		studentVO.setFirstName("firstName");
+		studentVO.setLastName("lastName");
+		studentVO.setEmailAddress("email@email.com");
+				
+		mockMvc.perform(MockMvcRequestBuilders.put(ROOT + STUDENTS)
+				.param("validationRole", ROLE_ADMIN)
+				.contentType(APPLICATION_JSON_UTF8)
+				.content(objectMApper.writeValueAsString(studentVO)) // generate json from java object
+			).andDo(MockMvcResultHandlers.print())
+			.andExpect(status().isOk())
+			.andExpect(jsonPath("$.message", is(getMessage(StudentServiceImpl.STUDENT_SAVE_SUCCESS)))) // verify json element
+			;
+		
+		// additional check
+		// get student with id=1
+		mockMvc.perform(MockMvcRequestBuilders.get(ROOT + STUDENTS + "/get/{id}", 1)
+				.param("validationRole", ROLE_ADMIN)
+			).andDo(MockMvcResultHandlers.print()).andExpect(status().isOk())
+			.andExpect(content().contentType(APPLICATION_JSON_UTF8))
+			.andExpect(jsonPath("$.id", is(1))) // verify json root element id is 1
+			.andExpect(jsonPath("$.firstName", is("firstName"))) // verify json element
+			.andExpect(jsonPath("$.lastName", is("lastName"))) // verify json element
+			.andExpect(jsonPath("$.emailAddress", is("email@email.com"))) // verify json element
+			;
+	}
+	
+	@Test
+	void updateStudentRoleInstructor() throws Exception {
+		log.info("updateStudentRoleInstructor");
+		
+		// check if student id 1 exists
+		StudentVO studentVO = studentService.findById(1);
+		log.info(studentVO.toString());
+		
+		assertNotNull(studentVO,"studentVO null");
+		assertEquals(1, studentVO.getId());
+		assertNotNull(studentVO.getFirstName(),"studentVO.getFirstName() null");
+		assertEquals("firstNameStudent", studentVO.getFirstName(),"assertEquals studentVO.getFirstName() failure");
+		
+		// update student
+		studentVO.setFirstName("firstName");
+		studentVO.setLastName("lastName");
+		studentVO.setEmailAddress("email@email.com");
+				
+		mockMvc.perform(MockMvcRequestBuilders.put(ROOT + STUDENTS)
+				.param("validationRole", ROLE_INSTRUCTOR)
+				.contentType(APPLICATION_JSON_UTF8)
+				.content(objectMApper.writeValueAsString(studentVO)) // generate json from java object
+			).andDo(MockMvcResultHandlers.print())
+			.andExpect(status().isOk())
+			.andExpect(jsonPath("$.message", is(getMessage(StudentServiceImpl.STUDENT_SAVE_SUCCESS)))) // verify json element
+			;
+		
+		// additional check
+		// get student with id=1
+		mockMvc.perform(MockMvcRequestBuilders.get(ROOT + STUDENTS + "/get/{id}", 1)
+				.param("validationRole", ROLE_INSTRUCTOR)
+			).andDo(MockMvcResultHandlers.print()).andExpect(status().isOk())
+			.andExpect(content().contentType(APPLICATION_JSON_UTF8))
+			.andExpect(jsonPath("$.id", is(1))) // verify json root element id is 1
+			.andExpect(jsonPath("$.firstName", is("firstName"))) // verify json element
+			.andExpect(jsonPath("$.lastName", is("lastName"))) // verify json element
+			.andExpect(jsonPath("$.emailAddress", is("email@email.com"))) // verify json element
+			;
+	}
 	
 //	@Test
-//	void updateStudentRoleAdmin() throws Exception {
-//		log.info("updateStudentRoleAdmin");
-//		
-//		// check if student id 1 exists
-//		StudentVO studentVO = studentService.findById(1);
-//		log.info(studentVO.toString());
-//		
-//		assertNotNull(studentVO,"studentVO null");
-//		assertEquals(1, studentVO.getId());
-//		assertNotNull(studentVO.getFirstName(),"studentVO.getFirstName() null");
-//		assertEquals("firstNameInstr", studentVO.getFirstName(),"assertEquals studentVO.getFirstName() failure");
-//		
-//		// update student
-//		studentVO.setFirstName("firstName");
-//		studentVO.setLastName("lastName");
-//		studentVO.setEmailAddress("email@email.com");
-//		studentVO.setYoutubeChannel("youtubeChannel");
-//		studentVO.setHobby("hobi");
-//				
-//		mockMvc.perform(MockMvcRequestBuilders.put(ROOT + STUDENTS)
-//				.param("validationRole", ROLE_ADMIN)
-//				.contentType(APPLICATION_JSON_UTF8)
-//				.content(objectMApper.writeValueAsString(studentVO)) // generate json from java object
-//			).andDo(MockMvcResultHandlers.print())
-//			.andExpect(status().isOk())
-//			.andExpect(jsonPath("$.message", is(getMessage(StudentServiceImpl.INSTRUCTOR_SAVE_SUCCESS)))) // verify json element
-//			;
-//		
-//		// additional check
-//		// get student with id=1
-//		mockMvc.perform(MockMvcRequestBuilders.get(ROOT + STUDENTS + "/get/{id}", 1)
-//				.param("validationRole", ROLE_ADMIN)
-//			).andDo(MockMvcResultHandlers.print()).andExpect(status().isOk())
-//			.andExpect(content().contentType(APPLICATION_JSON_UTF8))
-//			.andExpect(jsonPath("$.id", is(1))) // verify json root element id is 1
-//			.andExpect(jsonPath("$.firstName", is("firstName"))) // verify json element
-//			.andExpect(jsonPath("$.lastName", is("lastName"))) // verify json element
-//			.andExpect(jsonPath("$.emailAddress", is("email@email.com"))) // verify json element
-//			.andExpect(jsonPath("$.youtubeChannel", is("youtubeChannel"))) // verify json element
-//			.andExpect(jsonPath("$.hobby", is("hobi"))) // verify json element
-//			;
-//	}
-//	
-//	@Test
-//	void updateStudentRoleStudent() throws Exception {
-//		log.info("updateStudentRoleStudent");
-//		
-//		// check if student id 1 exists
-//		StudentVO studentVO = studentService.findById(1);
-//		log.info(studentVO.toString());
-//		
-//		assertNotNull(studentVO,"studentVO null");
-//		assertEquals(1, studentVO.getId());
-//		assertNotNull(studentVO.getFirstName(),"studentVO.getFirstName() null");
-//		assertEquals("firstNameInstr", studentVO.getFirstName(),"assertEquals studentVO.getFirstName() failure");
-//		
-//		// update student
-//		studentVO.setFirstName("firstName");
-//		studentVO.setLastName("lastName");
-//		studentVO.setEmailAddress("email@email.com");
-//		studentVO.setYoutubeChannel("youtubeChannel");
-//		studentVO.setHobby("hobi");
-//				
-//		mockMvc.perform(MockMvcRequestBuilders.put(ROOT + STUDENTS)
-//				.param("validationRole", ROLE_INSTRUCTOR)
-//				.contentType(APPLICATION_JSON_UTF8)
-//				.content(objectMApper.writeValueAsString(studentVO)) // generate json from java object
-//			).andDo(MockMvcResultHandlers.print())
-//			.andExpect(status().isOk())
-//			.andExpect(jsonPath("$.message", is(getMessage(StudentServiceImpl.INSTRUCTOR_SAVE_SUCCESS)))) // verify json element
-//			;
-//		
-//		// additional check
-//		// get student with id=1
-//		mockMvc.perform(MockMvcRequestBuilders.get(ROOT + STUDENTS + "/get/{id}", 1)
-//				.param("validationRole", ROLE_INSTRUCTOR)
-//			).andDo(MockMvcResultHandlers.print()).andExpect(status().isOk())
-//			.andExpect(content().contentType(APPLICATION_JSON_UTF8))
-//			.andExpect(jsonPath("$.id", is(1))) // verify json root element id is 1
-//			.andExpect(jsonPath("$.firstName", is("firstName"))) // verify json element
-//			.andExpect(jsonPath("$.lastName", is("lastName"))) // verify json element
-//			.andExpect(jsonPath("$.emailAddress", is("email@email.com"))) // verify json element
-//			.andExpect(jsonPath("$.youtubeChannel", is("youtubeChannel"))) // verify json element
-//			.andExpect(jsonPath("$.hobby", is("hobi"))) // verify json element
-//			;
-//	}
-//	
-//	@Test
-//	void updateStudentRoleStudent() throws Exception {
-//		log.info("updateStudentRoleStudent");
-//		
-//		// check if student id 1 exists
-//		StudentVO studentVO = studentService.findById(1);
-//		log.info(studentVO.toString());
-//		
-//		assertNotNull(studentVO,"studentVO null");
-//		assertEquals(1, studentVO.getId());
-//		assertNotNull(studentVO.getFirstName(),"studentVO.getFirstName() null");
-//		assertEquals("firstNameInstr", studentVO.getFirstName(),"assertEquals studentVO.getFirstName() failure");
-//		
-//		// update student
-//		studentVO.setFirstName("firstName");
-//		studentVO.setLastName("lastName");
-//		studentVO.setEmailAddress("email@email.com");
-//		studentVO.setYoutubeChannel("youtubeChannel");
-//		studentVO.setHobby("hobi");
-//				
-//		mockMvc.perform(MockMvcRequestBuilders.put(ROOT + STUDENTS)
-//				.param("validationRole", ROLE_STUDENT)
-//				.contentType(APPLICATION_JSON_UTF8)
-//				.content(objectMApper.writeValueAsString(studentVO)) // generate json from java object
-//			).andDo(MockMvcResultHandlers.print())
-//			.andExpect(status().is4xxClientError())
-//			.andExpect(status().isBadRequest()) // verify json root element status $ is 400 BAD_REQUEST
-//			.andExpect(jsonPath("$.message", is(String.format(messageSource.getMessage(ValidatorCodes.ERROR_CODE_ACTION_INVALID.getMessage(), new Object[] {}, LocaleContextHolder.getLocale()), ActionType.UPDATE)))) // verify json root element message
-//			;
-//		
-//		// additional check
-//		// get student with id=1
-//		mockMvc.perform(MockMvcRequestBuilders.get(ROOT + STUDENTS + "/get/{id}", 1)
-//				.param("validationRole", ROLE_STUDENT)
-//			).andDo(MockMvcResultHandlers.print()).andExpect(status().isOk())
-//			.andExpect(content().contentType(APPLICATION_JSON_UTF8))
-//			.andExpect(jsonPath("$.id", is(1))) // verify json root element id is 1
-//			.andExpect(jsonPath("$.firstName", is("firstNameInstr"))) // verify json element
-//			.andExpect(jsonPath("$.lastName", is("lastNameInstr"))) // verify json element
-//			.andExpect(jsonPath("$.emailAddress", is("firstNameInstr@babinuk.com"))) // verify json element
-//			.andExpect(jsonPath("$.youtubeChannel", is("ytb test"))) // verify json element
-//			.andExpect(jsonPath("$.hobby", is("test hobby"))) // verify json element
-//			;
-//	}
-//	
-//	@Test
-//	void updateStudentNoRole() throws Exception {
-//		log.info("updateStudentNoRole");
-//		
-//		// check if student id 1 exists
-//		StudentVO studentVO = studentService.findById(1);
-//		log.info(studentVO.toString());
-//		
-//		assertNotNull(studentVO,"studentVO null");
-//		assertEquals(1, studentVO.getId());
-//		assertNotNull(studentVO.getFirstName(),"studentVO.getFirstName() null");
-//		assertEquals("firstNameInstr", studentVO.getFirstName(),"assertEquals studentVO.getFirstName() failure");
-//		
-//		// update student
-//		studentVO.setFirstName("firstName");
-//		studentVO.setLastName("lastName");
-//		studentVO.setEmailAddress("email@email.com");
-//		studentVO.setYoutubeChannel("youtubeChannel");
-//		studentVO.setHobby("hobi");
-//				
-//		mockMvc.perform(MockMvcRequestBuilders.put(ROOT + STUDENTS)
-//				//.param("validationRole", ROLE_STUDENT)
-//				.contentType(APPLICATION_JSON_UTF8)
-//				.content(objectMApper.writeValueAsString(studentVO)) // generate json from java object
-//			).andDo(MockMvcResultHandlers.print())
-//			.andExpect(status().is4xxClientError())
-//			.andExpect(status().isBadRequest()) // verify json root element status $ is 400 BAD_REQUEST
-//			.andExpect(jsonPath("$.message", is(String.format(messageSource.getMessage(ValidatorCodes.ERROR_CODE_ACTION_INVALID.getMessage(), new Object[] {}, LocaleContextHolder.getLocale()), ActionType.UPDATE)))) // verify json root element message
-//			;
-//		
-//		// additional check
-//		// get student with id=1
-//		mockMvc.perform(MockMvcRequestBuilders.get(ROOT + STUDENTS + "/get/{id}", 1)
-//				//.param("validationRole", ROLE_STUDENT)
-//			).andDo(MockMvcResultHandlers.print()).andExpect(status().isOk())
-//			.andExpect(content().contentType(APPLICATION_JSON_UTF8))
-//			.andExpect(jsonPath("$.id", is(1))) // verify json root element id is 1
-//			.andExpect(jsonPath("$.firstName", is("firstNameInstr"))) // verify json element
-//			.andExpect(jsonPath("$.lastName", is("lastNameInstr"))) // verify json element
-//			.andExpect(jsonPath("$.emailAddress", is("firstNameInstr@babinuk.com"))) // verify json element
-//			.andExpect(jsonPath("$.youtubeChannel", is("ytb test"))) // verify json element
-//			.andExpect(jsonPath("$.hobby", is("test hobby"))) // verify json element
-//			;
-//	}
-//	
-//	@Test
-//	void updateStudentRoleNotExist() throws Exception {
-//		log.info("updateStudentRoleNotExist");
-//		
-//		// check if student id 1 exists
-//		StudentVO studentVO = studentService.findById(1);
-//		log.info(studentVO.toString());
-//		
-//		assertNotNull(studentVO,"studentVO null");
-//		assertEquals(1, studentVO.getId());
-//		assertNotNull(studentVO.getFirstName(),"studentVO.getFirstName() null");
-//		assertEquals("firstNameInstr", studentVO.getFirstName(),"assertEquals studentVO.getFirstName() failure");
-//		
-//		// update student
-//		studentVO.setFirstName("firstName");
-//		studentVO.setLastName("lastName");
-//		studentVO.setEmailAddress("email@email.com");
-//		studentVO.setYoutubeChannel("youtubeChannel");
-//		studentVO.setHobby("hobi");
-//				
-//		mockMvc.perform(MockMvcRequestBuilders.put(ROOT + STUDENTS)
-//				.param("validationRole", ROLE_NOT_EXIST)
-//				.contentType(APPLICATION_JSON_UTF8)
-//				.content(objectMApper.writeValueAsString(studentVO)) // generate json from java object
-//			).andDo(MockMvcResultHandlers.print())
-//			.andExpect(status().is4xxClientError())
-//			.andExpect(status().isBadRequest()) // verify json root element status $ is 400 BAD_REQUEST
-//			;
-//		
-//		// additional check
-//		// get student with id=1
-//		mockMvc.perform(MockMvcRequestBuilders.get(ROOT + STUDENTS + "/get/{id}", 1)
-//				.param("validationRole", ROLE_NOT_EXIST)
-//			).andDo(MockMvcResultHandlers.print()).andExpect(status().isOk())
-//			.andExpect(content().contentType(APPLICATION_JSON_UTF8))
-//			.andExpect(jsonPath("$.id", is(1))) // verify json root element id is 1
-//			.andExpect(jsonPath("$.firstName", is("firstNameInstr"))) // verify json element
-//			.andExpect(jsonPath("$.lastName", is("lastNameInstr"))) // verify json element
-//			.andExpect(jsonPath("$.emailAddress", is("firstNameInstr@babinuk.com"))) // verify json element
-//			.andExpect(jsonPath("$.youtubeChannel", is("ytb test"))) // verify json element
-//			.andExpect(jsonPath("$.hobby", is("test hobby"))) // verify json element
-//			;
-//	}
-//	
-//	@Test
-//	void deleteStudentRoleAdmin() throws Exception {
-//		log.info("deleteStudentRoleAdmin");
-//		
-//		// check if student id 1 exists
-//		int id = 1;
-//		StudentVO studentVO = studentService.findById(id);
-//		log.info(studentVO.toString());
-//		
-//		assertNotNull(studentVO,"studentVO null");
-//		assertEquals(1, studentVO.getId());
-//		assertNotNull(studentVO.getFirstName(),"studentVO.getFirstName() null");
-//		assertEquals("firstNameInstr", studentVO.getFirstName(),"assertEquals studentVO.getFirstName() failure");
-//				
-//		// delete student
-//		mockMvc.perform(MockMvcRequestBuilders.delete(ROOT + STUDENTS + "/{id}", id)
-//				.param("validationRole", ROLE_ADMIN)
-//			).andDo(MockMvcResultHandlers.print())
-//			.andExpect(status().isOk())
-//			.andExpect(content().contentType(APPLICATION_JSON_UTF8))
-//			.andExpect(jsonPath("$.message", is(getMessage(StudentServiceImpl.INSTRUCTOR_DELETE_SUCCESS)))) // verify json element
-//			;
-//		
-//		// get student with id=1 (non existing)
-//		mockMvc.perform(MockMvcRequestBuilders.get(ROOT + STUDENTS + "/get/{id}", id)
-//				.param("validationRole", ROLE_ADMIN)
-//			).andDo(MockMvcResultHandlers.print())
-//			.andExpect(status().isOk())
-//			.andExpect(content().contentType(APPLICATION_JSON_UTF8))
-//			.andExpect(jsonPath("$.message", is(String.format(getMessage("error_code_student_id_not_found"), id)))) //verify json element
-//			;
-//	}
-//	
-//	@Test
-//	void deleteStudentRoleStudent() throws Exception {
-//		log.info("deleteStudentRoleStudent");
-//		
-//		// check if student id 1 exists
-//		int id = 1;
-//		StudentVO studentVO = studentService.findById(id);
-//		log.info(studentVO.toString());
-//		
-//		assertNotNull(studentVO,"studentVO null");
-//		assertEquals(1, studentVO.getId());
-//		assertNotNull(studentVO.getFirstName(),"studentVO.getFirstName() null");
-//		assertEquals("firstNameInstr", studentVO.getFirstName(),"assertEquals studentVO.getFirstName() failure");
-//				
-//		// delete student
-//		mockMvc.perform(MockMvcRequestBuilders.delete(ROOT + STUDENTS + "/{id}", id)
-//				.param("validationRole", ROLE_INSTRUCTOR)
-//			).andDo(MockMvcResultHandlers.print())
-//			.andExpect(status().is4xxClientError())
-//			.andExpect(status().isBadRequest()) // verify json root element status $ is 400 BAD_REQUEST
-//			.andExpect(jsonPath("$.message", is(String.format(messageSource.getMessage(ValidatorCodes.ERROR_CODE_ACTION_INVALID.getMessage(), new Object[] {}, LocaleContextHolder.getLocale()), ActionType.DELETE)))) // verify json root element message
-//			;
-//	}
-//	
-//	@Test
-//	void deleteStudentRoleStudent() throws Exception {
-//		log.info("deleteStudentRoleStudent");
-//		
-//		// check if student id 1 exists
-//		int id = 1;
-//		StudentVO studentVO = studentService.findById(id);
-//		log.info(studentVO.toString());
-//		
-//		assertNotNull(studentVO,"studentVO null");
-//		assertEquals(1, studentVO.getId());
-//		assertNotNull(studentVO.getFirstName(),"studentVO.getFirstName() null");
-//		assertEquals("firstNameInstr", studentVO.getFirstName(),"assertEquals studentVO.getFirstName() failure");
-//				
-//		// delete student
-//		mockMvc.perform(MockMvcRequestBuilders.delete(ROOT + STUDENTS + "/{id}", id)
-//				.param("validationRole", ROLE_STUDENT)
-//			).andDo(MockMvcResultHandlers.print())
-//			.andExpect(status().is4xxClientError())
-//			.andExpect(status().isBadRequest()) // verify json root element status $ is 400 BAD_REQUEST
-//			.andExpect(jsonPath("$.message", is(String.format(messageSource.getMessage(ValidatorCodes.ERROR_CODE_ACTION_INVALID.getMessage(), new Object[] {}, LocaleContextHolder.getLocale()), ActionType.DELETE)))) // verify json root element message
-//			;
-//	}
-//
-//	@Test
-//	void deleteStudentNoRole() throws Exception {
-//		log.info("deleteStudentNoRole");
-//		
-//		// check if student id 1 exists
-//		int id = 1;
-//		StudentVO studentVO = studentService.findById(id);
-//		log.info(studentVO.toString());
-//		
-//		assertNotNull(studentVO,"studentVO null");
-//		assertEquals(1, studentVO.getId());
-//		assertNotNull(studentVO.getFirstName(),"studentVO.getFirstName() null");
-//		assertEquals("firstNameInstr", studentVO.getFirstName(),"assertEquals studentVO.getFirstName() failure");
-//				
-//		// delete student
-//		mockMvc.perform(MockMvcRequestBuilders.delete(ROOT + STUDENTS + "/{id}", id)
-//				//.param("validationRole", ROLE_STUDENT)
-//			).andDo(MockMvcResultHandlers.print())
-//			.andExpect(status().is4xxClientError())
-//			.andExpect(status().isBadRequest()) // verify json root element status $ is 400 BAD_REQUEST
-//			.andExpect(jsonPath("$.message", is(String.format(messageSource.getMessage(ValidatorCodes.ERROR_CODE_ACTION_INVALID.getMessage(), new Object[] {}, LocaleContextHolder.getLocale()), ActionType.DELETE)))) // verify json root element message
-//			;
-//	}
-//	
-//	@Test
-//	void deleteStudentRoleNotExist() throws Exception {
-//		log.info("deleteStudentRoleNotExist");
-//		
-//		// check if student id 1 exists
-//		int id = 1;
-//		StudentVO studentVO = studentService.findById(id);
-//		log.info(studentVO.toString());
-//		
-//		assertNotNull(studentVO,"studentVO null");
-//		assertEquals(1, studentVO.getId());
-//		assertNotNull(studentVO.getFirstName(),"studentVO.getFirstName() null");
-//		assertEquals("firstNameInstr", studentVO.getFirstName(),"assertEquals studentVO.getFirstName() failure");
-//				
-//		// delete student
-//		mockMvc.perform(MockMvcRequestBuilders.delete(ROOT + STUDENTS + "/{id}", id)
-//				.param("validationRole", ROLE_NOT_EXIST)
-//			).andDo(MockMvcResultHandlers.print())
-//			.andExpect(status().is4xxClientError())
-//			.andExpect(status().isBadRequest()) // verify json root element status $ is 400 BAD_REQUEST
-//			;
-//	}
+	void updateStudentRoleStudent() throws Exception {
+		log.info("updateStudentRoleStudent");
+		
+		// check if student id 1 exists
+		StudentVO studentVO = studentService.findById(1);
+		log.info(studentVO.toString());
+		
+		assertNotNull(studentVO,"studentVO null");
+		assertEquals(1, studentVO.getId());
+		assertNotNull(studentVO.getFirstName(),"studentVO.getFirstName() null");
+		assertEquals("firstNameStudent", studentVO.getFirstName(),"assertEquals studentVO.getFirstName() failure");
+		
+		// update student
+		studentVO.setFirstName("firstName");
+		studentVO.setLastName("lastName");
+		studentVO.setEmailAddress("email@email.com");
+				
+		mockMvc.perform(MockMvcRequestBuilders.put(ROOT + STUDENTS)
+				.param("validationRole", ROLE_STUDENT)
+				.contentType(APPLICATION_JSON_UTF8)
+				.content(objectMApper.writeValueAsString(studentVO)) // generate json from java object
+			).andDo(MockMvcResultHandlers.print())
+			.andExpect(status().is4xxClientError())
+			.andExpect(status().isBadRequest()) // verify json root element status $ is 400 BAD_REQUEST
+			.andExpect(jsonPath("$.message", is(String.format(messageSource.getMessage(ValidatorCodes.ERROR_CODE_ACTION_INVALID.getMessage(), new Object[] {}, LocaleContextHolder.getLocale()), ActionType.UPDATE)))) // verify json root element message
+			;
+		
+		// additional check
+		// get student with id=1
+		mockMvc.perform(MockMvcRequestBuilders.get(ROOT + STUDENTS + "/get/{id}", 1)
+				.param("validationRole", ROLE_STUDENT)
+			).andDo(MockMvcResultHandlers.print()).andExpect(status().isOk())
+			.andExpect(content().contentType(APPLICATION_JSON_UTF8))
+			.andExpect(jsonPath("$.id", is(1))) // verify json root element id is 1
+			.andExpect(jsonPath("$.firstName", is("firstNameInstr"))) // verify json element
+			.andExpect(jsonPath("$.lastName", is("lastNameInstr"))) // verify json element
+			.andExpect(jsonPath("$.emailAddress", is("firstNameInstr@babinuk.com"))) // verify json element
+			;
+	}
+	
+	@Test
+	void updateStudentNoRole() throws Exception {
+		log.info("updateStudentNoRole");
+		
+		// check if student id 1 exists
+		StudentVO studentVO = studentService.findById(1);
+		log.info(studentVO.toString());
+		
+		assertNotNull(studentVO,"studentVO null");
+		assertEquals(1, studentVO.getId());
+		assertNotNull(studentVO.getFirstName(),"studentVO.getFirstName() null");
+		assertEquals("firstNameStudent", studentVO.getFirstName(),"assertEquals studentVO.getFirstName() failure");
+		
+		// update student
+		studentVO.setFirstName("firstName");
+		studentVO.setLastName("lastName");
+		studentVO.setEmailAddress("email@email.com");
+				
+		mockMvc.perform(MockMvcRequestBuilders.put(ROOT + STUDENTS)
+				//.param("validationRole", ROLE_STUDENT)
+				.contentType(APPLICATION_JSON_UTF8)
+				.content(objectMApper.writeValueAsString(studentVO)) // generate json from java object
+			).andDo(MockMvcResultHandlers.print())
+			.andExpect(status().is4xxClientError())
+			.andExpect(status().isBadRequest()) // verify json root element status $ is 400 BAD_REQUEST
+			.andExpect(jsonPath("$.message", is(String.format(messageSource.getMessage(ValidatorCodes.ERROR_CODE_ACTION_INVALID.getMessage(), new Object[] {}, LocaleContextHolder.getLocale()), ActionType.UPDATE)))) // verify json root element message
+			;
+		
+		// additional check
+		// get student with id=1
+		mockMvc.perform(MockMvcRequestBuilders.get(ROOT + STUDENTS + "/get/{id}", 1)
+				//.param("validationRole", ROLE_STUDENT)
+			).andDo(MockMvcResultHandlers.print()).andExpect(status().isOk())
+			.andExpect(content().contentType(APPLICATION_JSON_UTF8))
+			.andExpect(jsonPath("$.id", is(1))) // verify json root element id is 1
+			.andExpect(jsonPath("$.firstName", is("firstNameStudent"))) // verify json element
+			.andExpect(jsonPath("$.lastName", is("lastNameStudent"))) // verify json element
+			.andExpect(jsonPath("$.emailAddress", is("firstNameStudent@babinuk.com"))) // verify json element
+			;
+	}
+	
+	@Test
+	void updateStudentRoleNotExist() throws Exception {
+		log.info("updateStudentRoleNotExist");
+		
+		// check if student id 1 exists
+		StudentVO studentVO = studentService.findById(1);
+		log.info(studentVO.toString());
+		
+		assertNotNull(studentVO,"studentVO null");
+		assertEquals(1, studentVO.getId());
+		assertNotNull(studentVO.getFirstName(),"studentVO.getFirstName() null");
+		assertEquals("firstNameStudent", studentVO.getFirstName(),"assertEquals studentVO.getFirstName() failure");
+		
+		// update student
+		studentVO.setFirstName("firstName");
+		studentVO.setLastName("lastName");
+		studentVO.setEmailAddress("email@email.com");
+				
+		mockMvc.perform(MockMvcRequestBuilders.put(ROOT + STUDENTS)
+				.param("validationRole", ROLE_NOT_EXIST)
+				.contentType(APPLICATION_JSON_UTF8)
+				.content(objectMApper.writeValueAsString(studentVO)) // generate json from java object
+			).andDo(MockMvcResultHandlers.print())
+			.andExpect(status().is4xxClientError())
+			.andExpect(status().isBadRequest()) // verify json root element status $ is 400 BAD_REQUEST
+			;
+		
+		// additional check
+		// get student with id=1
+		mockMvc.perform(MockMvcRequestBuilders.get(ROOT + STUDENTS + "/get/{id}", 1)
+				.param("validationRole", ROLE_NOT_EXIST)
+			).andDo(MockMvcResultHandlers.print()).andExpect(status().isOk())
+			.andExpect(content().contentType(APPLICATION_JSON_UTF8))
+			.andExpect(jsonPath("$.id", is(1))) // verify json root element id is 1
+			.andExpect(jsonPath("$.firstName", is("firstNameStudent"))) // verify json element
+			.andExpect(jsonPath("$.lastName", is("lastNameStudent"))) // verify json element
+			.andExpect(jsonPath("$.emailAddress", is("firstNameStudent@babinuk.com"))) // verify json element
+			;
+	}
+	
+	@Test
+	void deleteStudentRoleAdmin() throws Exception {
+		log.info("deleteStudentRoleAdmin");
+		
+		// check if student id 1 exists
+		int id = 1;
+		StudentVO studentVO = studentService.findById(id);
+		log.info(studentVO.toString());
+		
+		assertNotNull(studentVO,"studentVO null");
+		assertEquals(1, studentVO.getId());
+		assertNotNull(studentVO.getFirstName(),"studentVO.getFirstName() null");
+		assertEquals("firstNameStudent", studentVO.getFirstName(),"assertEquals studentVO.getFirstName() failure");
+				
+		// delete student
+		mockMvc.perform(MockMvcRequestBuilders.delete(ROOT + STUDENTS + "/{id}", id)
+				.param("validationRole", ROLE_ADMIN)
+			).andDo(MockMvcResultHandlers.print())
+			.andExpect(status().isOk())
+			.andExpect(content().contentType(APPLICATION_JSON_UTF8))
+			.andExpect(jsonPath("$.message", is(getMessage(StudentServiceImpl.STUDENT_DELETE_SUCCESS)))) // verify json element
+			;
+		
+		// get student with id=1 (non existing)
+		mockMvc.perform(MockMvcRequestBuilders.get(ROOT + STUDENTS + "/get/{id}", id)
+				.param("validationRole", ROLE_ADMIN)
+			).andDo(MockMvcResultHandlers.print())
+			.andExpect(status().isOk())
+			.andExpect(content().contentType(APPLICATION_JSON_UTF8))
+			.andExpect(jsonPath("$.message", is(String.format(getMessage("error_code_student_id_not_found"), id)))) //verify json element
+			;
+	}
+	
+	@Test
+	void deleteStudentRoleInstructor() throws Exception {
+		log.info("deleteStudentRoleInstructor");
+		
+		// check if student id 1 exists
+		int id = 1;
+		StudentVO studentVO = studentService.findById(id);
+		log.info(studentVO.toString());
+		
+		assertNotNull(studentVO,"studentVO null");
+		assertEquals(1, studentVO.getId());
+		assertNotNull(studentVO.getFirstName(),"studentVO.getFirstName() null");
+		assertEquals("firstNameStudent", studentVO.getFirstName(),"assertEquals studentVO.getFirstName() failure");
+				
+		// delete student
+		mockMvc.perform(MockMvcRequestBuilders.delete(ROOT + STUDENTS + "/{id}", id)
+				.param("validationRole", ROLE_INSTRUCTOR)
+			).andDo(MockMvcResultHandlers.print())
+			.andExpect(status().is4xxClientError())
+			.andExpect(status().isBadRequest()) // verify json root element status $ is 400 BAD_REQUEST
+			.andExpect(jsonPath("$.message", is(String.format(messageSource.getMessage(ValidatorCodes.ERROR_CODE_ACTION_INVALID.getMessage(), new Object[] {}, LocaleContextHolder.getLocale()), ActionType.DELETE)))) // verify json root element message
+			;
+	}
+	
+	@Test
+	void deleteStudentRoleStudent() throws Exception {
+		log.info("deleteStudentRoleStudent");
+		
+		// check if student id 1 exists
+		int id = 1;
+		StudentVO studentVO = studentService.findById(id);
+		log.info(studentVO.toString());
+		
+		assertNotNull(studentVO,"studentVO null");
+		assertEquals(1, studentVO.getId());
+		assertNotNull(studentVO.getFirstName(),"studentVO.getFirstName() null");
+		assertEquals("firstNameStudent", studentVO.getFirstName(),"assertEquals studentVO.getFirstName() failure");
+				
+		// delete student
+		mockMvc.perform(MockMvcRequestBuilders.delete(ROOT + STUDENTS + "/{id}", id)
+				.param("validationRole", ROLE_STUDENT)
+			).andDo(MockMvcResultHandlers.print())
+			.andExpect(status().is4xxClientError())
+			.andExpect(status().isBadRequest()) // verify json root element status $ is 400 BAD_REQUEST
+			.andExpect(jsonPath("$.message", is(String.format(messageSource.getMessage(ValidatorCodes.ERROR_CODE_ACTION_INVALID.getMessage(), new Object[] {}, LocaleContextHolder.getLocale()), ActionType.DELETE)))) // verify json root element message
+			;
+	}
+
+	@Test
+	void deleteStudentNoRole() throws Exception {
+		log.info("deleteStudentNoRole");
+		
+		// check if student id 1 exists
+		int id = 1;
+		StudentVO studentVO = studentService.findById(id);
+		log.info(studentVO.toString());
+		
+		assertNotNull(studentVO,"studentVO null");
+		assertEquals(1, studentVO.getId());
+		assertNotNull(studentVO.getFirstName(),"studentVO.getFirstName() null");
+		assertEquals("firstNameStudent", studentVO.getFirstName(),"assertEquals studentVO.getFirstName() failure");
+				
+		// delete student
+		mockMvc.perform(MockMvcRequestBuilders.delete(ROOT + STUDENTS + "/{id}", id)
+				//.param("validationRole", ROLE_STUDENT)
+			).andDo(MockMvcResultHandlers.print())
+			.andExpect(status().is4xxClientError())
+			.andExpect(status().isBadRequest()) // verify json root element status $ is 400 BAD_REQUEST
+			.andExpect(jsonPath("$.message", is(String.format(messageSource.getMessage(ValidatorCodes.ERROR_CODE_ACTION_INVALID.getMessage(), new Object[] {}, LocaleContextHolder.getLocale()), ActionType.DELETE)))) // verify json root element message
+			;
+	}
+	
+	@Test
+	void deleteStudentRoleNotExist() throws Exception {
+		log.info("deleteStudentRoleNotExist");
+		
+		// check if student id 1 exists
+		int id = 1;
+		StudentVO studentVO = studentService.findById(id);
+		log.info(studentVO.toString());
+		
+		assertNotNull(studentVO,"studentVO null");
+		assertEquals(1, studentVO.getId());
+		assertNotNull(studentVO.getFirstName(),"studentVO.getFirstName() null");
+		assertEquals("firstNameStudent", studentVO.getFirstName(),"assertEquals studentVO.getFirstName() failure");
+				
+		// delete student
+		mockMvc.perform(MockMvcRequestBuilders.delete(ROOT + STUDENTS + "/{id}", id)
+				.param("validationRole", ROLE_NOT_EXIST)
+			).andDo(MockMvcResultHandlers.print())
+			.andExpect(status().is4xxClientError())
+			.andExpect(status().isBadRequest()) // verify json root element status $ is 400 BAD_REQUEST
+			;
+	}
 	
 	private String getMessage(String str) {
 		return messageSource.getMessage(str, new Object[] {}, LocaleContextHolder.getLocale());
