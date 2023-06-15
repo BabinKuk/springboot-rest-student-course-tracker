@@ -43,7 +43,8 @@ private final Logger log = LogManager.getLogger(getClass());
 		// all action types are enabled
 		exceptionList.addAll(validatorHelper.validate(vo, action, validatorType));
 		
-		ObjectValidationException e = new ObjectValidationException("Validation failed");
+		String message = String.format(messageSource.getMessage("validation_failed", new Object[] {}, LocaleContextHolder.getLocale()), action);
+		ObjectValidationException e = new ObjectValidationException(message);
 		
 		for (ValidatorException validationException : exceptionList) {
 			//log.error(validationException.getErrorCode().getMessage());
@@ -66,7 +67,8 @@ private final Logger log = LogManager.getLogger(getClass());
 		// all action types are enabled
 		exceptionList.addAll(validatorHelper.validate(id, validatorType));
 		
-		ObjectValidationException e = new ObjectValidationException("Validation failed");
+		String message = String.format(messageSource.getMessage("validation_failed", new Object[] {}, LocaleContextHolder.getLocale()), action);
+		ObjectValidationException e = new ObjectValidationException(message);
 		
 		for (ValidatorException validationException : exceptionList) {
 			//log.error(validationException.getErrorCode().getMessage());
@@ -87,7 +89,8 @@ private final Logger log = LogManager.getLogger(getClass());
 		// all action types are enabled
 		exceptionList.addAll(validatorHelper.validate(vo, action, validatorType));
 		
-		ObjectValidationException e = new ObjectValidationException("Validation failed");
+		String message = String.format(messageSource.getMessage("validation_failed", new Object[] {}, LocaleContextHolder.getLocale()), action);
+		ObjectValidationException e = new ObjectValidationException(message);
 		
 		for (ValidatorException validationException : exceptionList) {
 			//log.error(validationException.getErrorCode().getMessage());
@@ -108,7 +111,8 @@ private final Logger log = LogManager.getLogger(getClass());
 		// all action types are enabled
 		exceptionList.addAll(validatorHelper.validate(vo, action, validatorType));
 		
-		ObjectValidationException e = new ObjectValidationException("Validation failed");
+		String message = String.format(messageSource.getMessage("validation_failed", new Object[] {}, LocaleContextHolder.getLocale()), action);
+		ObjectValidationException e = new ObjectValidationException(message);
 		
 		for (ValidatorException validationException : exceptionList) {
 			//log.error(validationException.getErrorCode().getMessage());
@@ -119,5 +123,4 @@ private final Logger log = LogManager.getLogger(getClass());
 			throw e;
 		}
 	}
-
 }
