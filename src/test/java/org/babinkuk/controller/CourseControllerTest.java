@@ -58,6 +58,10 @@ public class CourseControllerTest {
 	private static String ROLE_INSTRUCTOR = "ROLE_INSTRUCTOR";
 	private static String ROLE_STUDENT = "ROLE_STUDENT";
 	private static String ROLE_NOT_EXIST = "ROLE_NOT_EXIST";
+	private static String INSTRUCTOR_ENROLL = "/instructor" + "/{instructorId}" + "/enroll";
+	private static String INSTRUCTOR_WITHDRAW = "/instructor" + "/{instructorId}" + "/withdraw";
+	private static String STUDENT_ENROLL = "/student" + "/{studentId}" + "/enroll";
+	private static String STUDENT_WITHDRAW = "/student" + "/{studentId}" + "/withdraw";
 	
 	private static MockHttpServletRequest request;
 	
@@ -163,7 +167,7 @@ public class CourseControllerTest {
 		log.info("getAllCourses");
 		
 		// get all courses
-		mockMvc.perform(MockMvcRequestBuilders.get(ROOT + COURSES + "/get")
+		mockMvc.perform(MockMvcRequestBuilders.get(ROOT + COURSES)
 				.param("validationRole", ROLE_ADMIN)
 			).andDo(MockMvcResultHandlers.print())
 			.andExpect(status().isOk())
@@ -177,7 +181,7 @@ public class CourseControllerTest {
 		courseService.saveCourse(courseVO);
 				
 		// get all courses (different validationRole param)
-		mockMvc.perform(MockMvcRequestBuilders.get(ROOT + COURSES + "/get")
+		mockMvc.perform(MockMvcRequestBuilders.get(ROOT + COURSES)
 				.param("validationRole", ROLE_INSTRUCTOR)
 			).andDo(MockMvcResultHandlers.print())
 			.andExpect(status().isOk())
@@ -186,7 +190,7 @@ public class CourseControllerTest {
 			;
 		
 		// get all courses (different validationRole param)
-		mockMvc.perform(MockMvcRequestBuilders.get(ROOT + COURSES + "/get")
+		mockMvc.perform(MockMvcRequestBuilders.get(ROOT + COURSES)
 				.param("validationRole", ROLE_STUDENT)
 			).andDo(MockMvcResultHandlers.print())
 			.andExpect(status().isOk())
@@ -195,7 +199,7 @@ public class CourseControllerTest {
 			;
 		
 		// get all courses (without validationRole param)
-		mockMvc.perform(MockMvcRequestBuilders.get(ROOT + COURSES + "/get")
+		mockMvc.perform(MockMvcRequestBuilders.get(ROOT + COURSES)
 			//	.param("validationRole", "ROLE_STUDENT")
 			).andDo(MockMvcResultHandlers.print())
 			.andExpect(status().isOk())
@@ -204,7 +208,7 @@ public class CourseControllerTest {
 			;
 		
 		// get all courses (not existing validationRole param)
-		mockMvc.perform(MockMvcRequestBuilders.get(ROOT + COURSES + "/get")
+		mockMvc.perform(MockMvcRequestBuilders.get(ROOT + COURSES)
 				.param("validationRole", ROLE_NOT_EXIST)
 			).andDo(MockMvcResultHandlers.print())
 			.andExpect(status().isOk())
@@ -218,7 +222,7 @@ public class CourseControllerTest {
 		log.info("getCourse");
 		
 		// get course with id=1
-		mockMvc.perform(MockMvcRequestBuilders.get(ROOT + COURSES + "/get/{id}", 1)
+		mockMvc.perform(MockMvcRequestBuilders.get(ROOT + COURSES + "/{id}", 1)
 				.param("validationRole", ROLE_ADMIN)
 			).andDo(MockMvcResultHandlers.print())
 			.andExpect(status().isOk())
@@ -228,7 +232,7 @@ public class CourseControllerTest {
 			;
 
 		// get course with id=2 (non existing)
-		mockMvc.perform(MockMvcRequestBuilders.get(ROOT + COURSES + "/get/{id}", 2)
+		mockMvc.perform(MockMvcRequestBuilders.get(ROOT + COURSES + "/{id}", 2)
 				.param("validationRole", ROLE_ADMIN)
 			).andDo(MockMvcResultHandlers.print())
 			.andExpect(status().isOk())
@@ -237,7 +241,7 @@ public class CourseControllerTest {
 			;
 		
 		// get course with id=1 (validationRole ROLE_INSTRUCTOR)
-		mockMvc.perform(MockMvcRequestBuilders.get(ROOT + COURSES + "/get/{id}", 1)
+		mockMvc.perform(MockMvcRequestBuilders.get(ROOT + COURSES + "/{id}", 1)
 				.param("validationRole", ROLE_INSTRUCTOR)
 			).andDo(MockMvcResultHandlers.print())
 			.andExpect(status().isOk())
@@ -251,7 +255,7 @@ public class CourseControllerTest {
 			;
 
 		// get course with id=2 (non existing) (validationRole ROLE_INSTRUCTOR)
-		mockMvc.perform(MockMvcRequestBuilders.get(ROOT + COURSES + "/get/{id}", 2)
+		mockMvc.perform(MockMvcRequestBuilders.get(ROOT + COURSES + "/{id}", 2)
 				.param("validationRole", ROLE_INSTRUCTOR)
 			).andDo(MockMvcResultHandlers.print())
 			.andExpect(status().isOk())
@@ -260,7 +264,7 @@ public class CourseControllerTest {
 			;
 		
 		// get course with id=1 (validationRole ROLE_STUDENT)
-		mockMvc.perform(MockMvcRequestBuilders.get(ROOT + COURSES + "/get/{id}", 1)
+		mockMvc.perform(MockMvcRequestBuilders.get(ROOT + COURSES + "/{id}", 1)
 				.param("validationRole", ROLE_STUDENT)
 			).andDo(MockMvcResultHandlers.print())
 			.andExpect(status().isOk())
@@ -273,7 +277,7 @@ public class CourseControllerTest {
 			;
 
 		// get course with id=2 (non existing) (validationRole ROLE_STUDENT)
-		mockMvc.perform(MockMvcRequestBuilders.get(ROOT + COURSES + "/get/{id}", 2)
+		mockMvc.perform(MockMvcRequestBuilders.get(ROOT + COURSES + "/{id}", 2)
 				.param("validationRole", ROLE_STUDENT)
 			).andDo(MockMvcResultHandlers.print())
 			.andExpect(status().isOk())
@@ -282,7 +286,7 @@ public class CourseControllerTest {
 			;
 		
 		// get course with id=1 (without validationRole param)
-		mockMvc.perform(MockMvcRequestBuilders.get(ROOT + COURSES + "/get/{id}", 1)
+		mockMvc.perform(MockMvcRequestBuilders.get(ROOT + COURSES + "/{id}", 1)
 				//.param("validationRole", "ROLE_STUDENT")
 			).andDo(MockMvcResultHandlers.print())
 			.andExpect(status().isOk())
@@ -296,7 +300,7 @@ public class CourseControllerTest {
 			;
 		
 		// get course with id=2 (non existing) (without validationRole param)
-		mockMvc.perform(MockMvcRequestBuilders.get(ROOT + COURSES + "/get/{id}", 2)
+		mockMvc.perform(MockMvcRequestBuilders.get(ROOT + COURSES + "/{id}", 2)
 				//.param("validationRole", validationRole)
 			).andDo(MockMvcResultHandlers.print())
 			.andExpect(status().isOk())
@@ -305,7 +309,7 @@ public class CourseControllerTest {
 			;
 		
 		// get course with id=1 (non existing) (without validationRole param)
-		mockMvc.perform(MockMvcRequestBuilders.get(ROOT + COURSES + "/get/{id}", 1)
+		mockMvc.perform(MockMvcRequestBuilders.get(ROOT + COURSES + "/{id}", 1)
 				//.param("validationRole", ROLE_NOT_EXIST)
 			).andDo(MockMvcResultHandlers.print())
 			.andExpect(status().isOk())
@@ -319,7 +323,7 @@ public class CourseControllerTest {
 			;
 	
 		// get course with id=2 (non existing) (not existing validationRole param)
-		mockMvc.perform(MockMvcRequestBuilders.get(ROOT + COURSES + "/get/{id}", 2)
+		mockMvc.perform(MockMvcRequestBuilders.get(ROOT + COURSES + "/{id}", 2)
 				.param("validationRole", ROLE_NOT_EXIST)
 			).andDo(MockMvcResultHandlers.print())
 			.andExpect(status().isOk())
@@ -348,7 +352,7 @@ public class CourseControllerTest {
 		
 		// additional check
 		// get all courses
-		mockMvc.perform(MockMvcRequestBuilders.get(ROOT + COURSES + "/get")
+		mockMvc.perform(MockMvcRequestBuilders.get(ROOT + COURSES)
 				.param("validationRole", validationRole)
 			).andDo(MockMvcResultHandlers.print())
 			.andExpect(status().isOk())
@@ -379,7 +383,7 @@ public class CourseControllerTest {
 		
 		// additional check
 		// get all courses
-		mockMvc.perform(MockMvcRequestBuilders.get(ROOT + COURSES + "/get")
+		mockMvc.perform(MockMvcRequestBuilders.get(ROOT + COURSES)
 				.param("validationRole", validationRole)
 			).andDo(MockMvcResultHandlers.print())
 			.andExpect(status().isOk())
@@ -411,7 +415,7 @@ public class CourseControllerTest {
 		
 		// additional check
 		// get all courses
-		mockMvc.perform(MockMvcRequestBuilders.get(ROOT + COURSES + "/get")
+		mockMvc.perform(MockMvcRequestBuilders.get(ROOT + COURSES)
 				.param("validationRole", validationRole)
 			).andDo(MockMvcResultHandlers.print())
 			.andExpect(status().isOk())
@@ -441,7 +445,7 @@ public class CourseControllerTest {
 		
 		// additional check
 		// get all courses
-		mockMvc.perform(MockMvcRequestBuilders.get(ROOT + COURSES + "/get")
+		mockMvc.perform(MockMvcRequestBuilders.get(ROOT + COURSES)
 				//.param("validationRole", validationRole)
 			).andDo(MockMvcResultHandlers.print())
 			.andExpect(status().isOk())
@@ -471,7 +475,7 @@ public class CourseControllerTest {
 		
 		// additional check
 		// get all courses
-		mockMvc.perform(MockMvcRequestBuilders.get(ROOT + COURSES + "/get")
+		mockMvc.perform(MockMvcRequestBuilders.get(ROOT + COURSES)
 				.param("validationRole", ROLE_NOT_EXIST)
 			).andDo(MockMvcResultHandlers.print())
 			.andExpect(status().isOk())
@@ -501,7 +505,7 @@ public class CourseControllerTest {
 		
 		// additional check
 		// get course with id=1
-		mockMvc.perform(MockMvcRequestBuilders.get(ROOT + COURSES + "/get/{id}", 1)
+		mockMvc.perform(MockMvcRequestBuilders.get(ROOT + COURSES + "/{id}", 1)
 				.param("validationRole", validationRole)
 			).andDo(MockMvcResultHandlers.print())
 			.andExpect(status().isOk())
@@ -568,7 +572,7 @@ public class CourseControllerTest {
 		
 		// additional check
 		// get course with id=1
-		mockMvc.perform(MockMvcRequestBuilders.get(ROOT + COURSES + "/get/{id}", 1)
+		mockMvc.perform(MockMvcRequestBuilders.get(ROOT + COURSES + "/{id}", 1)
 				.param("validationRole", validationRole)
 			).andDo(MockMvcResultHandlers.print())
 			.andExpect(status().isOk())
@@ -636,7 +640,7 @@ public class CourseControllerTest {
 		
 		// additional check
 		// get course with id=1
-		mockMvc.perform(MockMvcRequestBuilders.get(ROOT + COURSES + "/get/{id}", 1)
+		mockMvc.perform(MockMvcRequestBuilders.get(ROOT + COURSES + "/{id}", 1)
 				.param("validationRole", validationRole)
 			).andDo(MockMvcResultHandlers.print())
 			.andExpect(status().isOk())
@@ -702,7 +706,7 @@ public class CourseControllerTest {
 		
 		// additional check
 		// get course with id=1
-		mockMvc.perform(MockMvcRequestBuilders.get(ROOT + COURSES + "/get/{id}", 1)
+		mockMvc.perform(MockMvcRequestBuilders.get(ROOT + COURSES + "/{id}", 1)
 				//.param("validationRole", validationRole)
 			).andDo(MockMvcResultHandlers.print())
 			.andExpect(status().isOk())
@@ -829,7 +833,7 @@ public class CourseControllerTest {
 			;
 		
 		// get course with id=1 (non existing)
-		mockMvc.perform(MockMvcRequestBuilders.get(ROOT + COURSES + "/get/{id}", id)
+		mockMvc.perform(MockMvcRequestBuilders.get(ROOT + COURSES + "/{id}", id)
 				.param("validationRole", validationRole)
 			).andDo(MockMvcResultHandlers.print())
 			.andExpect(status().isOk())
@@ -974,7 +978,7 @@ public class CourseControllerTest {
 		assertEquals("firstNameInstr", instructorVO.getFirstName(),"assertEquals instructorVO.getFirstName() failure");
 		
 		// enroll instructor
-		mockMvc.perform(MockMvcRequestBuilders.put(ROOT + COURSES + "/{courseId}" + "/instructor" + "/{instructorId}" + "/enroll", id, id)
+		mockMvc.perform(MockMvcRequestBuilders.put(ROOT + COURSES + "/{courseId}" + INSTRUCTOR_ENROLL, id, id)
 				.param("validationRole", validationRole)
 				.contentType(APPLICATION_JSON_UTF8)
 			).andDo(MockMvcResultHandlers.print())
@@ -992,7 +996,7 @@ public class CourseControllerTest {
 		assertEquals("firstNameInstr", courseVO.getInstructorVO().getFirstName(),"courseVO.getInstructorVO().getFirstName()");
 		
 		// enroll instructor (non existing course courseId=2)
-		mockMvc.perform(MockMvcRequestBuilders.put(ROOT + COURSES + "/{courseId}" + "/instructor" + "/{instructorId}" + "/enroll", 2, id)
+		mockMvc.perform(MockMvcRequestBuilders.put(ROOT + COURSES + "/{courseId}" + INSTRUCTOR_ENROLL, 2, id)
 				.param("validationRole", validationRole)
 				.contentType(APPLICATION_JSON_UTF8)
 			).andDo(MockMvcResultHandlers.print())
@@ -1001,7 +1005,7 @@ public class CourseControllerTest {
 			;
 		
 		// enroll non existing instructor id=2
-		mockMvc.perform(MockMvcRequestBuilders.put(ROOT + COURSES + "/{courseId}" + "/instructor" + "/{instructorId}" + "/enroll", id, 2)
+		mockMvc.perform(MockMvcRequestBuilders.put(ROOT + COURSES + "/{courseId}" + INSTRUCTOR_ENROLL, id, 2)
 				.param("validationRole", validationRole)
 				.contentType(APPLICATION_JSON_UTF8)
 			).andDo(MockMvcResultHandlers.print())
@@ -1038,7 +1042,7 @@ public class CourseControllerTest {
 		assertEquals("firstNameInstr", instructorVO.getFirstName(),"assertEquals instructorVO.getFirstName() failure");
 		
 		// enroll instructor
-		mockMvc.perform(MockMvcRequestBuilders.put(ROOT + COURSES + "/{courseId}" + "/instructor" + "/{instructorId}" + "/enroll", id, id)
+		mockMvc.perform(MockMvcRequestBuilders.put(ROOT + COURSES + "/{courseId}" + INSTRUCTOR_ENROLL, id, id)
 				.param("validationRole", validationRole)
 				.contentType(APPLICATION_JSON_UTF8)
 			).andDo(MockMvcResultHandlers.print())
@@ -1054,7 +1058,7 @@ public class CourseControllerTest {
 		assertNull(courseVO.getInstructorVO(),"courseVO.getInstructorVO() null");
 		
 		// enroll instructor (non existing course courseId=2)
-		mockMvc.perform(MockMvcRequestBuilders.put(ROOT + COURSES + "/{courseId}" + "/instructor" + "/{instructorId}" + "/enroll", 2, id)
+		mockMvc.perform(MockMvcRequestBuilders.put(ROOT + COURSES + "/{courseId}" + INSTRUCTOR_ENROLL, 2, id)
 				.param("validationRole", validationRole)
 				.contentType(APPLICATION_JSON_UTF8)
 			).andDo(MockMvcResultHandlers.print())
@@ -1063,7 +1067,7 @@ public class CourseControllerTest {
 			;
 		
 		// enroll non existing instructor id=2
-		mockMvc.perform(MockMvcRequestBuilders.put(ROOT + COURSES + "/{courseId}" + "/instructor" + "/{instructorId}" + "/enroll", id, 2)
+		mockMvc.perform(MockMvcRequestBuilders.put(ROOT + COURSES + "/{courseId}" + INSTRUCTOR_ENROLL, id, 2)
 				.param("validationRole", validationRole)
 				.contentType(APPLICATION_JSON_UTF8)
 			).andDo(MockMvcResultHandlers.print())
@@ -1100,7 +1104,7 @@ public class CourseControllerTest {
 		assertEquals("firstNameInstr", instructorVO.getFirstName(),"assertEquals instructorVO.getFirstName() failure");
 		
 		// enroll instructor
-		mockMvc.perform(MockMvcRequestBuilders.put(ROOT + COURSES + "/{courseId}" + "/instructor" + "/{instructorId}" + "/enroll", id, id)
+		mockMvc.perform(MockMvcRequestBuilders.put(ROOT + COURSES + "/{courseId}" + INSTRUCTOR_ENROLL, id, id)
 				.param("validationRole", validationRole)
 				.contentType(APPLICATION_JSON_UTF8)
 			).andDo(MockMvcResultHandlers.print())
@@ -1116,7 +1120,7 @@ public class CourseControllerTest {
 		assertNull(courseVO.getInstructorVO(),"courseVO.getInstructorVO() null");
 		
 		// enroll instructor (non existing course courseId=2)
-		mockMvc.perform(MockMvcRequestBuilders.put(ROOT + COURSES + "/{courseId}" + "/instructor" + "/{instructorId}" + "/enroll", 2, id)
+		mockMvc.perform(MockMvcRequestBuilders.put(ROOT + COURSES + "/{courseId}" + INSTRUCTOR_ENROLL, 2, id)
 				.param("validationRole", validationRole)
 				.contentType(APPLICATION_JSON_UTF8)
 			).andDo(MockMvcResultHandlers.print())
@@ -1125,7 +1129,7 @@ public class CourseControllerTest {
 			;
 		
 		// enroll non existing instructor id=2
-		mockMvc.perform(MockMvcRequestBuilders.put(ROOT + COURSES + "/{courseId}" + "/instructor" + "/{instructorId}" + "/enroll", id, 2)
+		mockMvc.perform(MockMvcRequestBuilders.put(ROOT + COURSES + "/{courseId}" + INSTRUCTOR_ENROLL, id, 2)
 				.param("validationRole", validationRole)
 				.contentType(APPLICATION_JSON_UTF8)
 			).andDo(MockMvcResultHandlers.print())
@@ -1160,7 +1164,7 @@ public class CourseControllerTest {
 		assertEquals("firstNameInstr", instructorVO.getFirstName(),"assertEquals instructorVO.getFirstName() failure");
 		
 		// enroll instructor
-		mockMvc.perform(MockMvcRequestBuilders.put(ROOT + COURSES + "/{courseId}" + "/instructor" + "/{instructorId}" + "/enroll", id, id)
+		mockMvc.perform(MockMvcRequestBuilders.put(ROOT + COURSES + "/{courseId}" + INSTRUCTOR_ENROLL, id, id)
 				//.param("validationRole", validationRole)
 				.contentType(APPLICATION_JSON_UTF8)
 			).andDo(MockMvcResultHandlers.print())
@@ -1176,7 +1180,7 @@ public class CourseControllerTest {
 		assertNull(courseVO.getInstructorVO(),"courseVO.getInstructorVO() null");
 		
 		// enroll instructor (non existing course courseId=2)
-		mockMvc.perform(MockMvcRequestBuilders.put(ROOT + COURSES + "/{courseId}" + "/instructor" + "/{instructorId}" + "/enroll", 2, id)
+		mockMvc.perform(MockMvcRequestBuilders.put(ROOT + COURSES + "/{courseId}" + INSTRUCTOR_ENROLL, 2, id)
 				//.param("validationRole", validationRole)
 				.contentType(APPLICATION_JSON_UTF8)
 			).andDo(MockMvcResultHandlers.print())
@@ -1185,7 +1189,7 @@ public class CourseControllerTest {
 			;
 		
 		// enroll non existing instructor id=2
-		mockMvc.perform(MockMvcRequestBuilders.put(ROOT + COURSES + "/{courseId}" + "/instructor" + "/{instructorId}" + "/enroll", id, 2)
+		mockMvc.perform(MockMvcRequestBuilders.put(ROOT + COURSES + "/{courseId}" + INSTRUCTOR_ENROLL, id, 2)
 				//.param("validationRole", validationRole)
 				.contentType(APPLICATION_JSON_UTF8)
 			).andDo(MockMvcResultHandlers.print())
@@ -1220,7 +1224,7 @@ public class CourseControllerTest {
 		assertEquals("firstNameInstr", instructorVO.getFirstName(),"assertEquals instructorVO.getFirstName() failure");
 		
 		// enroll instructor
-		mockMvc.perform(MockMvcRequestBuilders.put(ROOT + COURSES + "/{courseId}" + "/instructor" + "/{instructorId}" + "/enroll", id, id)
+		mockMvc.perform(MockMvcRequestBuilders.put(ROOT + COURSES + "/{courseId}" + INSTRUCTOR_ENROLL, id, id)
 				.param("validationRole", ROLE_NOT_EXIST)
 				.contentType(APPLICATION_JSON_UTF8)
 			).andDo(MockMvcResultHandlers.print())
@@ -1236,7 +1240,7 @@ public class CourseControllerTest {
 		assertNull(courseVO.getInstructorVO(),"courseVO.getInstructorVO() null");
 		
 		// enroll instructor (non existing course courseId=2)
-		mockMvc.perform(MockMvcRequestBuilders.put(ROOT + COURSES + "/{courseId}" + "/instructor" + "/{instructorId}" + "/enroll", 2, id)
+		mockMvc.perform(MockMvcRequestBuilders.put(ROOT + COURSES + "/{courseId}" + INSTRUCTOR_ENROLL, 2, id)
 				.param("validationRole", ROLE_NOT_EXIST)
 				.contentType(APPLICATION_JSON_UTF8)
 			).andDo(MockMvcResultHandlers.print())
@@ -1245,7 +1249,7 @@ public class CourseControllerTest {
 			;
 		
 		// enroll non existing instructor id=2
-		mockMvc.perform(MockMvcRequestBuilders.put(ROOT + COURSES + "/{courseId}" + "/instructor" + "/{instructorId}" + "/enroll", id, 2)
+		mockMvc.perform(MockMvcRequestBuilders.put(ROOT + COURSES + "/{courseId}" + INSTRUCTOR_ENROLL, id, 2)
 				.param("validationRole", ROLE_NOT_EXIST)
 				.contentType(APPLICATION_JSON_UTF8)
 			).andDo(MockMvcResultHandlers.print())
@@ -1282,7 +1286,7 @@ public class CourseControllerTest {
 		assertEquals("firstNameInstr", instructorVO.getFirstName(),"assertEquals instructorVO.getFirstName() failure");
 		
 		// enroll instructor
-		mockMvc.perform(MockMvcRequestBuilders.put(ROOT + COURSES + "/{courseId}" + "/instructor" + "/{instructorId}" + "/enroll", id, id)
+		mockMvc.perform(MockMvcRequestBuilders.put(ROOT + COURSES + "/{courseId}" + INSTRUCTOR_ENROLL, id, id)
 				.param("validationRole", validationRole)
 				.contentType(APPLICATION_JSON_UTF8)
 			).andDo(MockMvcResultHandlers.print())
@@ -1300,7 +1304,7 @@ public class CourseControllerTest {
 		assertEquals("firstNameInstr", courseVO.getInstructorVO().getFirstName(),"courseVO.getInstructorVO().getFirstName()");
 		
 		// withdraw instructor id=1
-		mockMvc.perform(MockMvcRequestBuilders.put(ROOT + COURSES + "/{courseId}" + "/instructor" + "/{instructorId}" + "/withdraw", id, id)
+		mockMvc.perform(MockMvcRequestBuilders.put(ROOT + COURSES + "/{courseId}" + INSTRUCTOR_WITHDRAW, id, id)
 				.param("validationRole", validationRole)
 				.contentType(APPLICATION_JSON_UTF8)
 			).andDo(MockMvcResultHandlers.print())
@@ -1316,7 +1320,7 @@ public class CourseControllerTest {
 		assertNull(courseVO.getInstructorVO(),"courseVO.getInstructorVO() null");
 		
 		// withdraw instructor (non existing course courseId=2)
-		mockMvc.perform(MockMvcRequestBuilders.put(ROOT + COURSES + "/{courseId}" + "/instructor" + "/{instructorId}" + "/withdraw", 2, id)
+		mockMvc.perform(MockMvcRequestBuilders.put(ROOT + COURSES + "/{courseId}" + INSTRUCTOR_WITHDRAW, 2, id)
 				.param("validationRole", validationRole)
 				.contentType(APPLICATION_JSON_UTF8)
 			).andDo(MockMvcResultHandlers.print())
@@ -1325,7 +1329,7 @@ public class CourseControllerTest {
 			;
 		
 		// withdraw non existing instructor id=2
-		mockMvc.perform(MockMvcRequestBuilders.put(ROOT + COURSES + "/{courseId}" + "/instructor" + "/{instructorId}" + "/withdraw", id, 2)
+		mockMvc.perform(MockMvcRequestBuilders.put(ROOT + COURSES + "/{courseId}" + INSTRUCTOR_WITHDRAW, id, 2)
 				.param("validationRole", validationRole)
 				.contentType(APPLICATION_JSON_UTF8)
 			).andDo(MockMvcResultHandlers.print())
@@ -1362,7 +1366,7 @@ public class CourseControllerTest {
 		assertEquals("firstNameInstr", instructorVO.getFirstName(),"assertEquals instructorVO.getFirstName() failure");
 		
 		// enroll instructor
-		mockMvc.perform(MockMvcRequestBuilders.put(ROOT + COURSES + "/{courseId}" + "/instructor" + "/{instructorId}" + "/enroll", id, id)
+		mockMvc.perform(MockMvcRequestBuilders.put(ROOT + COURSES + "/{courseId}" + INSTRUCTOR_ENROLL, id, id)
 				.param("validationRole", validationRole)
 				.contentType(APPLICATION_JSON_UTF8)
 			).andDo(MockMvcResultHandlers.print())
@@ -1379,7 +1383,7 @@ public class CourseControllerTest {
 		assertNull(courseVO.getInstructorVO(),"courseVO.getInstructorVO() null");
 		
 		// withdraw instructor id=1
-		mockMvc.perform(MockMvcRequestBuilders.put(ROOT + COURSES + "/{courseId}" + "/instructor" + "/{instructorId}" + "/withdraw", id, id)
+		mockMvc.perform(MockMvcRequestBuilders.put(ROOT + COURSES + "/{courseId}" + INSTRUCTOR_WITHDRAW, id, id)
 				.param("validationRole", validationRole)
 				.contentType(APPLICATION_JSON_UTF8)
 			).andDo(MockMvcResultHandlers.print())
@@ -1396,7 +1400,7 @@ public class CourseControllerTest {
 		assertNull(courseVO.getInstructorVO(),"courseVO.getInstructorVO() null");
 		
 		// withdraw instructor (non existing course courseId=2)
-		mockMvc.perform(MockMvcRequestBuilders.put(ROOT + COURSES + "/{courseId}" + "/instructor" + "/{instructorId}" + "/withdraw", 2, id)
+		mockMvc.perform(MockMvcRequestBuilders.put(ROOT + COURSES + "/{courseId}" + INSTRUCTOR_WITHDRAW, 2, id)
 				.param("validationRole", validationRole)
 				.contentType(APPLICATION_JSON_UTF8)
 			).andDo(MockMvcResultHandlers.print())
@@ -1405,7 +1409,7 @@ public class CourseControllerTest {
 			;
 		
 		// withdraw non existing instructor id=2
-		mockMvc.perform(MockMvcRequestBuilders.put(ROOT + COURSES + "/{courseId}" + "/instructor" + "/{instructorId}" + "/withdraw", id, 2)
+		mockMvc.perform(MockMvcRequestBuilders.put(ROOT + COURSES + "/{courseId}" + INSTRUCTOR_WITHDRAW, id, 2)
 				.param("validationRole", validationRole)
 				.contentType(APPLICATION_JSON_UTF8)
 			).andDo(MockMvcResultHandlers.print())
@@ -1442,7 +1446,7 @@ public class CourseControllerTest {
 		assertEquals("firstNameInstr", instructorVO.getFirstName(),"assertEquals instructorVO.getFirstName() failure");
 		
 		// enroll instructor
-		mockMvc.perform(MockMvcRequestBuilders.put(ROOT + COURSES + "/{courseId}" + "/instructor" + "/{instructorId}" + "/enroll", id, id)
+		mockMvc.perform(MockMvcRequestBuilders.put(ROOT + COURSES + "/{courseId}" + INSTRUCTOR_ENROLL, id, id)
 				.param("validationRole", validationRole)
 				.contentType(APPLICATION_JSON_UTF8)
 			).andDo(MockMvcResultHandlers.print())
@@ -1459,7 +1463,7 @@ public class CourseControllerTest {
 		assertNull(courseVO.getInstructorVO(),"courseVO.getInstructorVO() null");
 		
 		// withdraw instructor id=1
-		mockMvc.perform(MockMvcRequestBuilders.put(ROOT + COURSES + "/{courseId}" + "/instructor" + "/{instructorId}" + "/withdraw", id, id)
+		mockMvc.perform(MockMvcRequestBuilders.put(ROOT + COURSES + "/{courseId}" + INSTRUCTOR_WITHDRAW, id, id)
 				.param("validationRole", validationRole)
 				.contentType(APPLICATION_JSON_UTF8)
 			).andDo(MockMvcResultHandlers.print())
@@ -1476,7 +1480,7 @@ public class CourseControllerTest {
 		assertNull(courseVO.getInstructorVO(),"courseVO.getInstructorVO() null");
 		
 		// withdraw instructor (non existing course courseId=2)
-		mockMvc.perform(MockMvcRequestBuilders.put(ROOT + COURSES + "/{courseId}" + "/instructor" + "/{instructorId}" + "/withdraw", 2, id)
+		mockMvc.perform(MockMvcRequestBuilders.put(ROOT + COURSES + "/{courseId}" + INSTRUCTOR_WITHDRAW, 2, id)
 				.param("validationRole", validationRole)
 				.contentType(APPLICATION_JSON_UTF8)
 			).andDo(MockMvcResultHandlers.print())
@@ -1485,7 +1489,7 @@ public class CourseControllerTest {
 			;
 		
 		// withdraw non existing instructor id=2
-		mockMvc.perform(MockMvcRequestBuilders.put(ROOT + COURSES + "/{courseId}" + "/instructor" + "/{instructorId}" + "/withdraw", id, 2)
+		mockMvc.perform(MockMvcRequestBuilders.put(ROOT + COURSES + "/{courseId}" + INSTRUCTOR_WITHDRAW, id, 2)
 				.param("validationRole", validationRole)
 				.contentType(APPLICATION_JSON_UTF8)
 			).andDo(MockMvcResultHandlers.print())
@@ -1520,7 +1524,7 @@ public class CourseControllerTest {
 		assertEquals("firstNameInstr", instructorVO.getFirstName(),"assertEquals instructorVO.getFirstName() failure");
 		
 		// enroll instructor
-		mockMvc.perform(MockMvcRequestBuilders.put(ROOT + COURSES + "/{courseId}" + "/instructor" + "/{instructorId}" + "/enroll", id, id)
+		mockMvc.perform(MockMvcRequestBuilders.put(ROOT + COURSES + "/{courseId}" + INSTRUCTOR_ENROLL, id, id)
 				//.param("validationRole", validationRole)
 				.contentType(APPLICATION_JSON_UTF8)
 			).andDo(MockMvcResultHandlers.print())
@@ -1537,7 +1541,7 @@ public class CourseControllerTest {
 		assertNull(courseVO.getInstructorVO(),"courseVO.getInstructorVO() null");
 		
 		// withdraw instructor id=1
-		mockMvc.perform(MockMvcRequestBuilders.put(ROOT + COURSES + "/{courseId}" + "/instructor" + "/{instructorId}" + "/withdraw", id, id)
+		mockMvc.perform(MockMvcRequestBuilders.put(ROOT + COURSES + "/{courseId}" + INSTRUCTOR_WITHDRAW, id, id)
 				//.param("validationRole", validationRole)
 				.contentType(APPLICATION_JSON_UTF8)
 			).andDo(MockMvcResultHandlers.print())
@@ -1554,7 +1558,7 @@ public class CourseControllerTest {
 		assertNull(courseVO.getInstructorVO(),"courseVO.getInstructorVO() null");
 		
 		// withdraw instructor (non existing course courseId=2)
-		mockMvc.perform(MockMvcRequestBuilders.put(ROOT + COURSES + "/{courseId}" + "/instructor" + "/{instructorId}" + "/withdraw", 2, id)
+		mockMvc.perform(MockMvcRequestBuilders.put(ROOT + COURSES + "/{courseId}" + INSTRUCTOR_WITHDRAW, 2, id)
 				//.param("validationRole", validationRole)
 				.contentType(APPLICATION_JSON_UTF8)
 			).andDo(MockMvcResultHandlers.print())
@@ -1563,7 +1567,7 @@ public class CourseControllerTest {
 			;
 		
 		// withdraw non existing instructor id=2
-		mockMvc.perform(MockMvcRequestBuilders.put(ROOT + COURSES + "/{courseId}" + "/instructor" + "/{instructorId}" + "/withdraw", id, 2)
+		mockMvc.perform(MockMvcRequestBuilders.put(ROOT + COURSES + "/{courseId}" + INSTRUCTOR_WITHDRAW, id, 2)
 				//.param("validationRole", validationRole)
 				.contentType(APPLICATION_JSON_UTF8)
 			).andDo(MockMvcResultHandlers.print())
@@ -1600,7 +1604,7 @@ public class CourseControllerTest {
 		assertEquals("firstNameInstr", instructorVO.getFirstName(),"assertEquals instructorVO.getFirstName() failure");
 		
 		// enroll instructor
-		mockMvc.perform(MockMvcRequestBuilders.put(ROOT + COURSES + "/{courseId}" + "/instructor" + "/{instructorId}" + "/enroll", id, id)
+		mockMvc.perform(MockMvcRequestBuilders.put(ROOT + COURSES + "/{courseId}" + INSTRUCTOR_ENROLL, id, id)
 				.param("validationRole", validationRole)
 				.contentType(APPLICATION_JSON_UTF8)
 			).andDo(MockMvcResultHandlers.print())
@@ -1617,7 +1621,7 @@ public class CourseControllerTest {
 		assertNull(courseVO.getInstructorVO(),"courseVO.getInstructorVO() null");
 		
 		// withdraw instructor id=1
-		mockMvc.perform(MockMvcRequestBuilders.put(ROOT + COURSES + "/{courseId}" + "/instructor" + "/{instructorId}" + "/withdraw", id, id)
+		mockMvc.perform(MockMvcRequestBuilders.put(ROOT + COURSES + "/{courseId}" + INSTRUCTOR_WITHDRAW, id, id)
 				.param("validationRole", ROLE_NOT_EXIST)
 				.contentType(APPLICATION_JSON_UTF8)
 			).andDo(MockMvcResultHandlers.print())
@@ -1633,7 +1637,7 @@ public class CourseControllerTest {
 		assertNull(courseVO.getInstructorVO(),"courseVO.getInstructorVO() null");
 		
 		// withdraw instructor (non existing course courseId=2)
-		mockMvc.perform(MockMvcRequestBuilders.put(ROOT + COURSES + "/{courseId}" + "/instructor" + "/{instructorId}" + "/withdraw", 2, id)
+		mockMvc.perform(MockMvcRequestBuilders.put(ROOT + COURSES + "/{courseId}" + INSTRUCTOR_WITHDRAW, 2, id)
 				.param("validationRole", ROLE_NOT_EXIST)
 				.contentType(APPLICATION_JSON_UTF8)
 			).andDo(MockMvcResultHandlers.print())
@@ -1642,7 +1646,7 @@ public class CourseControllerTest {
 			;
 		
 		// withdraw non existing instructor id=2
-		mockMvc.perform(MockMvcRequestBuilders.put(ROOT + COURSES + "/{courseId}" + "/instructor" + "/{instructorId}" + "/withdraw", id, 2)
+		mockMvc.perform(MockMvcRequestBuilders.put(ROOT + COURSES + "/{courseId}" + INSTRUCTOR_WITHDRAW, id, 2)
 				.param("validationRole", ROLE_NOT_EXIST)
 				.contentType(APPLICATION_JSON_UTF8)
 			).andDo(MockMvcResultHandlers.print())
@@ -1686,7 +1690,7 @@ public class CourseControllerTest {
 		assertEquals(studentVO.getEmailAddress(), newStudentVO.getEmailAddress(),"assertEquals newStudentVO.getEmailAddress() failure");
 		
 		// enroll new student
-		mockMvc.perform(MockMvcRequestBuilders.put(ROOT + COURSES + "/{courseId}" + "/student" + "/{instructorId}" + "/enroll", id, newStudentVO.getId())
+		mockMvc.perform(MockMvcRequestBuilders.put(ROOT + COURSES + "/{courseId}" + STUDENT_ENROLL, id, newStudentVO.getId())
 				.param("validationRole", validationRole)
 				.contentType(APPLICATION_JSON_UTF8)
 			).andDo(MockMvcResultHandlers.print())
@@ -1704,7 +1708,7 @@ public class CourseControllerTest {
         assertTrue(courseVO.getStudentsVO().stream().filter(o -> o.getEmailAddress().equals(studentVO.getEmailAddress())).findFirst().isPresent());
         
 		// enroll student (non existing course courseId=2)
-		mockMvc.perform(MockMvcRequestBuilders.put(ROOT + COURSES + "/{courseId}" + "/student" + "/{instructorId}" + "/enroll", 2, newStudentVO.getId())
+		mockMvc.perform(MockMvcRequestBuilders.put(ROOT + COURSES + "/{courseId}" + STUDENT_ENROLL, 2, newStudentVO.getId())
 				.param("validationRole", validationRole)
 				.contentType(APPLICATION_JSON_UTF8)
 			).andDo(MockMvcResultHandlers.print())
@@ -1713,7 +1717,7 @@ public class CourseControllerTest {
 			;
 		
 		// enroll non existing student id=2
-		mockMvc.perform(MockMvcRequestBuilders.put(ROOT + COURSES + "/{courseId}" + "/student" + "/{instructorId}" + "/enroll", id, 2222)
+		mockMvc.perform(MockMvcRequestBuilders.put(ROOT + COURSES + "/{courseId}" + STUDENT_ENROLL, id, 2222)
 				.param("validationRole", validationRole)
 				.contentType(APPLICATION_JSON_UTF8)
 			).andDo(MockMvcResultHandlers.print())
@@ -1757,7 +1761,7 @@ public class CourseControllerTest {
 		assertEquals(studentVO.getEmailAddress(), newStudentVO.getEmailAddress(),"assertEquals newStudentVO.getEmailAddress() failure");
 		
 		// enroll new student
-		mockMvc.perform(MockMvcRequestBuilders.put(ROOT + COURSES + "/{courseId}" + "/student" + "/{instructorId}" + "/enroll", id, newStudentVO.getId())
+		mockMvc.perform(MockMvcRequestBuilders.put(ROOT + COURSES + "/{courseId}" + STUDENT_ENROLL, id, newStudentVO.getId())
 				.param("validationRole", validationRole)
 				.contentType(APPLICATION_JSON_UTF8)
 			).andDo(MockMvcResultHandlers.print())
@@ -1775,7 +1779,7 @@ public class CourseControllerTest {
         assertTrue(courseVO.getStudentsVO().stream().filter(o -> o.getEmailAddress().equals(studentVO.getEmailAddress())).findFirst().isPresent());
         
 		// enroll student (non existing course courseId=2)
-		mockMvc.perform(MockMvcRequestBuilders.put(ROOT + COURSES + "/{courseId}" + "/student" + "/{instructorId}" + "/enroll", 2, newStudentVO.getId())
+		mockMvc.perform(MockMvcRequestBuilders.put(ROOT + COURSES + "/{courseId}" + STUDENT_ENROLL, 2, newStudentVO.getId())
 				.param("validationRole", validationRole)
 				.contentType(APPLICATION_JSON_UTF8)
 			).andDo(MockMvcResultHandlers.print())
@@ -1784,7 +1788,7 @@ public class CourseControllerTest {
 			;
 		
 		// enroll non existing student id=2
-		mockMvc.perform(MockMvcRequestBuilders.put(ROOT + COURSES + "/{courseId}" + "/student" + "/{instructorId}" + "/enroll", id, 2222)
+		mockMvc.perform(MockMvcRequestBuilders.put(ROOT + COURSES + "/{courseId}" + STUDENT_ENROLL, id, 2222)
 				.param("validationRole", validationRole)
 				.contentType(APPLICATION_JSON_UTF8)
 			).andDo(MockMvcResultHandlers.print())
@@ -1828,7 +1832,7 @@ public class CourseControllerTest {
 		assertEquals(studentVO.getEmailAddress(), newStudentVO.getEmailAddress(),"assertEquals newStudentVO.getEmailAddress() failure");
 		
 		// enroll new student
-		mockMvc.perform(MockMvcRequestBuilders.put(ROOT + COURSES + "/{courseId}" + "/student" + "/{instructorId}" + "/enroll", id, newStudentVO.getId())
+		mockMvc.perform(MockMvcRequestBuilders.put(ROOT + COURSES + "/{courseId}" + STUDENT_ENROLL, id, newStudentVO.getId())
 				.param("validationRole", validationRole)
 				.contentType(APPLICATION_JSON_UTF8)
 			).andDo(MockMvcResultHandlers.print())
@@ -1847,7 +1851,7 @@ public class CourseControllerTest {
         assertFalse(courseVO.getStudentsVO().stream().filter(o -> o.getEmailAddress().equals(studentVO.getEmailAddress())).findFirst().isPresent());
         
 		// enroll student (non existing course courseId=2)
-		mockMvc.perform(MockMvcRequestBuilders.put(ROOT + COURSES + "/{courseId}" + "/student" + "/{instructorId}" + "/enroll", 2, newStudentVO.getId())
+		mockMvc.perform(MockMvcRequestBuilders.put(ROOT + COURSES + "/{courseId}" + STUDENT_ENROLL, 2, newStudentVO.getId())
 				.param("validationRole", validationRole)
 				.contentType(APPLICATION_JSON_UTF8)
 			).andDo(MockMvcResultHandlers.print())
@@ -1856,7 +1860,7 @@ public class CourseControllerTest {
 			;
 		
 		// enroll non existing student id=2
-		mockMvc.perform(MockMvcRequestBuilders.put(ROOT + COURSES + "/{courseId}" + "/student" + "/{instructorId}" + "/enroll", id, 2222)
+		mockMvc.perform(MockMvcRequestBuilders.put(ROOT + COURSES + "/{courseId}" + STUDENT_ENROLL, id, 2222)
 				.param("validationRole", validationRole)
 				.contentType(APPLICATION_JSON_UTF8)
 			).andDo(MockMvcResultHandlers.print())
@@ -1898,7 +1902,7 @@ public class CourseControllerTest {
 		assertEquals(studentVO.getEmailAddress(), newStudentVO.getEmailAddress(),"assertEquals newStudentVO.getEmailAddress() failure");
 		
 		// enroll new student
-		mockMvc.perform(MockMvcRequestBuilders.put(ROOT + COURSES + "/{courseId}" + "/student" + "/{instructorId}" + "/enroll", id, newStudentVO.getId())
+		mockMvc.perform(MockMvcRequestBuilders.put(ROOT + COURSES + "/{courseId}" + STUDENT_ENROLL, id, newStudentVO.getId())
 				//.param("validationRole", validationRole)
 				.contentType(APPLICATION_JSON_UTF8)
 			).andDo(MockMvcResultHandlers.print())
@@ -1917,7 +1921,7 @@ public class CourseControllerTest {
         assertFalse(courseVO.getStudentsVO().stream().filter(o -> o.getEmailAddress().equals(studentVO.getEmailAddress())).findFirst().isPresent());
         
 		// enroll student (non existing course courseId=2)
-		mockMvc.perform(MockMvcRequestBuilders.put(ROOT + COURSES + "/{courseId}" + "/student" + "/{instructorId}" + "/enroll", 2, newStudentVO.getId())
+		mockMvc.perform(MockMvcRequestBuilders.put(ROOT + COURSES + "/{courseId}" + STUDENT_ENROLL, 2, newStudentVO.getId())
 				//.param("validationRole", validationRole)
 				.contentType(APPLICATION_JSON_UTF8)
 			).andDo(MockMvcResultHandlers.print())
@@ -1926,7 +1930,7 @@ public class CourseControllerTest {
 			;
 		
 		// enroll non existing student id=2
-		mockMvc.perform(MockMvcRequestBuilders.put(ROOT + COURSES + "/{courseId}" + "/student" + "/{instructorId}" + "/enroll", id, 2222)
+		mockMvc.perform(MockMvcRequestBuilders.put(ROOT + COURSES + "/{courseId}" + STUDENT_ENROLL, id, 2222)
 				//.param("validationRole", validationRole)
 				.contentType(APPLICATION_JSON_UTF8)
 			).andDo(MockMvcResultHandlers.print())
@@ -1970,7 +1974,7 @@ public class CourseControllerTest {
 		assertEquals(studentVO.getEmailAddress(), newStudentVO.getEmailAddress(),"assertEquals newStudentVO.getEmailAddress() failure");
 		
 		// enroll new student
-		mockMvc.perform(MockMvcRequestBuilders.put(ROOT + COURSES + "/{courseId}" + "/student" + "/{instructorId}" + "/enroll", id, newStudentVO.getId())
+		mockMvc.perform(MockMvcRequestBuilders.put(ROOT + COURSES + "/{courseId}" + STUDENT_ENROLL, id, newStudentVO.getId())
 				.param("validationRole", validationRole)
 				.contentType(APPLICATION_JSON_UTF8)
 			).andDo(MockMvcResultHandlers.print())
@@ -1989,7 +1993,7 @@ public class CourseControllerTest {
         assertFalse(courseVO.getStudentsVO().stream().filter(o -> o.getEmailAddress().equals(studentVO.getEmailAddress())).findFirst().isPresent());
         
 		// enroll student (non existing course courseId=2)
-		mockMvc.perform(MockMvcRequestBuilders.put(ROOT + COURSES + "/{courseId}" + "/student" + "/{instructorId}" + "/enroll", 2, newStudentVO.getId())
+		mockMvc.perform(MockMvcRequestBuilders.put(ROOT + COURSES + "/{courseId}" + STUDENT_ENROLL, 2, newStudentVO.getId())
 				.param("validationRole", validationRole)
 				.contentType(APPLICATION_JSON_UTF8)
 			).andDo(MockMvcResultHandlers.print())
@@ -1998,7 +2002,7 @@ public class CourseControllerTest {
 			;
 		
 		// enroll non existing student id=2
-		mockMvc.perform(MockMvcRequestBuilders.put(ROOT + COURSES + "/{courseId}" + "/student" + "/{instructorId}" + "/enroll", id, 2222)
+		mockMvc.perform(MockMvcRequestBuilders.put(ROOT + COURSES + "/{courseId}" + STUDENT_ENROLL, id, 2222)
 				.param("validationRole", validationRole)
 				.contentType(APPLICATION_JSON_UTF8)
 			).andDo(MockMvcResultHandlers.print())
@@ -2027,7 +2031,7 @@ public class CourseControllerTest {
 		assertTrue(courseVO.getStudentsVO().stream().filter(o -> o.getId() == 1).findFirst().isPresent());
         
 		// withdraw instructor id=1
-		mockMvc.perform(MockMvcRequestBuilders.put(ROOT + COURSES + "/{courseId}" + "/student" + "/{studentId}" + "/withdraw", id, id)
+		mockMvc.perform(MockMvcRequestBuilders.put(ROOT + COURSES + "/{courseId}" + STUDENT_WITHDRAW, id, id)
 				.param("validationRole", validationRole)
 				.contentType(APPLICATION_JSON_UTF8)
 			).andDo(MockMvcResultHandlers.print())
@@ -2044,7 +2048,7 @@ public class CourseControllerTest {
 		assertFalse(courseVO.getStudentsVO().stream().filter(o -> o.getId() == 1).findFirst().isPresent());
         
 		// withdraw instructor (non existing course courseId=2)
-		mockMvc.perform(MockMvcRequestBuilders.put(ROOT + COURSES + "/{courseId}" + "/student" + "/{studentId}" + "/withdraw", 2, id)
+		mockMvc.perform(MockMvcRequestBuilders.put(ROOT + COURSES + "/{courseId}" + STUDENT_WITHDRAW, 2, id)
 				.param("validationRole", validationRole)
 				.contentType(APPLICATION_JSON_UTF8)
 			).andDo(MockMvcResultHandlers.print())
@@ -2053,7 +2057,7 @@ public class CourseControllerTest {
 			;
 		
 		// withdraw non existing instructor id=2
-		mockMvc.perform(MockMvcRequestBuilders.put(ROOT + COURSES + "/{courseId}" + "/student" + "/{instructorId}" + "/withdraw", id, 2)
+		mockMvc.perform(MockMvcRequestBuilders.put(ROOT + COURSES + "/{courseId}" + STUDENT_WITHDRAW, id, 2)
 				.param("validationRole", validationRole)
 				.contentType(APPLICATION_JSON_UTF8)
 			).andDo(MockMvcResultHandlers.print())
@@ -2082,7 +2086,7 @@ public class CourseControllerTest {
 		assertTrue(courseVO.getStudentsVO().stream().filter(o -> o.getId() == 1).findFirst().isPresent());
         
 		// withdraw instructor id=1
-		mockMvc.perform(MockMvcRequestBuilders.put(ROOT + COURSES + "/{courseId}" + "/student" + "/{studentId}" + "/withdraw", id, id)
+		mockMvc.perform(MockMvcRequestBuilders.put(ROOT + COURSES + "/{courseId}" + STUDENT_WITHDRAW, id, id)
 				.param("validationRole", validationRole)
 				.contentType(APPLICATION_JSON_UTF8)
 			).andDo(MockMvcResultHandlers.print())
@@ -2099,7 +2103,7 @@ public class CourseControllerTest {
 		assertFalse(courseVO.getStudentsVO().stream().filter(o -> o.getId() == 1).findFirst().isPresent());
         
 		// withdraw instructor (non existing course courseId=2)
-		mockMvc.perform(MockMvcRequestBuilders.put(ROOT + COURSES + "/{courseId}" + "/student" + "/{studentId}" + "/withdraw", 2, id)
+		mockMvc.perform(MockMvcRequestBuilders.put(ROOT + COURSES + "/{courseId}" + STUDENT_WITHDRAW, 2, id)
 				.param("validationRole", validationRole)
 				.contentType(APPLICATION_JSON_UTF8)
 			).andDo(MockMvcResultHandlers.print())
@@ -2108,7 +2112,7 @@ public class CourseControllerTest {
 			;
 		
 		// withdraw non existing instructor id=2
-		mockMvc.perform(MockMvcRequestBuilders.put(ROOT + COURSES + "/{courseId}" + "/student" + "/{instructorId}" + "/withdraw", id, 2)
+		mockMvc.perform(MockMvcRequestBuilders.put(ROOT + COURSES + "/{courseId}" + STUDENT_WITHDRAW, id, 2)
 				.param("validationRole", validationRole)
 				.contentType(APPLICATION_JSON_UTF8)
 			).andDo(MockMvcResultHandlers.print())
@@ -2137,7 +2141,7 @@ public class CourseControllerTest {
 		assertTrue(courseVO.getStudentsVO().stream().filter(o -> o.getId() == 1).findFirst().isPresent());
         
 		// withdraw instructor id=1
-		mockMvc.perform(MockMvcRequestBuilders.put(ROOT + COURSES + "/{courseId}" + "/student" + "/{studentId}" + "/withdraw", id, id)
+		mockMvc.perform(MockMvcRequestBuilders.put(ROOT + COURSES + "/{courseId}" + STUDENT_WITHDRAW, id, id)
 				.param("validationRole", validationRole)
 				.contentType(APPLICATION_JSON_UTF8)
 			).andDo(MockMvcResultHandlers.print())
@@ -2155,7 +2159,7 @@ public class CourseControllerTest {
 		assertTrue(courseVO.getStudentsVO().stream().filter(o -> o.getId() == 1).findFirst().isPresent());
         
 		// withdraw instructor (non existing course courseId=2)
-		mockMvc.perform(MockMvcRequestBuilders.put(ROOT + COURSES + "/{courseId}" + "/student" + "/{studentId}" + "/withdraw", 2, id)
+		mockMvc.perform(MockMvcRequestBuilders.put(ROOT + COURSES + "/{courseId}" + STUDENT_WITHDRAW, 2, id)
 				.param("validationRole", validationRole)
 				.contentType(APPLICATION_JSON_UTF8)
 			).andDo(MockMvcResultHandlers.print())
@@ -2164,7 +2168,7 @@ public class CourseControllerTest {
 			;
 		
 		// withdraw non existing instructor id=2
-		mockMvc.perform(MockMvcRequestBuilders.put(ROOT + COURSES + "/{courseId}" + "/student" + "/{instructorId}" + "/withdraw", id, 2)
+		mockMvc.perform(MockMvcRequestBuilders.put(ROOT + COURSES + "/{courseId}" + STUDENT_WITHDRAW, id, 2)
 				.param("validationRole", validationRole)
 				.contentType(APPLICATION_JSON_UTF8)
 			).andDo(MockMvcResultHandlers.print())
@@ -2193,7 +2197,7 @@ public class CourseControllerTest {
 		assertTrue(courseVO.getStudentsVO().stream().filter(o -> o.getId() == 1).findFirst().isPresent());
         
 		// withdraw student id=1
-		mockMvc.perform(MockMvcRequestBuilders.put(ROOT + COURSES + "/{courseId}" + "/student" + "/{studentId}" + "/withdraw", id, id)
+		mockMvc.perform(MockMvcRequestBuilders.put(ROOT + COURSES + "/{courseId}" + STUDENT_WITHDRAW, id, id)
 				.param("validationRole", validationRole)
 				.contentType(APPLICATION_JSON_UTF8)
 			).andDo(MockMvcResultHandlers.print())
@@ -2211,7 +2215,7 @@ public class CourseControllerTest {
 		assertTrue(courseVO.getStudentsVO().stream().filter(o -> o.getId() == 1).findFirst().isPresent());
         
 		// withdraw student (non existing course courseId=2)
-		mockMvc.perform(MockMvcRequestBuilders.put(ROOT + COURSES + "/{courseId}" + "/student" + "/{studentId}" + "/withdraw", 2, id)
+		mockMvc.perform(MockMvcRequestBuilders.put(ROOT + COURSES + "/{courseId}" + STUDENT_WITHDRAW, 2, id)
 				.param("validationRole", validationRole)
 				.contentType(APPLICATION_JSON_UTF8)
 			).andDo(MockMvcResultHandlers.print())
@@ -2220,7 +2224,7 @@ public class CourseControllerTest {
 			;
 		
 		// withdraw non existing student id=2
-		mockMvc.perform(MockMvcRequestBuilders.put(ROOT + COURSES + "/{courseId}" + "/student" + "/{instructorId}" + "/withdraw", id, 2)
+		mockMvc.perform(MockMvcRequestBuilders.put(ROOT + COURSES + "/{courseId}" + STUDENT_WITHDRAW, id, 2)
 				.param("validationRole", validationRole)
 				.contentType(APPLICATION_JSON_UTF8)
 			).andDo(MockMvcResultHandlers.print())
@@ -2247,7 +2251,7 @@ public class CourseControllerTest {
 		assertTrue(courseVO.getStudentsVO().stream().filter(o -> o.getId() == 1).findFirst().isPresent());
         
 		// withdraw instructor id=1
-		mockMvc.perform(MockMvcRequestBuilders.put(ROOT + COURSES + "/{courseId}" + "/student" + "/{studentId}" + "/withdraw", id, id)
+		mockMvc.perform(MockMvcRequestBuilders.put(ROOT + COURSES + "/{courseId}" + STUDENT_WITHDRAW, id, id)
 				//.param("validationRole", validationRole)
 				.contentType(APPLICATION_JSON_UTF8)
 			).andDo(MockMvcResultHandlers.print())
@@ -2265,7 +2269,7 @@ public class CourseControllerTest {
 		assertTrue(courseVO.getStudentsVO().stream().filter(o -> o.getId() == 1).findFirst().isPresent());
         
 		// withdraw instructor (non existing course courseId=2)
-		mockMvc.perform(MockMvcRequestBuilders.put(ROOT + COURSES + "/{courseId}" + "/student" + "/{studentId}" + "/withdraw", 2, id)
+		mockMvc.perform(MockMvcRequestBuilders.put(ROOT + COURSES + "/{courseId}" + STUDENT_WITHDRAW, 2, id)
 				//.param("validationRole", validationRole)
 				.contentType(APPLICATION_JSON_UTF8)
 			).andDo(MockMvcResultHandlers.print())
@@ -2274,7 +2278,7 @@ public class CourseControllerTest {
 			;
 		
 		// withdraw non existing instructor id=2
-		mockMvc.perform(MockMvcRequestBuilders.put(ROOT + COURSES + "/{courseId}" + "/student" + "/{instructorId}" + "/withdraw", id, 2)
+		mockMvc.perform(MockMvcRequestBuilders.put(ROOT + COURSES + "/{courseId}" + STUDENT_WITHDRAW, id, 2)
 				//.param("validationRole", validationRole)
 				.contentType(APPLICATION_JSON_UTF8)
 			).andDo(MockMvcResultHandlers.print())

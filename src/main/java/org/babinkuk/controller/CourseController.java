@@ -72,13 +72,13 @@ public class CourseController {
 	}
 
 	/**
-	 * expose GET "/courses/get"
+	 * expose GET "/courses"
 	 * get course list
 	 *
 	 * @param 
 	 * @return ResponseEntity
 	 */
-	@GetMapping("/get")
+	@GetMapping("")
 	public ResponseEntity<Iterable<CourseVO>> getAllCourses() {
 		log.info("Called CourseController.getAllCourses");
 
@@ -86,13 +86,13 @@ public class CourseController {
 	}
 	
 	/**
-	 * expose GET "/courses/get/{courseId}"
+	 * expose GET "/courses/{courseId}"
 	 * get specific course
 	 * 
 	 * @param 
 	 * @return ResponseEntity
 	 */
-	@GetMapping("/get/{courseId}")
+	@GetMapping("/{courseId}")
 	public ResponseEntity<CourseVO> getCourse(@PathVariable int courseId) {
 		log.info("Called CourseController.getCourse(courseId={})", courseId);
 		

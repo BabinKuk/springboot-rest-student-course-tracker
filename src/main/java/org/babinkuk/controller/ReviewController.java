@@ -64,13 +64,13 @@ public class ReviewController {
 	}
 
 	/**
-	 * expose GET "/reviews/get"
+	 * expose GET "/reviews"
 	 * get review list
 	 *
 	 * @param 
 	 * @return ResponseEntity
 	 */
-	@GetMapping("/get")
+	@GetMapping("")
 	public ResponseEntity<Iterable<ReviewVO>> getAllReviews() {
 		log.info("Called ReviewController.getAllReviews");
 
@@ -78,13 +78,13 @@ public class ReviewController {
 	}
 	
 	/**
-	 * expose GET "/reviews/get/{reviewId}"
+	 * expose GET "/reviews/{reviewId}"
 	 * get specific review
 	 *
 	 * @param 
 	 * @return ResponseEntity
 	 */
-	@GetMapping("/get/{reviewId}")
+	@GetMapping("/{reviewId}")
 	public ResponseEntity<ReviewVO> getReview(@PathVariable int reviewId) {
 		log.info("Called ReviewController.getReview(reviewId={})", reviewId);
 		

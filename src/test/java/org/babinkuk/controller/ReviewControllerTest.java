@@ -10,7 +10,6 @@ import org.babinkuk.service.ReviewService;
 import org.babinkuk.service.ReviewServiceImpl;
 import org.babinkuk.validator.ActionType;
 import org.babinkuk.validator.ValidatorCodes;
-import org.babinkuk.validator.ValidatorRole;
 import org.babinkuk.vo.CourseVO;
 import org.babinkuk.vo.ReviewVO;
 import org.junit.jupiter.api.AfterEach;
@@ -153,7 +152,7 @@ public class ReviewControllerTest {
 		log.info("getAllReviews");
 		
 		// get all reviews
-		mockMvc.perform(MockMvcRequestBuilders.get(ROOT + REVIEWS + "/get")
+		mockMvc.perform(MockMvcRequestBuilders.get(ROOT + REVIEWS)
 				.param("validationRole", ROLE_ADMIN)
 			).andDo(MockMvcResultHandlers.print())
 			.andExpect(status().isOk())
@@ -176,7 +175,7 @@ public class ReviewControllerTest {
 		reviewService.saveReview(courseVO);
 		
 		// get all reviews (different validationRole param)
-		mockMvc.perform(MockMvcRequestBuilders.get(ROOT + REVIEWS + "/get")
+		mockMvc.perform(MockMvcRequestBuilders.get(ROOT + REVIEWS)
 				.param("validationRole", ROLE_INSTRUCTOR)
 			).andDo(MockMvcResultHandlers.print())
 			.andExpect(status().isOk())
@@ -185,7 +184,7 @@ public class ReviewControllerTest {
 			;
 		
 		// get all reviews (different validationRole param)
-		mockMvc.perform(MockMvcRequestBuilders.get(ROOT + REVIEWS + "/get")
+		mockMvc.perform(MockMvcRequestBuilders.get(ROOT + REVIEWS)
 				.param("validationRole", ROLE_STUDENT)
 			).andDo(MockMvcResultHandlers.print())
 			.andExpect(status().isOk())
@@ -194,7 +193,7 @@ public class ReviewControllerTest {
 			;
 		
 		// get all reviews (without validationRole param)
-		mockMvc.perform(MockMvcRequestBuilders.get(ROOT + REVIEWS + "/get")
+		mockMvc.perform(MockMvcRequestBuilders.get(ROOT + REVIEWS)
 			//	.param("validationRole", "ROLE_STUDENT")
 			).andDo(MockMvcResultHandlers.print())
 			.andExpect(status().isOk())
@@ -203,7 +202,7 @@ public class ReviewControllerTest {
 			;
 		
 		// get all reviews (not existing validationRole param)
-		mockMvc.perform(MockMvcRequestBuilders.get(ROOT + REVIEWS + "/get")
+		mockMvc.perform(MockMvcRequestBuilders.get(ROOT + REVIEWS)
 				.param("validationRole", ROLE_NOT_EXIST)
 			).andDo(MockMvcResultHandlers.print())
 			.andExpect(status().isOk())
@@ -217,7 +216,7 @@ public class ReviewControllerTest {
 		log.info("getReview");
 		
 		// get review with id=1
-		mockMvc.perform(MockMvcRequestBuilders.get(ROOT + REVIEWS + "/get/{id}", 1)
+		mockMvc.perform(MockMvcRequestBuilders.get(ROOT + REVIEWS + "/{id}", 1)
 				.param("validationRole", ROLE_ADMIN)
 			).andDo(MockMvcResultHandlers.print()).andExpect(status().isOk())
 			.andExpect(content().contentType(APPLICATION_JSON_UTF8))
@@ -226,7 +225,7 @@ public class ReviewControllerTest {
 			;
 
 		// get review with id=2 (non existing)
-		mockMvc.perform(MockMvcRequestBuilders.get(ROOT + REVIEWS + "/get/{id}", 2)
+		mockMvc.perform(MockMvcRequestBuilders.get(ROOT + REVIEWS + "/{id}", 2)
 				.param("validationRole", ROLE_ADMIN)
 			).andDo(MockMvcResultHandlers.print())
 			.andExpect(status().isOk())
@@ -235,7 +234,7 @@ public class ReviewControllerTest {
 			;
 		
 		// get review with id=1 (validationRole ROLE_INSTRUCTOR)
-		mockMvc.perform(MockMvcRequestBuilders.get(ROOT + REVIEWS + "/get/{id}", 1)
+		mockMvc.perform(MockMvcRequestBuilders.get(ROOT + REVIEWS + "/{id}", 1)
 				.param("validationRole", ROLE_INSTRUCTOR)
 			).andDo(MockMvcResultHandlers.print()).andExpect(status().isOk())
 			.andExpect(content().contentType(APPLICATION_JSON_UTF8))
@@ -244,7 +243,7 @@ public class ReviewControllerTest {
 			;
 
 		// get review with id=2 (non existing) (validationRole ROLE_INSTRUCTOR)
-		mockMvc.perform(MockMvcRequestBuilders.get(ROOT + REVIEWS + "/get/{id}", 2)
+		mockMvc.perform(MockMvcRequestBuilders.get(ROOT + REVIEWS + "/{id}", 2)
 				.param("validationRole", ROLE_INSTRUCTOR)
 			).andDo(MockMvcResultHandlers.print())
 			.andExpect(status().isOk())
@@ -253,7 +252,7 @@ public class ReviewControllerTest {
 			;
 		
 		// get review with id=1 (validationRole ROLE_STUDENT)
-		mockMvc.perform(MockMvcRequestBuilders.get(ROOT + REVIEWS + "/get/{id}", 1)
+		mockMvc.perform(MockMvcRequestBuilders.get(ROOT + REVIEWS + "/{id}", 1)
 				.param("validationRole", ROLE_STUDENT)
 			).andDo(MockMvcResultHandlers.print()).andExpect(status().isOk())
 			.andExpect(content().contentType(APPLICATION_JSON_UTF8))
@@ -262,7 +261,7 @@ public class ReviewControllerTest {
 			;
 
 		// get review with id=2 (non existing) (validationRole ROLE_STUDENT)
-		mockMvc.perform(MockMvcRequestBuilders.get(ROOT + REVIEWS + "/get/{id}", 2)
+		mockMvc.perform(MockMvcRequestBuilders.get(ROOT + REVIEWS + "/{id}", 2)
 				.param("validationRole", ROLE_STUDENT)
 			).andDo(MockMvcResultHandlers.print())
 			.andExpect(status().isOk())
@@ -271,7 +270,7 @@ public class ReviewControllerTest {
 			;
 		
 		// get review with id=1 (without validationRole param)
-		mockMvc.perform(MockMvcRequestBuilders.get(ROOT + REVIEWS + "/get/{id}", 1)
+		mockMvc.perform(MockMvcRequestBuilders.get(ROOT + REVIEWS + "/{id}", 1)
 				//.param("validationRole", "ROLE_STUDENT")
 			).andDo(MockMvcResultHandlers.print()).andExpect(status().isOk())
 			.andExpect(content().contentType(APPLICATION_JSON_UTF8))
@@ -280,7 +279,7 @@ public class ReviewControllerTest {
 			;
 
 		// get review with id=2 (non existing) (without validationRole param)
-		mockMvc.perform(MockMvcRequestBuilders.get(ROOT + REVIEWS + "/get/{id}", 2)
+		mockMvc.perform(MockMvcRequestBuilders.get(ROOT + REVIEWS + "/{id}", 2)
 				//.param("validationRole", "ROLE_STUDENT")
 			).andDo(MockMvcResultHandlers.print())
 			.andExpect(status().isOk())
@@ -289,7 +288,7 @@ public class ReviewControllerTest {
 			;
 	
 		// get review with id=2 (non existing) (not existing validationRole param)
-		mockMvc.perform(MockMvcRequestBuilders.get(ROOT + REVIEWS + "/get/{id}", 2)
+		mockMvc.perform(MockMvcRequestBuilders.get(ROOT + REVIEWS + "/{id}", 2)
 				.param("validationRole", ROLE_NOT_EXIST)
 			).andDo(MockMvcResultHandlers.print())
 			.andExpect(status().isOk())
@@ -318,7 +317,7 @@ public class ReviewControllerTest {
 		
 		// additional check
 		// get all reviews
-		mockMvc.perform(MockMvcRequestBuilders.get(ROOT + REVIEWS + "/get")
+		mockMvc.perform(MockMvcRequestBuilders.get(ROOT + REVIEWS)
 				.param("validationRole", validationRole)
 			).andDo(MockMvcResultHandlers.print())
 			.andExpect(status().isOk())
@@ -348,7 +347,7 @@ public class ReviewControllerTest {
 		
 		// additional check
 		// get all reviews
-		mockMvc.perform(MockMvcRequestBuilders.get(ROOT + REVIEWS + "/get")
+		mockMvc.perform(MockMvcRequestBuilders.get(ROOT + REVIEWS)
 				.param("validationRole", validationRole)
 			).andDo(MockMvcResultHandlers.print())
 			.andExpect(status().isOk())
@@ -378,7 +377,7 @@ public class ReviewControllerTest {
 		
 		// additional check
 		// get all reviews
-		mockMvc.perform(MockMvcRequestBuilders.get(ROOT + REVIEWS + "/get")
+		mockMvc.perform(MockMvcRequestBuilders.get(ROOT + REVIEWS)
 				.param("validationRole", validationRole)
 			).andDo(MockMvcResultHandlers.print())
 			.andExpect(status().isOk())
@@ -406,7 +405,7 @@ public class ReviewControllerTest {
 		
 		// additional check
 		// get all reviews
-		mockMvc.perform(MockMvcRequestBuilders.get(ROOT + REVIEWS + "/get")
+		mockMvc.perform(MockMvcRequestBuilders.get(ROOT + REVIEWS)
 			//	.param("validationRole", ROLE_STUDENT)
 			).andDo(MockMvcResultHandlers.print())
 			.andExpect(status().isOk())
@@ -436,7 +435,7 @@ public class ReviewControllerTest {
 		
 		// additional check
 		// get all reviews
-		mockMvc.perform(MockMvcRequestBuilders.get(ROOT + REVIEWS + "/get")
+		mockMvc.perform(MockMvcRequestBuilders.get(ROOT + REVIEWS)
 				.param("validationRole", validationRole)
 			).andDo(MockMvcResultHandlers.print())
 			.andExpect(status().isOk())
@@ -474,7 +473,7 @@ public class ReviewControllerTest {
 		
 		// additional check
 		// get review with id=1
-		mockMvc.perform(MockMvcRequestBuilders.get(ROOT + REVIEWS + "/get/{id}", 1)
+		mockMvc.perform(MockMvcRequestBuilders.get(ROOT + REVIEWS + "/{id}", 1)
 				.param("validationRole", validationRole)
 			).andDo(MockMvcResultHandlers.print()).andExpect(status().isOk())
 			.andExpect(content().contentType(APPLICATION_JSON_UTF8))
@@ -512,7 +511,7 @@ public class ReviewControllerTest {
 		
 		// additional check
 		// get review with id=1
-		mockMvc.perform(MockMvcRequestBuilders.get(ROOT + REVIEWS + "/get/{id}", 1)
+		mockMvc.perform(MockMvcRequestBuilders.get(ROOT + REVIEWS + "/{id}", 1)
 				.param("validationRole", validationRole)
 			).andDo(MockMvcResultHandlers.print()).andExpect(status().isOk())
 			.andExpect(content().contentType(APPLICATION_JSON_UTF8))
@@ -631,7 +630,7 @@ public class ReviewControllerTest {
 			;
 		
 		// get review with id=1 (non existing)
-		mockMvc.perform(MockMvcRequestBuilders.get(ROOT + REVIEWS + "/get/{id}", id)
+		mockMvc.perform(MockMvcRequestBuilders.get(ROOT + REVIEWS + "/{id}", id)
 				.param("validationRole", validationRole)
 			).andDo(MockMvcResultHandlers.print())
 			.andExpect(status().isOk())

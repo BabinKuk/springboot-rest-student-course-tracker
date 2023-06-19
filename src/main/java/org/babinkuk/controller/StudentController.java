@@ -60,13 +60,13 @@ public class StudentController {
 	}
 
 	/**
-	 * expose GET "/students/get"
+	 * expose GET "/students"
 	 * get student list
 	 *
 	 * @param 
 	 * @return ResponseEntity
 	 */
-	@GetMapping("/get")
+	@GetMapping("")
 	public ResponseEntity<Iterable<StudentVO>> getAllStudents() {
 		log.info("Called StudentController.getAllStudents");
 
@@ -74,13 +74,13 @@ public class StudentController {
 	}
 	
 	/**
-	 * expose GET "/students/get/{studentId}"
+	 * expose GET "/students/{studentId}"
 	 * get student
 	 * 			
 	 * @param studentId
 	 * @return
 	 */
-	@GetMapping("/get/{studentId}")
+	@GetMapping("/{studentId}")
 	public ResponseEntity<StudentVO> getStudent(@PathVariable int studentId) {
 		log.info("Called StudentController.getStudent(studentId={})", studentId);
 		

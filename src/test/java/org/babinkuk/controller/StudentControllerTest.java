@@ -150,7 +150,7 @@ public class StudentControllerTest {
 		log.info("getAllStudents");
 		
 		// get all students
-		mockMvc.perform(MockMvcRequestBuilders.get(ROOT + STUDENTS + "/get")
+		mockMvc.perform(MockMvcRequestBuilders.get(ROOT + STUDENTS)
 				.param("validationRole", ROLE_ADMIN)
 			).andDo(MockMvcResultHandlers.print())
 			.andExpect(status().isOk())
@@ -164,7 +164,7 @@ public class StudentControllerTest {
 		studentService.saveStudent(studentVO);
 				
 		// get all students (different validationRole param)
-		mockMvc.perform(MockMvcRequestBuilders.get(ROOT + STUDENTS + "/get")
+		mockMvc.perform(MockMvcRequestBuilders.get(ROOT + STUDENTS)
 				.param("validationRole", ROLE_INSTRUCTOR)
 			).andDo(MockMvcResultHandlers.print())
 			.andExpect(status().isOk())
@@ -173,7 +173,7 @@ public class StudentControllerTest {
 			;
 		
 		// get all students (different validationRole param)
-		mockMvc.perform(MockMvcRequestBuilders.get(ROOT + STUDENTS + "/get")
+		mockMvc.perform(MockMvcRequestBuilders.get(ROOT + STUDENTS)
 				.param("validationRole", ROLE_STUDENT)
 			).andDo(MockMvcResultHandlers.print())
 			.andExpect(status().isOk())
@@ -182,7 +182,7 @@ public class StudentControllerTest {
 			;
 		
 		// get all students (without validationRole param)
-		mockMvc.perform(MockMvcRequestBuilders.get(ROOT + STUDENTS + "/get")
+		mockMvc.perform(MockMvcRequestBuilders.get(ROOT + STUDENTS)
 			//	.param("validationRole", "ROLE_STUDENT")
 			).andDo(MockMvcResultHandlers.print())
 			.andExpect(status().isOk())
@@ -191,7 +191,7 @@ public class StudentControllerTest {
 			;
 		
 		// get all students (not existing validationRole param)
-		mockMvc.perform(MockMvcRequestBuilders.get(ROOT + STUDENTS + "/get")
+		mockMvc.perform(MockMvcRequestBuilders.get(ROOT + STUDENTS)
 				.param("validationRole", ROLE_NOT_EXIST)
 			).andDo(MockMvcResultHandlers.print())
 			.andExpect(status().isOk())
@@ -205,7 +205,7 @@ public class StudentControllerTest {
 		log.info("getStudent");
 		
 		// get student with id=1
-		mockMvc.perform(MockMvcRequestBuilders.get(ROOT + STUDENTS + "/get/{id}", 1)
+		mockMvc.perform(MockMvcRequestBuilders.get(ROOT + STUDENTS + "/{id}", 1)
 				.param("validationRole", ROLE_ADMIN)
 			).andDo(MockMvcResultHandlers.print()).andExpect(status().isOk())
 			.andExpect(content().contentType(APPLICATION_JSON_UTF8))
@@ -214,7 +214,7 @@ public class StudentControllerTest {
 			;
 
 		// get student with id=2 (non existing)
-		mockMvc.perform(MockMvcRequestBuilders.get(ROOT + STUDENTS + "/get/{id}", 2)
+		mockMvc.perform(MockMvcRequestBuilders.get(ROOT + STUDENTS + "/{id}", 2)
 				.param("validationRole", ROLE_ADMIN)
 			).andDo(MockMvcResultHandlers.print())
 			.andExpect(status().isOk())
@@ -223,7 +223,7 @@ public class StudentControllerTest {
 			;
 		
 		// get student with id=1 (validationRole ROLE_INSTRUCTOR)
-		mockMvc.perform(MockMvcRequestBuilders.get(ROOT + STUDENTS + "/get/{id}", 1)
+		mockMvc.perform(MockMvcRequestBuilders.get(ROOT + STUDENTS + "/{id}", 1)
 				.param("validationRole", ROLE_INSTRUCTOR)
 			).andDo(MockMvcResultHandlers.print()).andExpect(status().isOk())
 			.andExpect(content().contentType(APPLICATION_JSON_UTF8))
@@ -232,7 +232,7 @@ public class StudentControllerTest {
 			;
 
 		// get student with id=2 (non existing) (validationRole ROLE_INSTRUCTOR)
-		mockMvc.perform(MockMvcRequestBuilders.get(ROOT + STUDENTS + "/get/{id}", 2)
+		mockMvc.perform(MockMvcRequestBuilders.get(ROOT + STUDENTS + "/{id}", 2)
 				.param("validationRole", ROLE_INSTRUCTOR)
 			).andDo(MockMvcResultHandlers.print())
 			.andExpect(status().isOk())
@@ -241,7 +241,7 @@ public class StudentControllerTest {
 			;
 		
 		// get student with id=1 (validationRole ROLE_STUDENT)
-		mockMvc.perform(MockMvcRequestBuilders.get(ROOT + STUDENTS + "/get/{id}", 1)
+		mockMvc.perform(MockMvcRequestBuilders.get(ROOT + STUDENTS + "/{id}", 1)
 				.param("validationRole", ROLE_STUDENT)
 			).andDo(MockMvcResultHandlers.print()).andExpect(status().isOk())
 			.andExpect(content().contentType(APPLICATION_JSON_UTF8))
@@ -250,7 +250,7 @@ public class StudentControllerTest {
 			;
 
 		// get student with id=2 (non existing) (validationRole ROLE_STUDENT)
-		mockMvc.perform(MockMvcRequestBuilders.get(ROOT + STUDENTS + "/get/{id}", 2)
+		mockMvc.perform(MockMvcRequestBuilders.get(ROOT + STUDENTS + "/{id}", 2)
 				.param("validationRole", ROLE_STUDENT)
 			).andDo(MockMvcResultHandlers.print())
 			.andExpect(status().isOk())
@@ -259,7 +259,7 @@ public class StudentControllerTest {
 			;
 		
 		// get student with id=1 (without validationRole param)
-		mockMvc.perform(MockMvcRequestBuilders.get(ROOT + STUDENTS + "/get/{id}", 1)
+		mockMvc.perform(MockMvcRequestBuilders.get(ROOT + STUDENTS + "/{id}", 1)
 				//.param("validationRole", "ROLE_STUDENT")
 			).andDo(MockMvcResultHandlers.print()).andExpect(status().isOk())
 			.andExpect(content().contentType(APPLICATION_JSON_UTF8))
@@ -268,7 +268,7 @@ public class StudentControllerTest {
 			;
 		
 		// get student with id=2 (non existing) (without validationRole param)
-		mockMvc.perform(MockMvcRequestBuilders.get(ROOT + STUDENTS + "/get/{id}", 2)
+		mockMvc.perform(MockMvcRequestBuilders.get(ROOT + STUDENTS + "/{id}", 2)
 				//.param("validationRole", ROLE_STUDENT)
 			).andDo(MockMvcResultHandlers.print())
 			.andExpect(status().isOk())
@@ -277,7 +277,7 @@ public class StudentControllerTest {
 			;
 		
 		// get student with id=1 (non existing) (without validationRole param)
-		mockMvc.perform(MockMvcRequestBuilders.get(ROOT + STUDENTS + "/get/{id}", 1)
+		mockMvc.perform(MockMvcRequestBuilders.get(ROOT + STUDENTS + "/{id}", 1)
 				.param("validationRole", ROLE_NOT_EXIST)
 			).andDo(MockMvcResultHandlers.print())
 			.andExpect(status().isOk())
@@ -288,7 +288,7 @@ public class StudentControllerTest {
 			;
 	
 		// get student with id=2 (non existing) (not existing validationRole param)
-		mockMvc.perform(MockMvcRequestBuilders.get(ROOT + STUDENTS + "/get/{id}", 2)
+		mockMvc.perform(MockMvcRequestBuilders.get(ROOT + STUDENTS + "/{id}", 2)
 				.param("validationRole", ROLE_NOT_EXIST)
 			).andDo(MockMvcResultHandlers.print())
 			.andExpect(status().isOk())
@@ -317,7 +317,7 @@ public class StudentControllerTest {
 		
 		// additional check
 		// get all students
-		mockMvc.perform(MockMvcRequestBuilders.get(ROOT + STUDENTS + "/get")
+		mockMvc.perform(MockMvcRequestBuilders.get(ROOT + STUDENTS)
 				.param("validationRole", validationRole)
 			).andDo(MockMvcResultHandlers.print())
 			.andExpect(status().isOk())
@@ -358,7 +358,7 @@ public class StudentControllerTest {
 		
 		// additional check
 		// get all students
-		mockMvc.perform(MockMvcRequestBuilders.get(ROOT + STUDENTS + "/get")
+		mockMvc.perform(MockMvcRequestBuilders.get(ROOT + STUDENTS)
 				.param("validationRole", validationRole)
 			).andDo(MockMvcResultHandlers.print())
 			.andExpect(status().isOk())
@@ -400,7 +400,7 @@ public class StudentControllerTest {
 		
 		// additional check
 		// get all students
-		mockMvc.perform(MockMvcRequestBuilders.get(ROOT + STUDENTS + "/get")
+		mockMvc.perform(MockMvcRequestBuilders.get(ROOT + STUDENTS)
 				.param("validationRole", validationRole)
 			).andDo(MockMvcResultHandlers.print())
 			.andExpect(status().isOk())
@@ -428,7 +428,7 @@ public class StudentControllerTest {
 		
 		// additional check
 		// get all students
-		mockMvc.perform(MockMvcRequestBuilders.get(ROOT + STUDENTS + "/get")
+		mockMvc.perform(MockMvcRequestBuilders.get(ROOT + STUDENTS)
 				//.param("validationRole", ROLE_STUDENT)
 			).andDo(MockMvcResultHandlers.print())
 			.andExpect(status().isOk())
@@ -457,7 +457,7 @@ public class StudentControllerTest {
 		
 		// additional check
 		// get all students
-		mockMvc.perform(MockMvcRequestBuilders.get(ROOT + STUDENTS + "/get")
+		mockMvc.perform(MockMvcRequestBuilders.get(ROOT + STUDENTS)
 				.param("validationRole", validationRole)
 			).andDo(MockMvcResultHandlers.print())
 			.andExpect(status().isOk())
@@ -497,7 +497,7 @@ public class StudentControllerTest {
 		
 		// additional check
 		// get student with id=1
-		mockMvc.perform(MockMvcRequestBuilders.get(ROOT + STUDENTS + "/get/{id}", 1)
+		mockMvc.perform(MockMvcRequestBuilders.get(ROOT + STUDENTS + "/{id}", 1)
 				.param("validationRole", validationRole)
 			).andDo(MockMvcResultHandlers.print()).andExpect(status().isOk())
 			.andExpect(content().contentType(APPLICATION_JSON_UTF8))
@@ -539,7 +539,7 @@ public class StudentControllerTest {
 		
 		// additional check
 		// get student with id=1
-		mockMvc.perform(MockMvcRequestBuilders.get(ROOT + STUDENTS + "/get/{id}", 1)
+		mockMvc.perform(MockMvcRequestBuilders.get(ROOT + STUDENTS + "/{id}", 1)
 				.param("validationRole", validationRole)
 			).andDo(MockMvcResultHandlers.print()).andExpect(status().isOk())
 			.andExpect(content().contentType(APPLICATION_JSON_UTF8))
@@ -582,7 +582,7 @@ public class StudentControllerTest {
 		
 		// additional check
 		// get student with id=1
-		mockMvc.perform(MockMvcRequestBuilders.get(ROOT + STUDENTS + "/get/{id}", 1)
+		mockMvc.perform(MockMvcRequestBuilders.get(ROOT + STUDENTS + "/{id}", 1)
 				.param("validationRole", validationRole)
 			).andDo(MockMvcResultHandlers.print()).andExpect(status().isOk())
 			.andExpect(content().contentType(APPLICATION_JSON_UTF8))
@@ -623,7 +623,7 @@ public class StudentControllerTest {
 		
 		// additional check
 		// get student with id=1
-		mockMvc.perform(MockMvcRequestBuilders.get(ROOT + STUDENTS + "/get/{id}", 1)
+		mockMvc.perform(MockMvcRequestBuilders.get(ROOT + STUDENTS + "/{id}", 1)
 				//.param("validationRole", ROLE_STUDENT)
 			).andDo(MockMvcResultHandlers.print()).andExpect(status().isOk())
 			.andExpect(content().contentType(APPLICATION_JSON_UTF8))
@@ -665,7 +665,7 @@ public class StudentControllerTest {
 		
 		// additional check
 		// get student with id=1
-		mockMvc.perform(MockMvcRequestBuilders.get(ROOT + STUDENTS + "/get/{id}", 1)
+		mockMvc.perform(MockMvcRequestBuilders.get(ROOT + STUDENTS + "/{id}", 1)
 				.param("validationRole", validationRole)
 			).andDo(MockMvcResultHandlers.print()).andExpect(status().isOk())
 			.andExpect(content().contentType(APPLICATION_JSON_UTF8))
@@ -702,7 +702,7 @@ public class StudentControllerTest {
 			;
 		
 		// get student with id=1 (non existing)
-		mockMvc.perform(MockMvcRequestBuilders.get(ROOT + STUDENTS + "/get/{id}", id)
+		mockMvc.perform(MockMvcRequestBuilders.get(ROOT + STUDENTS + "/{id}", id)
 				.param("validationRole", validationRole)
 			).andDo(MockMvcResultHandlers.print())
 			.andExpect(status().isOk())
