@@ -1,11 +1,13 @@
 package org.babinkuk.service;
 
 import java.util.Optional;
+import java.util.Set;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.babinkuk.common.ApiResponse;
 import org.babinkuk.dao.InstructorRepository;
+import org.babinkuk.entity.Course;
 import org.babinkuk.entity.Instructor;
 import org.babinkuk.exception.ObjectException;
 import org.babinkuk.exception.ObjectNotFoundException;
@@ -143,6 +145,24 @@ public class InstructorServiceImpl implements InstructorService {
 		
 		response.setStatus(HttpStatus.OK);
 		response.setMessage(getMessage(INSTRUCTOR_DELETE_SUCCESS));
+		
+		// retrieve instructor
+		Optional<Instructor> result = instructorRepository.findById(id);
+		
+		Instructor instructor = null;
+		
+		if (result.isPresent()) {
+			instructor = result.get();
+			
+			// get courses for the instructor
+			Set<Course> courses = instructor.getCourses();
+			
+			// break association of all courses for the instructor
+			// if instructor is deleted DO NOT delete course
+			for (Course course : courses) {
+				course.setInstructor(null);
+			}
+		}
 		
 		instructorRepository.deleteById(id);
 		

@@ -45,9 +45,6 @@ public class CourseServiceTest {
 	@Autowired
 	private StudentService studentService;
 	
-	@Autowired
-	private ReviewService reviewService;
-	
 	@Value("${sql.script.review.insert}")
 	private String sqlAddReview;
 	

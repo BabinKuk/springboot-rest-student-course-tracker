@@ -9,7 +9,6 @@ import org.babinkuk.validator.ValidatorRole;
 import org.babinkuk.validator.ValidatorType;
 import org.babinkuk.vo.CourseVO;
 import org.babinkuk.vo.InstructorVO;
-import org.babinkuk.vo.ReviewVO;
 import org.babinkuk.vo.StudentVO;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -34,9 +33,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import java.util.HashSet;
 import java.util.Optional;
-import java.util.Set;
 
 import static org.babinkuk.controller.Api.ROOT;
 import static org.babinkuk.controller.Api.COURSES;

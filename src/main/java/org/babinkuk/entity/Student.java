@@ -14,10 +14,15 @@ import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 @Entity
 @Table(name = "student")
 public class Student {
 
+	public static final Logger log = LogManager.getLogger(Student.class);
+	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "id")
@@ -43,7 +48,7 @@ public class Student {
 			name = "course_student",
 			joinColumns = @JoinColumn(name = "student_id"),
 			inverseJoinColumns = @JoinColumn(name = "course_id")) // Course is other side/class
-	private Set<Course> courses = new HashSet<Course>();
+	private Set<Course> courses;
 	
 	public Student() {
 		// TODO Auto-generated constructor stub
@@ -96,9 +101,12 @@ public class Student {
 	}
 	
 	public void addCourse(Course course) {
+		if (courses == null) {
+			courses = new HashSet<Course>();
+		}
 		courses.add(course);
 	}
-
+	
 	@Override
 	public String toString() {
 		return "Student [id=" + id + ", firstName=" + firstName + ", lastName=" + lastName + ", email=" + email/* + ", courses=" + getCourses()*/ + "]";

@@ -35,7 +35,6 @@ public class Instructor {
 	
 	// mapping with instructor_detail table 
 	// foreign key (instructor_detail.id column)
-	// do not apply cascade delete/remove
 	@OneToOne(cascade = CascadeType.ALL)
 	@JoinColumn(name = "instructor_detail_id")
 	private InstructorDetail instructorDetail;

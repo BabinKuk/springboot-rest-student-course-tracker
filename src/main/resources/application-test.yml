@@ -59,6 +59,7 @@ sql:
     course:
       insert: INSERT INTO course(id,title,instructor_id) values(1,'test course',null)
       delete: DELETE FROM course
+      update: UPDATE course set instructor_id='1' where id=1
     instructor:
       insert: INSERT INTO instructor(id,first_name,last_name,email,instructor_detail_id) values(1,'firstNameInstr','lastNameInstr','firstNameInstr@babinuk.com',1)
       delete: DELETE FROM instructor

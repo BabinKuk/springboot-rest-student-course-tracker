@@ -19,10 +19,15 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 @Entity
 @Table(name = "course")
 public class Course {
 
+	public static final Logger log = LogManager.getLogger(Course.class);
+	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "id")
@@ -50,8 +55,8 @@ public class Course {
 	private List<Review> reviews;
 	
 	@ManyToMany(
-			fetch = FetchType.LAZY
-			/*cascade = {
+			fetch = FetchType.LAZY/*,
+			cascade = {
 				CascadeType.PERSIST,
 				CascadeType.DETACH,
 				CascadeType.MERGE,
@@ -60,7 +65,7 @@ public class Course {
 			name = "course_student",
 			joinColumns = @JoinColumn(name = "course_id"),
 			inverseJoinColumns = @JoinColumn(name = "student_id")) // Student is other side/class
-	private Set<Student> students = new HashSet<Student>();
+	private Set<Student> students;
 	
 	public Course() {
 		// TODO Auto-generated constructor stub
@@ -110,7 +115,7 @@ public class Course {
 		this.students = students;
 	}
 
-	// convenienca methods
+	// convenience methods
 	public void addReview(Review review) {
 		if (reviews == null) {
 			reviews = new ArrayList<Review>();
@@ -120,6 +125,9 @@ public class Course {
 	}
 	
 	public void addStudent(Student student) {
+		if (students == null) {
+			students = new HashSet<Student>();
+		}
 		students.add(student);
 	}
 	
