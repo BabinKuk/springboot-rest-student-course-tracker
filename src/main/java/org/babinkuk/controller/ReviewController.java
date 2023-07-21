@@ -17,6 +17,7 @@ import org.babinkuk.exception.ObjectValidationException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -32,6 +33,8 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import java.util.Optional;
+
+import javax.validation.Valid;
 
 import static org.babinkuk.controller.Api.ROOT;
 import static org.babinkuk.controller.Api.REVIEWS;
@@ -108,7 +111,7 @@ public class ReviewController {
 			@RequestParam(name="validationRole", required = false) ValidatorRole validationRole) throws JsonProcessingException {
 		log.info("Called ReviewController.addReview({}) for courseId={}", mapper.writeValueAsString(reviewVO), courseId);
 		
-		// first find review
+		// first find course
 		CourseVO courseVO = courseService.findById(courseId);
 		
 		// in case id is passed in json, set to 0
