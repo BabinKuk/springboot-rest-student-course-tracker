@@ -402,7 +402,6 @@ public class ReviewValidatorTest {
 			;
 	}
 	
-// TODO validation nonexistent review (update, delete) for each user role
 	@Test
 	void updateInvalidReviewRoleAdmin() throws Exception {
 		log.info("updateReviewRoleAdmin");
