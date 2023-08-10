@@ -56,7 +56,7 @@ public class ValidatorHelper {
 		List<ValidatorException> exceptions = new LinkedList<ValidatorException>();
 		
 		try {
-			validator.validateTitle(vo.getTitle());
+			validator.validateTitle(vo);
 		} catch (ValidatorException e) {
 			exceptions.add(e);
 		}

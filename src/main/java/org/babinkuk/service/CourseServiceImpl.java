@@ -128,4 +128,29 @@ public class CourseServiceImpl implements CourseService {
 	public Iterable<CourseVO> getAllCourses() {
 		return courseMapper.toVO(courseRepository.findAll());
 	}
+
+	@Override
+	public CourseVO findByTitle(String title) throws ObjectNotFoundException {
+		
+		Optional<Course> result = courseRepository.findByTitle(title);
+		
+		Course course = null;
+		CourseVO courseVO = null;
+		
+		if (result.isPresent()) {
+			course = result.get();
+			log.info("course ({})", course);
+			
+			// mapping
+			courseVO = courseMapper.toVO(course);
+			log.info("courseVO ({})", courseVO);
+			
+			return courseVO;
+		} else {
+			// not found
+			String message = String.format(getMessage("error_code_course_title_not_found"), title);
+			log.warn(message);
+			throw new ObjectNotFoundException(message);
+		}
+	}
 }

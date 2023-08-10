@@ -46,8 +46,9 @@ public class BusinessValidator {
 	 * @param title
 	 * @throws ValidationException
 	 */
-	public void validateTitle(String title) throws ValidatorException {
-		validateStringIsBlank(title, ValidatorCodes.ERROR_CODE_TITLE_EMPTY);
+	public void validateTitle(CourseVO vo) throws ValidatorException {
+		validateStringIsBlank(vo.getTitle(), ValidatorCodes.ERROR_CODE_TITLE_EMPTY);
+		titleExists(vo);
 	}
 	
 	/**
@@ -145,6 +146,37 @@ public class BusinessValidator {
 				// another employee with same email already exists in db
 				log.error(ValidatorCodes.ERROR_CODE_EMAIL_ALREADY_EXIST.getMessage());
 				throw new ValidatorException(ValidatorCodes.ERROR_CODE_EMAIL_ALREADY_EXIST);
+			}
+		}
+	}
+	
+	/**
+	 * validate if course title already exist must be unique (call repository findByTitle)
+	 * 
+	 * @param vo
+	 * @param isInsert
+	 * @return
+	 * @throws ValidatorException
+	 */
+	public void titleExists(CourseVO vo) throws ValidatorException {
+		log.info("course " + vo.toString());
+		CourseVO dbVO = null;
+		
+		dbVO = courseService.findByTitle(vo.getTitle());
+		 
+		if (dbVO == null) {
+			// title not found
+			// that's ok
+			log.info("title not found");
+		} else {
+			log.info("title found");
+			if (dbVO.getId() == vo.getId()) {
+				// same course, title has not changed
+				log.info("belongs to same course, title has not changed");
+			} else {
+				// another course with same title already exists in db
+				log.error(ValidatorCodes.ERROR_CODE_TITLE_ALREADY_EXIST.getMessage());
+				throw new ValidatorException(ValidatorCodes.ERROR_CODE_TITLE_ALREADY_EXIST);
 			}
 		}
 	}

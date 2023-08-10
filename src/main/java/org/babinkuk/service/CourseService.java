@@ -40,5 +40,14 @@ public interface CourseService {
 	 * @throws ObjectNotFoundException
 	 */
 	public ApiResponse deleteCourse(int id) throws ObjectNotFoundException;
+
+	/**
+	 * get course
+	 * 
+	 * @param title
+	 * @return CourseVO
+	 * @throws ObjectNotFoundException
+	 */
+	public CourseVO findByTitle(String title) throws ObjectNotFoundException;
 		
 }

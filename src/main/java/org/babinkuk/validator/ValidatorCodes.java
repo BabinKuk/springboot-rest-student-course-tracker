@@ -13,7 +13,8 @@ public enum ValidatorCodes {
 	ERROR_CODE_STUDENT_INVALID("error_code_student_invalid"),
 	ERROR_CODE_COURSE_INVALID("error_code_course_invalid"),
 	ERROR_CODE_REVIEW_INVALID("error_code_review_invalid"),
-	ERROR_CODE_ACTION_INVALID("error_code_action_invalid");
+	ERROR_CODE_ACTION_INVALID("error_code_action_invalid"),
+	ERROR_CODE_TITLE_ALREADY_EXIST("error_code_title_already_exist");
 	
 	private String message;
 	

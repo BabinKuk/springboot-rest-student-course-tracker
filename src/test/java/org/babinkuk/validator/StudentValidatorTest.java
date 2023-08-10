@@ -6,9 +6,7 @@ import javax.persistence.PersistenceContext;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.babinkuk.service.CourseService;
-import org.babinkuk.service.InstructorService;
 import org.babinkuk.service.StudentService;
-import org.babinkuk.vo.InstructorVO;
 import org.babinkuk.vo.StudentVO;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
@@ -38,7 +36,7 @@ import static org.hamcrest.Matchers.is;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 import static org.babinkuk.controller.Api.ROOT;
-import static org.babinkuk.controller.Api.STUDENTS;;
+import static org.babinkuk.controller.Api.STUDENTS;
 
 @SpringBootTest
 @ActiveProfiles("test")
