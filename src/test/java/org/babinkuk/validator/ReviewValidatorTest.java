@@ -170,19 +170,21 @@ public class ReviewValidatorTest {
 				.param("validationRole", validationRole)
 				.contentType(APPLICATION_JSON_UTF8)
 				.content(objectMApper.writeValueAsString(reviewVO)) // generate json from java object
-			).andDo(MockMvcResultHandlers.print())
-		.andExpect(status().is4xxClientError())
-		.andExpect(status().isBadRequest()) // verify json root element status $ is 400 BAD_REQUEST
-		.andExpect(jsonPath("$.message", is(String.format(getMessage(VALIDATION_FAILED), ActionType.CREATE)))) // verify json root element message
-		.andExpect(jsonPath("$.errors", hasSize(1))) // verify that json root element $ is size 1
-		.andExpect(jsonPath("$.errors[0]", is(String.format(getMessage(ValidatorCodes.ERROR_CODE_REVIEW_EMPTY.getMessage()), ActionType.CREATE))))
-		;
+			)
+			.andDo(MockMvcResultHandlers.print())
+			.andExpect(status().is4xxClientError())
+			.andExpect(status().isBadRequest()) // verify json root element status $ is 400 BAD_REQUEST
+			.andExpect(jsonPath("$.message", is(String.format(getMessage(VALIDATION_FAILED), ActionType.CREATE)))) // verify json root element message
+			.andExpect(jsonPath("$.errors", hasSize(1))) // verify that json root element $ is size 1
+			.andExpect(jsonPath("$.errors[0]", is(String.format(getMessage(ValidatorCodes.ERROR_CODE_REVIEW_EMPTY.getMessage()), ActionType.CREATE))))
+			;
 		
 		// additional check
 		// get all reviews
 		mockMvc.perform(MockMvcRequestBuilders.get(ROOT + REVIEWS)
 				.param("validationRole", validationRole)
-			).andDo(MockMvcResultHandlers.print())
+			)
+			.andDo(MockMvcResultHandlers.print())
 			.andExpect(status().isOk())
 			.andExpect(content().contentType(APPLICATION_JSON_UTF8))
 			.andExpect(jsonPath("$", hasSize(1))) // verify that json root element $ is now size 1
@@ -203,13 +205,14 @@ public class ReviewValidatorTest {
 				//.param("validationRole", validationRole)
 				.contentType(APPLICATION_JSON_UTF8)
 				.content(objectMApper.writeValueAsString(reviewVO)) // generate json from java object
-			).andDo(MockMvcResultHandlers.print())
-		.andExpect(status().is4xxClientError())
-		.andExpect(status().isBadRequest()) // verify json root element status $ is 400 BAD_REQUEST
-		.andExpect(jsonPath("$.message", is(String.format(getMessage(VALIDATION_FAILED), ActionType.CREATE)))) // verify json root element message
-		.andExpect(jsonPath("$.errors", hasSize(1))) // verify that json root element $ is size 1
-		.andExpect(jsonPath("$.errors[0]", is(String.format(getMessage(ValidatorCodes.ERROR_CODE_REVIEW_EMPTY.getMessage()), ActionType.CREATE))))
-		;
+			)
+			.andDo(MockMvcResultHandlers.print())
+			.andExpect(status().is4xxClientError())
+			.andExpect(status().isBadRequest()) // verify json root element status $ is 400 BAD_REQUEST
+			.andExpect(jsonPath("$.message", is(String.format(getMessage(VALIDATION_FAILED), ActionType.CREATE)))) // verify json root element message
+			.andExpect(jsonPath("$.errors", hasSize(1))) // verify that json root element $ is size 1
+			.andExpect(jsonPath("$.errors[0]", is(String.format(getMessage(ValidatorCodes.ERROR_CODE_REVIEW_EMPTY.getMessage()), ActionType.CREATE))))
+			;
 		
 		// additional check
 		// get all reviews
@@ -252,16 +255,18 @@ public class ReviewValidatorTest {
 				.param("validationRole", validationRole)
 				.contentType(APPLICATION_JSON_UTF8)
 				.content(objectMApper.writeValueAsString(reviewVO)) // generate json from java object
-			).andDo(MockMvcResultHandlers.print())
-		.andExpect(status().isOk())
-		.andExpect(jsonPath("$.message", is(String.format(getMessage("error_code_course_id_not_found"), 2)))) // verify json element.andExpect(jsonPath("$.message", is(String.format(getMessage(VALIDATION_FAILED), ActionType.CREATE)))) // verify json root element message
-		;
+			)
+			.andDo(MockMvcResultHandlers.print())
+			.andExpect(status().isOk())
+			.andExpect(jsonPath("$.message", is(String.format(getMessage("error_code_course_id_not_found"), 2)))) // verify json element.andExpect(jsonPath("$.message", is(String.format(getMessage(VALIDATION_FAILED), ActionType.CREATE)))) // verify json root element message
+			;
 		
 		// additional check
 		// get all reviews
 		mockMvc.perform(MockMvcRequestBuilders.get(ROOT + REVIEWS)
 				.param("validationRole", validationRole)
-			).andDo(MockMvcResultHandlers.print())
+			)
+			.andDo(MockMvcResultHandlers.print())
 			.andExpect(status().isOk())
 			.andExpect(content().contentType(APPLICATION_JSON_UTF8))
 			.andExpect(jsonPath("$", hasSize(1))) // verify that json root element $ is now size 1
@@ -283,16 +288,18 @@ public class ReviewValidatorTest {
 				//.param("validationRole", validationRole)
 				.contentType(APPLICATION_JSON_UTF8)
 				.content(objectMApper.writeValueAsString(reviewVO)) // generate json from java object
-			).andDo(MockMvcResultHandlers.print())
-		.andExpect(status().isOk())
-		.andExpect(jsonPath("$.message", is(String.format(getMessage("error_code_course_id_not_found"), 2)))) // verify json element.andExpect(jsonPath("$.message", is(String.format(getMessage(VALIDATION_FAILED), ActionType.CREATE)))) // verify json root element message
-		;
+			)
+			.andDo(MockMvcResultHandlers.print())
+			.andExpect(status().isOk())
+			.andExpect(jsonPath("$.message", is(String.format(getMessage("error_code_course_id_not_found"), 2)))) // verify json element.andExpect(jsonPath("$.message", is(String.format(getMessage(VALIDATION_FAILED), ActionType.CREATE)))) // verify json root element message
+			;
 		
 		// additional check
 		// get all reviews
 		mockMvc.perform(MockMvcRequestBuilders.get(ROOT + REVIEWS)
 				//.param("validationRole", validationRole)
-			).andDo(MockMvcResultHandlers.print())
+			)
+			.andDo(MockMvcResultHandlers.print())
 			.andExpect(status().isOk())
 			.andExpect(content().contentType(APPLICATION_JSON_UTF8))
 			.andExpect(jsonPath("$", hasSize(1))) // verify that json root element $ is now size 1
@@ -326,13 +333,14 @@ public class ReviewValidatorTest {
 		// check if review id 2 exists
 		mockMvc.perform(MockMvcRequestBuilders.get(ROOT + REVIEWS + "/{id}", id)
 				.param("validationRole", validationRole)
-			).andDo(MockMvcResultHandlers.print())
+			)
+			.andDo(MockMvcResultHandlers.print())
 			.andExpect(status().isOk())
 			.andExpect(content().contentType(APPLICATION_JSON_UTF8))
 			.andExpect(jsonPath("$.message", is(String.format(getMessage("error_code_review_id_not_found"), id)))) // verify json element
 			;
 		
-		// create invalid review 
+		// create invalid review (set invalid id 2)
 		ReviewVO reviewVO = new ReviewVO("review");
 		reviewVO.setId(id);
 		
@@ -341,7 +349,8 @@ public class ReviewValidatorTest {
 					.param("validationRole", validationRole)
 					.contentType(APPLICATION_JSON_UTF8)
 					.content(objectMApper.writeValueAsString(reviewVO)) // generate json from java object
-				).andDo(MockMvcResultHandlers.print())
+				)
+				.andDo(MockMvcResultHandlers.print())
 				.andExpect(status().is4xxClientError())
 				.andExpect(status().isBadRequest()) // verify json root element status $ is 400 BAD_REQUEST
 				.andExpect(jsonPath("$.message", is(String.format(getMessage(ValidatorCodes.ERROR_CODE_ACTION_INVALID.getMessage()), ActionType.UPDATE)))) // verify json root element message
@@ -351,7 +360,8 @@ public class ReviewValidatorTest {
 					.param("validationRole", validationRole)
 					.contentType(APPLICATION_JSON_UTF8)
 					.content(objectMApper.writeValueAsString(reviewVO)) // generate json from java object
-				).andDo(MockMvcResultHandlers.print())
+				)
+				.andDo(MockMvcResultHandlers.print())
 				.andExpect(status().isOk())
 				.andExpect(jsonPath("$.message", is(String.format(getMessage("error_code_review_id_not_found"), id)))) // verify json element
 				;
@@ -368,13 +378,14 @@ public class ReviewValidatorTest {
 		// check if review id 2 exists
 		mockMvc.perform(MockMvcRequestBuilders.get(ROOT + REVIEWS + "/{id}", id)
 			//	.param("validationRole", validationRole)
-			).andDo(MockMvcResultHandlers.print())
+			)
+			.andDo(MockMvcResultHandlers.print())
 			.andExpect(status().isOk())
 			.andExpect(content().contentType(APPLICATION_JSON_UTF8))
 			.andExpect(jsonPath("$.message", is(String.format(getMessage("error_code_review_id_not_found"), id)))) // verify json element
 			;
 		
-		// create invalid review 
+		// create invalid review (set invalid id 2)
 		ReviewVO reviewVO = new ReviewVO("review");
 		reviewVO.setId(id);
 		
@@ -382,7 +393,8 @@ public class ReviewValidatorTest {
 				//.param("validationRole", validationRole)
 				.contentType(APPLICATION_JSON_UTF8)
 				.content(objectMApper.writeValueAsString(reviewVO)) // generate json from java object
-			).andDo(MockMvcResultHandlers.print())
+			)
+			.andDo(MockMvcResultHandlers.print())
 			.andExpect(status().is4xxClientError())
 			.andExpect(status().isBadRequest()) // verify json root element status $ is 400 BAD_REQUEST
 			.andExpect(jsonPath("$.message", is(String.format(messageSource.getMessage(ValidatorCodes.ERROR_CODE_ACTION_INVALID.getMessage(), new Object[] {}, LocaleContextHolder.getLocale()), ActionType.UPDATE)))) // verify json root element message
@@ -415,7 +427,8 @@ public class ReviewValidatorTest {
 		// check if review id 2 exists
 		mockMvc.perform(MockMvcRequestBuilders.get(ROOT + REVIEWS + "/{id}", id)
 				.param("validationRole", validationRole)
-			).andDo(MockMvcResultHandlers.print())
+			)
+			.andDo(MockMvcResultHandlers.print())
 			.andExpect(status().isOk())
 			.andExpect(content().contentType(APPLICATION_JSON_UTF8))
 			.andExpect(jsonPath("$.message", is(String.format(getMessage("error_code_review_id_not_found"), id)))) // verify json element
@@ -425,7 +438,8 @@ public class ReviewValidatorTest {
 		if (validationRole.equals(ROLE_ADMIN)) {
 			mockMvc.perform(MockMvcRequestBuilders.delete(ROOT + REVIEWS + "/{id}", id)
 					.param("validationRole", validationRole)
-				).andDo(MockMvcResultHandlers.print())
+				)
+				.andDo(MockMvcResultHandlers.print())
 				.andExpect(status().isOk())
 				.andExpect(content().contentType(APPLICATION_JSON_UTF8))
 				.andExpect(jsonPath("$.message", is(String.format(getMessage("error_code_review_id_not_found"), id)))) //verify json element
@@ -433,7 +447,8 @@ public class ReviewValidatorTest {
 		} else {
 			mockMvc.perform(MockMvcRequestBuilders.delete(ROOT + REVIEWS + "/{id}", id)
 					.param("validationRole", validationRole)
-				).andDo(MockMvcResultHandlers.print())
+				)
+				.andDo(MockMvcResultHandlers.print())
 				.andExpect(status().is4xxClientError())
 				.andExpect(status().isBadRequest()) // verify json root element status $ is 400 BAD_REQUEST
 				.andExpect(content().contentType(APPLICATION_JSON_UTF8))
@@ -451,7 +466,8 @@ public class ReviewValidatorTest {
 		// check if review id 2 exists
 		mockMvc.perform(MockMvcRequestBuilders.get(ROOT + REVIEWS + "/{id}", id)
 				//.param("validationRole", validationRole)
-			).andDo(MockMvcResultHandlers.print())
+			)
+			.andDo(MockMvcResultHandlers.print())
 			.andExpect(status().isOk())
 			.andExpect(content().contentType(APPLICATION_JSON_UTF8))
 			.andExpect(jsonPath("$.message", is(String.format(getMessage("error_code_review_id_not_found"), id)))) // verify json element
@@ -460,7 +476,8 @@ public class ReviewValidatorTest {
 		// delete review
 		mockMvc.perform(MockMvcRequestBuilders.delete(ROOT + REVIEWS + "/{id}", id)
 			//	.param("validationRole", ROLE_STUDENT)
-			).andDo(MockMvcResultHandlers.print())
+			)
+			.andDo(MockMvcResultHandlers.print())
 			.andExpect(status().is4xxClientError())
 			.andExpect(status().isBadRequest()) // verify json root element status $ is 400 BAD_REQUEST
 			.andExpect(jsonPath("$.message", is(String.format(messageSource.getMessage(ValidatorCodes.ERROR_CODE_ACTION_INVALID.getMessage(), new Object[] {}, LocaleContextHolder.getLocale()), ActionType.DELETE)))) // verify json root element message
