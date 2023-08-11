@@ -161,6 +161,10 @@ public class JpaTest {
 		jdbc.execute(sqlAddReview);
 		jdbc.execute(sqlAddStudent);
 		jdbc.execute(sqlAddCourseStudent);
+		
+		// clear query results from cache
+		entityManager.clear();
+		
 	}
 	
 	@AfterEach
@@ -173,6 +177,9 @@ public class JpaTest {
 		jdbc.execute(sqlDeleteCourse);
 		jdbc.execute(sqlDeleteInstructor);
 		jdbc.execute(sqlDeleteInstructorDetail);
+		
+		// clear query results from cache
+		entityManager.clear();
 	}
 	
 	@Test
@@ -553,6 +560,9 @@ public class JpaTest {
 			.andExpect(jsonPath("$.message", is(String.format(getMessage("error_code_review_id_not_found"), id)))) // verify json element
 			;
 		
+		// clear query results from cache
+		entityManager.clear();
+		
 		// get course with id=1
 		mockMvc.perform(MockMvcRequestBuilders.get(ROOT + COURSES + "/{id}", id)
 				.param("validationRole", validationRole)
@@ -591,15 +601,6 @@ public class JpaTest {
 			.andExpect(jsonPath("$.firstName", is("firstNameStudent"))) // verify json element
 			.andExpect(jsonPath("$.lastName", is("lastNameStudent")))
 			.andExpect(jsonPath("$.emailAddress", is("firstNameStudent@babinuk.com")))
-			;
-	
-		// get review with id=1
-		mockMvc.perform(MockMvcRequestBuilders.get(ROOT + REVIEWS + "/{id}", 1)
-				.param("validationRole", ROLE_ADMIN)
-			).andDo(MockMvcResultHandlers.print()).andExpect(status().isOk())
-			.andExpect(content().contentType(APPLICATION_JSON_UTF8))
-			.andExpect(jsonPath("$.id", is(1))) // verify json root element id is 1
-			.andExpect(jsonPath("$.comment", is("test review"))) // verify json element
 			;
 	}
 	

@@ -334,40 +334,18 @@ public class CourseControllerTest {
 	
 	@Test
 	void addCourseRoleAdmin() throws Exception {
-		log.info("addCourseRoleAdmin");
-		
-		String validationRole = ROLE_ADMIN;
-		
-		// create course
-		CourseVO courseVO = new CourseVO("another course");
-		
-		mockMvc.perform(MockMvcRequestBuilders.post(ROOT + COURSES)
-				.param("validationRole", validationRole)
-				.contentType(APPLICATION_JSON_UTF8)
-				.content(objectMApper.writeValueAsString(courseVO)) // generate json from java object
-			).andDo(MockMvcResultHandlers.print())
-			.andExpect(status().isOk())
-			.andExpect(jsonPath("$.message", is(getMessage(CourseServiceImpl.COURSE_SAVE_SUCCESS)))) // verify json element
-			;
-		
-		// additional check
-		// get all courses
-		mockMvc.perform(MockMvcRequestBuilders.get(ROOT + COURSES)
-				.param("validationRole", validationRole)
-			).andDo(MockMvcResultHandlers.print())
-			.andExpect(status().isOk())
-			.andExpect(content().contentType(APPLICATION_JSON_UTF8))
-			.andExpect(jsonPath("$", hasSize(2))) // verify that json root element $ is now size 2
-			.andExpect(jsonPath("$[0].title", is("test course")))
-			.andExpect(jsonPath("$[1].title", is("another course")))
-			;
+
+		addCourseSuccess(ROLE_ADMIN);
 	}
 
 	@Test
 	void addCourseRoleInstructor() throws Exception {
-		log.info("addCourseRoleInstructor");
-		
-		String validationRole = ROLE_INSTRUCTOR;
+
+		addCourseSuccess(ROLE_INSTRUCTOR);
+	}
+	
+	private void addCourseSuccess(String validationRole) throws Exception {
+		log.info("addCourseSuccess {}", validationRole);
 		
 		// create course
 		CourseVO courseVO = new CourseVO("another course");
@@ -396,45 +374,24 @@ public class CourseControllerTest {
 	
 	@Test
 	void addCourseRoleStudent() throws Exception {
-		log.info("addCourseRoleStudent");
-		
-		String validationRole = ROLE_STUDENT;
-		
-		// create course
-		CourseVO courseVO = new CourseVO("another course");
-		
-		mockMvc.perform(MockMvcRequestBuilders.post(ROOT + COURSES)
-				.param("validationRole", validationRole)
-				.contentType(APPLICATION_JSON_UTF8)
-				.content(objectMApper.writeValueAsString(courseVO)) // generate json from java object
-			).andDo(MockMvcResultHandlers.print())
-			.andExpect(status().is4xxClientError())
-			.andExpect(status().isBadRequest()) // verify json root element status $ is 400 BAD_REQUEST
-			.andExpect(jsonPath("$.message", is(String.format(messageSource.getMessage(ValidatorCodes.ERROR_CODE_ACTION_INVALID.getMessage(), new Object[] {}, LocaleContextHolder.getLocale()), ActionType.CREATE)))) // verify json root element message
-			;
-		
-		// additional check
-		// get all courses
-		mockMvc.perform(MockMvcRequestBuilders.get(ROOT + COURSES)
-				.param("validationRole", validationRole)
-			).andDo(MockMvcResultHandlers.print())
-			.andExpect(status().isOk())
-			.andExpect(content().contentType(APPLICATION_JSON_UTF8))
-			.andExpect(jsonPath("$", hasSize(1))) // verify that json root element $ is still size 1
-			.andExpect(jsonPath("$[0].title", is("test course")))
-//			.andExpect(jsonPath("$[1].title", is("another course")))
-			;
+
+		addCourseFail(ROLE_STUDENT);
 	}
 	
 	@Test
 	void addCourseNoRole() throws Exception {
-		log.info("addCourseNoRole");
+
+		addCourseFail(null);
+	}
+	
+	private void addCourseFail(String validationRole) throws Exception {
+		log.info("addCourseFail {}", validationRole);
 		
 		// create course
 		CourseVO courseVO = new CourseVO("another course");
 		
 		mockMvc.perform(MockMvcRequestBuilders.post(ROOT + COURSES)
-				//.param("validationRole", validationRole)
+				.param("validationRole", validationRole)
 				.contentType(APPLICATION_JSON_UTF8)
 				.content(objectMApper.writeValueAsString(courseVO)) // generate json from java object
 			).andDo(MockMvcResultHandlers.print())
@@ -446,13 +403,12 @@ public class CourseControllerTest {
 		// additional check
 		// get all courses
 		mockMvc.perform(MockMvcRequestBuilders.get(ROOT + COURSES)
-				//.param("validationRole", validationRole)
+				.param("validationRole", validationRole)
 			).andDo(MockMvcResultHandlers.print())
 			.andExpect(status().isOk())
 			.andExpect(content().contentType(APPLICATION_JSON_UTF8))
 			.andExpect(jsonPath("$", hasSize(1))) // verify that json root element $ is still size 1
 			.andExpect(jsonPath("$[0].title", is("test course")))
-//			.andExpect(jsonPath("$[1].title", is("another course")))
 			;
 	}
 	
@@ -488,77 +444,20 @@ public class CourseControllerTest {
 	
 	@Test
 	void updateCourseRoleAdmin() throws Exception {
-		log.info("updateCourseRoleAdmin");
-		
-		String courseTitle = "new test course";
-		String validationRole = ROLE_ADMIN;
-			
-		// update course id 1 with new title
-		mockMvc.perform(MockMvcRequestBuilders.put(ROOT + COURSES + "/{id}", 1)
-				.param("validationRole", validationRole)
-				.param("title", courseTitle)
-				.contentType(APPLICATION_JSON_UTF8)
-			).andDo(MockMvcResultHandlers.print())
-			.andExpect(status().isOk())
-			.andExpect(jsonPath("$.message", is(getMessage(CourseServiceImpl.COURSE_SAVE_SUCCESS)))) // verify json element
-			;
-		
-		// additional check
-		// get course with id=1
-		mockMvc.perform(MockMvcRequestBuilders.get(ROOT + COURSES + "/{id}", 1)
-				.param("validationRole", validationRole)
-			).andDo(MockMvcResultHandlers.print())
-			.andExpect(status().isOk())
-			.andExpect(content().contentType(APPLICATION_JSON_UTF8))
-			.andExpect(jsonPath("$.id", is(1))) // verify json root element id is 1
-			.andExpect(jsonPath("$.title", is(courseTitle))) // verify json element
-			.andExpect(jsonPath("$.reviewsVO", hasSize(1))) // verify json element
-			.andExpect(jsonPath("$.reviewsVO[0].comment", is("test review")))
-			.andExpect(jsonPath("$.studentsVO", hasSize(1))) // verify json element
-			.andExpect(jsonPath("$.studentsVO[0].firstName", is("firstNameStudent")))
-			;
-		
-		// update course with id=2 (non existing)
-		mockMvc.perform(MockMvcRequestBuilders.put(ROOT + COURSES + "/{id}", 2)
-				.param("validationRole", validationRole)
-				.param("title", courseTitle)
-				.contentType(APPLICATION_JSON_UTF8)
-			).andDo(MockMvcResultHandlers.print())
-			.andExpect(status().isOk())
-			.andExpect(jsonPath("$.message", is(String.format(getMessage("error_code_course_id_not_found"), 2)))) // verify json element
-			;
-		
-		// update course id 1 without title (required parameter)
-		mockMvc.perform(MockMvcRequestBuilders.put(ROOT + COURSES + "/{id}", 1)
-				.param("validationRole", validationRole)
-				//.param("title", courseTitle)
-				.contentType(APPLICATION_JSON_UTF8)
-			).andDo(MockMvcResultHandlers.print())
-			.andExpect(status().is4xxClientError())
-			.andExpect(status().isBadRequest()) // verify json root element status $ is 400 BAD_REQUEST
-			.andExpect(jsonPath("$.message", is("Required String parameter 'title' is not present"))) // verify json element
-			;
-				
-		// update course id 1 with empty title (required parameter)
-		mockMvc.perform(MockMvcRequestBuilders.put(ROOT + COURSES + "/{id}", 1)
-				.param("validationRole", validationRole)
-				.param("title", "")
-				.contentType(APPLICATION_JSON_UTF8)
-			).andDo(MockMvcResultHandlers.print())
-			.andExpect(status().is4xxClientError())
-			.andExpect(status().isBadRequest()) // verify json root element status $ is 400 BAD_REQUEST
-			.andExpect(jsonPath("$.message", is(getMessage("validation_failed")))) // verify json element
-			.andExpect(jsonPath("$.errors", hasSize(1))) // verify json element
-			.andExpect(jsonPath("$.errors", contains(getMessage("error_code_title_empty")))) // verify json element
-			;	
+
+		updateCourseSuccess(ROLE_ADMIN);
 	}
 	
 	@Test
 	void updateCourseRoleInstructor() throws Exception {
-		log.info("updateCourseRoleInstructor");
+
+		updateCourseSuccess(ROLE_INSTRUCTOR);
+	}
+	
+	private void updateCourseSuccess(String validationRole) throws Exception {
+		log.info("updateCourseSuccess {}", validationRole);
 		
 		String courseTitle = "new test course";
-		String validationRole = ROLE_INSTRUCTOR;
 		
 		// update course id 1 with new title
 		mockMvc.perform(MockMvcRequestBuilders.put(ROOT + COURSES + "/{id}", 1)
@@ -605,7 +504,7 @@ public class CourseControllerTest {
 			.andExpect(status().isBadRequest()) // verify json root element status $ is 400 BAD_REQUEST
 			.andExpect(jsonPath("$.message", is("Required String parameter 'title' is not present"))) // verify json element
 			;
-				
+			
 		// update course id 1 with empty title (required parameter)
 		mockMvc.perform(MockMvcRequestBuilders.put(ROOT + COURSES + "/{id}", 1)
 				.param("validationRole", validationRole)
@@ -617,85 +516,29 @@ public class CourseControllerTest {
 			.andExpect(jsonPath("$.message", is(getMessage("validation_failed")))) // verify json element
 			.andExpect(jsonPath("$.errors", hasSize(1))) // verify json element
 			.andExpect(jsonPath("$.errors", contains(getMessage("error_code_title_empty")))) // verify json element
-			;	
+			;
 	}
 	
 	@Test
 	void updateCourseRoleStudent() throws Exception {
-		log.info("updateCourseRoleStudent");
-		
-		String courseTitle = "new test course";
-		String validationRole = ROLE_STUDENT;
-		
-		// update course id 1 with new title
-		mockMvc.perform(MockMvcRequestBuilders.put(ROOT + COURSES + "/{id}", 1)
-				.param("validationRole", validationRole)
-				.param("title", courseTitle)
-				.contentType(APPLICATION_JSON_UTF8)
-			).andDo(MockMvcResultHandlers.print())
-			.andExpect(status().is4xxClientError())
-			.andExpect(status().isBadRequest()) // verify json root element status $ is 400 BAD_REQUEST
-			.andExpect(jsonPath("$.message", is(String.format(messageSource.getMessage(ValidatorCodes.ERROR_CODE_ACTION_INVALID.getMessage(), new Object[] {}, LocaleContextHolder.getLocale()), ActionType.UPDATE)))) // verify json root element message
-			;
-		
-		// additional check
-		// get course with id=1
-		mockMvc.perform(MockMvcRequestBuilders.get(ROOT + COURSES + "/{id}", 1)
-				.param("validationRole", validationRole)
-			).andDo(MockMvcResultHandlers.print())
-			.andExpect(status().isOk())
-			.andExpect(content().contentType(APPLICATION_JSON_UTF8))
-			.andExpect(jsonPath("$.id", is(1))) // verify json root element id is 1
-			.andExpect(jsonPath("$.title", is("test course"))) // verify json element
-			.andExpect(jsonPath("$.reviewsVO", hasSize(1))) // verify json element
-			.andExpect(jsonPath("$.reviewsVO[0].comment", is("test review")))
-			.andExpect(jsonPath("$.studentsVO", hasSize(1))) // verify json element
-			.andExpect(jsonPath("$.studentsVO[0].firstName", is("firstNameStudent")))
-			;
-		
-		// update course with id=2 (non existing)
-		mockMvc.perform(MockMvcRequestBuilders.put(ROOT + COURSES + "/{id}", 2)
-				.param("validationRole", validationRole)
-				.param("title", courseTitle)
-				.contentType(APPLICATION_JSON_UTF8)
-			).andDo(MockMvcResultHandlers.print())
-			.andExpect(status().isOk())
-			.andExpect(jsonPath("$.message", is(String.format(getMessage("error_code_course_id_not_found"), 2)))) // verify json element
-			;
-		
-		// update course id 1 without title (required parameter)
-		mockMvc.perform(MockMvcRequestBuilders.put(ROOT + COURSES + "/{id}", 1)
-				.param("validationRole", validationRole)
-				//.param("title", courseTitle)
-				.contentType(APPLICATION_JSON_UTF8)
-			).andDo(MockMvcResultHandlers.print())
-			.andExpect(status().is4xxClientError())
-			.andExpect(status().isBadRequest()) // verify json root element status $ is 400 BAD_REQUEST
-			.andExpect(jsonPath("$.message", is("Required String parameter 'title' is not present"))) // verify json element
-			//.andExpect(jsonPath("$.message", is(String.format(messageSource.getMessage(ValidatorCodes.ERROR_CODE_ACTION_INVALID.getMessage(), new Object[] {}, LocaleContextHolder.getLocale()), ActionType.UPDATE)))) // verify json root element message
-			;
-		
-		// update course id 1 with empty title (required parameter)
-		mockMvc.perform(MockMvcRequestBuilders.put(ROOT + COURSES + "/{id}", 1)
-				.param("validationRole", validationRole)
-				.param("title", "")
-				.contentType(APPLICATION_JSON_UTF8)
-			).andDo(MockMvcResultHandlers.print())
-			.andExpect(status().is4xxClientError())
-			.andExpect(status().isBadRequest()) // verify json root element status $ is 400 BAD_REQUEST
-			.andExpect(jsonPath("$.message", is(String.format(messageSource.getMessage(ValidatorCodes.ERROR_CODE_ACTION_INVALID.getMessage(), new Object[] {}, LocaleContextHolder.getLocale()), ActionType.UPDATE)))) // verify json root element message
-			;
+
+		updateCourseFail(ROLE_STUDENT);
 	}
 	
 	@Test
 	void updateCourseNoRole() throws Exception {
-		log.info("updateCourseNoRole");
+
+		updateCourseFail(null);
+	}
+	
+	private void updateCourseFail(String validationRole) throws Exception {
+		log.info("updateCourseFail {}", validationRole);
 		
 		String courseTitle = "new test course";
-				
+		
 		// update course id 1 with new title
 		mockMvc.perform(MockMvcRequestBuilders.put(ROOT + COURSES + "/{id}", 1)
-				//.param("validationRole", validationRole)
+				.param("validationRole", validationRole)
 				.param("title", courseTitle)
 				.contentType(APPLICATION_JSON_UTF8)
 			).andDo(MockMvcResultHandlers.print())
@@ -707,7 +550,7 @@ public class CourseControllerTest {
 		// additional check
 		// get course with id=1
 		mockMvc.perform(MockMvcRequestBuilders.get(ROOT + COURSES + "/{id}", 1)
-				//.param("validationRole", validationRole)
+				.param("validationRole", validationRole)
 			).andDo(MockMvcResultHandlers.print())
 			.andExpect(status().isOk())
 			.andExpect(content().contentType(APPLICATION_JSON_UTF8))
@@ -721,7 +564,7 @@ public class CourseControllerTest {
 		
 		// update course with id=2 (non existing)
 		mockMvc.perform(MockMvcRequestBuilders.put(ROOT + COURSES + "/{id}", 2)
-				//.param("validationRole", validationRole)
+				.param("validationRole", validationRole)
 				.param("title", courseTitle)
 				.contentType(APPLICATION_JSON_UTF8)
 			).andDo(MockMvcResultHandlers.print())
@@ -731,19 +574,18 @@ public class CourseControllerTest {
 		
 		// update course id 1 without title (required parameter)
 		mockMvc.perform(MockMvcRequestBuilders.put(ROOT + COURSES + "/{id}", 1)
-				//.param("validationRole", validationRole)
+				.param("validationRole", validationRole)
 				//.param("title", courseTitle)
 				.contentType(APPLICATION_JSON_UTF8)
 			).andDo(MockMvcResultHandlers.print())
 			.andExpect(status().is4xxClientError())
 			.andExpect(status().isBadRequest()) // verify json root element status $ is 400 BAD_REQUEST
 			.andExpect(jsonPath("$.message", is("Required String parameter 'title' is not present"))) // verify json element
-			//.andExpect(jsonPath("$.message", is(String.format(messageSource.getMessage(ValidatorCodes.ERROR_CODE_ACTION_INVALID.getMessage(), new Object[] {}, LocaleContextHolder.getLocale()), ActionType.UPDATE)))) // verify json root element message
 			;
 		
 		// update course id 1 with empty title (required parameter)
 		mockMvc.perform(MockMvcRequestBuilders.put(ROOT + COURSES + "/{id}", 1)
-				//.param("validationRole", validationRole)
+				.param("validationRole", validationRole)
 				.param("title", "")
 				.contentType(APPLICATION_JSON_UTF8)
 			).andDo(MockMvcResultHandlers.print())
@@ -844,37 +686,24 @@ public class CourseControllerTest {
 	
 	@Test
 	void deleteCourseRoleInstructor() throws Exception {
-		log.info("deleteCourseRoleInstructor");
-		
-		String validationRole = ROLE_INSTRUCTOR;
-		
-		// check if course id 1 exists
-		int id = 1;
-		CourseVO courseVO = courseService.findById(id);
-		log.info(courseVO.toString());
-		
-		assertNotNull(courseVO,"courseVO null");
-		assertEquals(1, courseVO.getId());
-		assertNotNull(courseVO.getTitle(),"courseVO.getTitle() null");
-		assertEquals("test course", courseVO.getTitle(),"assertEquals courseVO.getTitle() failure");
-		assertNull(courseVO.getInstructorVO(),"courseVO.getInstructorVO() null");
-		assertEquals(1, courseVO.getStudentsVO().size());
-		
-		// delete student
-		mockMvc.perform(MockMvcRequestBuilders.delete(ROOT + COURSES + "/{id}", id)
-				.param("validationRole", validationRole)
-			).andDo(MockMvcResultHandlers.print())
-			.andExpect(status().is4xxClientError())
-			.andExpect(status().isBadRequest()) // verify json root element status $ is 400 BAD_REQUEST
-			.andExpect(jsonPath("$.message", is(String.format(messageSource.getMessage(ValidatorCodes.ERROR_CODE_ACTION_INVALID.getMessage(), new Object[] {}, LocaleContextHolder.getLocale()), ActionType.DELETE)))) // verify json root element message
-			;
+
+		deleteCourseFail(ROLE_INSTRUCTOR);
 	}
 	
 	@Test
 	void deleteCourseRoleStudent() throws Exception {
-		log.info("deleteCourseRoleStudent");
-		
-		String validationRole = ROLE_STUDENT;
+
+		deleteCourseFail(ROLE_STUDENT);
+	}
+	
+	@Test
+	void deleteCourseNoRole() throws Exception {
+
+		deleteCourseFail(null);
+	}
+	
+	private void deleteCourseFail(String validationRole) throws Exception {
+		log.info("deleteCourseRoleFail {}", validationRole);
 		
 		// check if course id 1 exists
 		int id = 1;
@@ -891,32 +720,6 @@ public class CourseControllerTest {
 		// delete student
 		mockMvc.perform(MockMvcRequestBuilders.delete(ROOT + COURSES + "/{id}", id)
 				.param("validationRole", validationRole)
-			).andDo(MockMvcResultHandlers.print())
-			.andExpect(status().is4xxClientError())
-			.andExpect(status().isBadRequest()) // verify json root element status $ is 400 BAD_REQUEST
-			.andExpect(jsonPath("$.message", is(String.format(messageSource.getMessage(ValidatorCodes.ERROR_CODE_ACTION_INVALID.getMessage(), new Object[] {}, LocaleContextHolder.getLocale()), ActionType.DELETE)))) // verify json root element message
-			;
-	}
-	
-	@Test
-	void deleteCourseNoRole() throws Exception {
-		log.info("deleteCourseNoRole");
-		
-		// check if course id 1 exists
-		int id = 1;
-		CourseVO courseVO = courseService.findById(id);
-		log.info(courseVO.toString());
-		
-		assertNotNull(courseVO,"courseVO null");
-		assertEquals(1, courseVO.getId());
-		assertNotNull(courseVO.getTitle(),"courseVO.getTitle() null");
-		assertEquals("test course", courseVO.getTitle(),"assertEquals courseVO.getTitle() failure");
-		assertNull(courseVO.getInstructorVO(),"courseVO.getInstructorVO() null");
-		assertEquals(1, courseVO.getStudentsVO().size());
-		
-		// delete student
-		mockMvc.perform(MockMvcRequestBuilders.delete(ROOT + COURSES + "/{id}", id)
-				//.param("validationRole", validationRole)
 			).andDo(MockMvcResultHandlers.print())
 			.andExpect(status().is4xxClientError())
 			.andExpect(status().isBadRequest()) // verify json root element status $ is 400 BAD_REQUEST
@@ -1016,131 +819,24 @@ public class CourseControllerTest {
 	
 	@Test
 	void enrollInstructorRoleInstructor() throws Exception {
-		log.info("enrollInstructorRoleInstructor");
-		
-		String validationRole = ROLE_INSTRUCTOR;
-		
-		// check if course id 1 exists
-		int id = 1;
-		CourseVO courseVO = courseService.findById(id);
-		log.info(courseVO.toString());
-		
-		assertNotNull(courseVO,"courseVO null");
-		assertEquals(1, courseVO.getId());
-		assertNotNull(courseVO.getTitle(),"courseVO.getTitle() null");
-		assertEquals("test course", courseVO.getTitle(),"assertEquals courseVO.getTitle() failure");
-		assertNull(courseVO.getInstructorVO(),"courseVO.getInstructorVO() null");
-		assertEquals(1, courseVO.getStudentsVO().size());
-		
-		// check if instructor id 1 exists
-		InstructorVO instructorVO = instructorService.findById(id);
-		log.info(instructorVO.toString());
-		
-		assertNotNull(instructorVO,"courseVO null");
-		assertEquals(1, instructorVO.getId());
-		assertNotNull(instructorVO.getFirstName(),"instructorVO.getFirstName() null");
-		assertEquals("firstNameInstr", instructorVO.getFirstName(),"assertEquals instructorVO.getFirstName() failure");
-		
-		// enroll instructor
-		mockMvc.perform(MockMvcRequestBuilders.put(ROOT + COURSES + "/{courseId}" + INSTRUCTOR_ENROLL, id, id)
-				.param("validationRole", validationRole)
-				.contentType(APPLICATION_JSON_UTF8)
-			).andDo(MockMvcResultHandlers.print())
-			.andExpect(status().is4xxClientError())
-			.andExpect(status().isBadRequest()) // verify json root element status $ is 400 BAD_REQUEST
-			.andExpect(jsonPath("$.message", is(String.format(messageSource.getMessage(ValidatorCodes.ERROR_CODE_ACTION_INVALID.getMessage(), new Object[] {}, LocaleContextHolder.getLocale()), ActionType.ENROLL)))) // verify json root element message
-			;
-		
-		// check course
-		courseVO = courseService.findById(id);
-		
-		assertEquals(1, courseVO.getId());
-		assertNull(courseVO.getInstructorVO(),"courseVO.getInstructorVO() null");
-		
-		// enroll instructor (non existing course courseId=2)
-		mockMvc.perform(MockMvcRequestBuilders.put(ROOT + COURSES + "/{courseId}" + INSTRUCTOR_ENROLL, 2, id)
-				.param("validationRole", validationRole)
-				.contentType(APPLICATION_JSON_UTF8)
-			).andDo(MockMvcResultHandlers.print())
-			.andExpect(status().isOk())
-			.andExpect(jsonPath("$.message", is(String.format(getMessage("error_code_course_id_not_found"), 2)))) // verify json element
-			;
-		
-		// enroll non existing instructor id=2
-		mockMvc.perform(MockMvcRequestBuilders.put(ROOT + COURSES + "/{courseId}" + INSTRUCTOR_ENROLL, id, 2)
-				.param("validationRole", validationRole)
-				.contentType(APPLICATION_JSON_UTF8)
-			).andDo(MockMvcResultHandlers.print())
-			.andExpect(status().isOk())
-			.andExpect(jsonPath("$.message", is(String.format(getMessage("error_code_instructor_id_not_found"), 2)))) // verify json element
-			;
+
+		enrollInstructorFail(ROLE_INSTRUCTOR);
 	}
 	
 	@Test
 	void enrollInstructorRoleStudent() throws Exception {
-		log.info("enrollInstructorRoleStudent");
-		
-		String validationRole = ROLE_STUDENT;
-		
-		// check if course id 1 exists
-		int id = 1;
-		CourseVO courseVO = courseService.findById(id);
-		log.info(courseVO.toString());
-		
-		assertNotNull(courseVO,"courseVO null");
-		assertEquals(1, courseVO.getId());
-		assertNotNull(courseVO.getTitle(),"courseVO.getTitle() null");
-		assertEquals("test course", courseVO.getTitle(),"assertEquals courseVO.getTitle() failure");
-		assertNull(courseVO.getInstructorVO(),"courseVO.getInstructorVO() null");
-		assertEquals(1, courseVO.getStudentsVO().size());
-		
-		// check if instructor id 1 exists
-		InstructorVO instructorVO = instructorService.findById(id);
-		log.info(instructorVO.toString());
-		
-		assertNotNull(instructorVO,"courseVO null");
-		assertEquals(1, instructorVO.getId());
-		assertNotNull(instructorVO.getFirstName(),"instructorVO.getFirstName() null");
-		assertEquals("firstNameInstr", instructorVO.getFirstName(),"assertEquals instructorVO.getFirstName() failure");
-		
-		// enroll instructor
-		mockMvc.perform(MockMvcRequestBuilders.put(ROOT + COURSES + "/{courseId}" + INSTRUCTOR_ENROLL, id, id)
-				.param("validationRole", validationRole)
-				.contentType(APPLICATION_JSON_UTF8)
-			).andDo(MockMvcResultHandlers.print())
-			.andExpect(status().is4xxClientError())
-			.andExpect(status().isBadRequest()) // verify json root element status $ is 400 BAD_REQUEST
-			.andExpect(jsonPath("$.message", is(String.format(messageSource.getMessage(ValidatorCodes.ERROR_CODE_ACTION_INVALID.getMessage(), new Object[] {}, LocaleContextHolder.getLocale()), ActionType.ENROLL)))) // verify json root element message
-			;
-		
-		// check course
-		courseVO = courseService.findById(id);
-		
-		assertEquals(1, courseVO.getId());
-		assertNull(courseVO.getInstructorVO(),"courseVO.getInstructorVO() null");
-		
-		// enroll instructor (non existing course courseId=2)
-		mockMvc.perform(MockMvcRequestBuilders.put(ROOT + COURSES + "/{courseId}" + INSTRUCTOR_ENROLL, 2, id)
-				.param("validationRole", validationRole)
-				.contentType(APPLICATION_JSON_UTF8)
-			).andDo(MockMvcResultHandlers.print())
-			.andExpect(status().isOk())
-			.andExpect(jsonPath("$.message", is(String.format(getMessage("error_code_course_id_not_found"), 2)))) // verify json element
-			;
-		
-		// enroll non existing instructor id=2
-		mockMvc.perform(MockMvcRequestBuilders.put(ROOT + COURSES + "/{courseId}" + INSTRUCTOR_ENROLL, id, 2)
-				.param("validationRole", validationRole)
-				.contentType(APPLICATION_JSON_UTF8)
-			).andDo(MockMvcResultHandlers.print())
-			.andExpect(status().isOk())
-			.andExpect(jsonPath("$.message", is(String.format(getMessage("error_code_instructor_id_not_found"), 2)))) // verify json element
-			;
+
+		enrollInstructorFail(ROLE_STUDENT);
 	}
 	
 	@Test
 	void enrollInstructorNoRole() throws Exception {
-		log.info("enrollInstructorNoRole");
+
+		enrollInstructorFail(null);
+	}
+	
+	private void enrollInstructorFail(String validationRole) throws Exception {
+		log.info("enrollInstructorFail {}", validationRole);
 		
 		// check if course id 1 exists
 		int id = 1;
@@ -1165,7 +861,7 @@ public class CourseControllerTest {
 		
 		// enroll instructor
 		mockMvc.perform(MockMvcRequestBuilders.put(ROOT + COURSES + "/{courseId}" + INSTRUCTOR_ENROLL, id, id)
-				//.param("validationRole", validationRole)
+				.param("validationRole", validationRole)
 				.contentType(APPLICATION_JSON_UTF8)
 			).andDo(MockMvcResultHandlers.print())
 			.andExpect(status().is4xxClientError())
@@ -1181,7 +877,7 @@ public class CourseControllerTest {
 		
 		// enroll instructor (non existing course courseId=2)
 		mockMvc.perform(MockMvcRequestBuilders.put(ROOT + COURSES + "/{courseId}" + INSTRUCTOR_ENROLL, 2, id)
-				//.param("validationRole", validationRole)
+				.param("validationRole", validationRole)
 				.contentType(APPLICATION_JSON_UTF8)
 			).andDo(MockMvcResultHandlers.print())
 			.andExpect(status().isOk())
@@ -1190,7 +886,7 @@ public class CourseControllerTest {
 		
 		// enroll non existing instructor id=2
 		mockMvc.perform(MockMvcRequestBuilders.put(ROOT + COURSES + "/{courseId}" + INSTRUCTOR_ENROLL, id, 2)
-				//.param("validationRole", validationRole)
+				.param("validationRole", validationRole)
 				.contentType(APPLICATION_JSON_UTF8)
 			).andDo(MockMvcResultHandlers.print())
 			.andExpect(status().isOk())
@@ -1340,167 +1036,24 @@ public class CourseControllerTest {
 	
 	@Test
 	void withdrawInstructorRoleInstructor() throws Exception {
-		log.info("withdrawInstructorRoleInstructor");
-		
-		String validationRole = ROLE_INSTRUCTOR;
-		
-		// check if course id 1 exists
-		int id = 1;
-		CourseVO courseVO = courseService.findById(id);
-		log.info(courseVO.toString());
-		
-		assertNotNull(courseVO,"courseVO null");
-		assertEquals(1, courseVO.getId());
-		assertNotNull(courseVO.getTitle(),"courseVO.getTitle() null");
-		assertEquals("test course", courseVO.getTitle(),"assertEquals courseVO.getTitle() failure");
-		assertNull(courseVO.getInstructorVO(),"courseVO.getInstructorVO() null");
-		assertEquals(1, courseVO.getStudentsVO().size());
-		
-		// check if instructor id 1 exists
-		InstructorVO instructorVO = instructorService.findById(id);
-		log.info(instructorVO.toString());
-		
-		assertNotNull(instructorVO,"courseVO null");
-		assertEquals(1, instructorVO.getId());
-		assertNotNull(instructorVO.getFirstName(),"instructorVO.getFirstName() null");
-		assertEquals("firstNameInstr", instructorVO.getFirstName(),"assertEquals instructorVO.getFirstName() failure");
-		
-		// enroll instructor
-		mockMvc.perform(MockMvcRequestBuilders.put(ROOT + COURSES + "/{courseId}" + INSTRUCTOR_ENROLL, id, id)
-				.param("validationRole", validationRole)
-				.contentType(APPLICATION_JSON_UTF8)
-			).andDo(MockMvcResultHandlers.print())
-			.andExpect(status().is4xxClientError())
-			.andExpect(status().isBadRequest()) // verify json root element status $ is 400 BAD_REQUEST
-			.andExpect(jsonPath("$.message", is(String.format(messageSource.getMessage(ValidatorCodes.ERROR_CODE_ACTION_INVALID.getMessage(), new Object[] {}, LocaleContextHolder.getLocale()), ActionType.ENROLL)))) // verify json root element message
-			;
-		
-		// check course
-		courseVO = courseService.findById(id);
-		log.info(courseVO.toString());
-		
-		assertEquals(1, courseVO.getId());
-		assertNull(courseVO.getInstructorVO(),"courseVO.getInstructorVO() null");
-		
-		// withdraw instructor id=1
-		mockMvc.perform(MockMvcRequestBuilders.put(ROOT + COURSES + "/{courseId}" + INSTRUCTOR_WITHDRAW, id, id)
-				.param("validationRole", validationRole)
-				.contentType(APPLICATION_JSON_UTF8)
-			).andDo(MockMvcResultHandlers.print())
-			.andExpect(status().is4xxClientError())
-			.andExpect(status().isBadRequest()) // verify json root element status $ is 400 BAD_REQUEST
-			.andExpect(jsonPath("$.message", is(String.format(messageSource.getMessage(ValidatorCodes.ERROR_CODE_ACTION_INVALID.getMessage(), new Object[] {}, LocaleContextHolder.getLocale()), ActionType.WITHDRAW)))) // verify json root element message
-			;
-		
-		// check course
-		courseVO = courseService.findById(id);
-		log.info(courseVO.toString());
-		
-		assertEquals(1, courseVO.getId());
-		assertNull(courseVO.getInstructorVO(),"courseVO.getInstructorVO() null");
-		
-		// withdraw instructor (non existing course courseId=2)
-		mockMvc.perform(MockMvcRequestBuilders.put(ROOT + COURSES + "/{courseId}" + INSTRUCTOR_WITHDRAW, 2, id)
-				.param("validationRole", validationRole)
-				.contentType(APPLICATION_JSON_UTF8)
-			).andDo(MockMvcResultHandlers.print())
-			.andExpect(status().isOk())
-			.andExpect(jsonPath("$.message", is(String.format(getMessage("error_code_course_id_not_found"), 2)))) // verify json element
-			;
-		
-		// withdraw non existing instructor id=2
-		mockMvc.perform(MockMvcRequestBuilders.put(ROOT + COURSES + "/{courseId}" + INSTRUCTOR_WITHDRAW, id, 2)
-				.param("validationRole", validationRole)
-				.contentType(APPLICATION_JSON_UTF8)
-			).andDo(MockMvcResultHandlers.print())
-			.andExpect(status().isOk())
-			.andExpect(jsonPath("$.message", is(String.format(getMessage("error_code_instructor_id_not_found"), 2)))) // verify json element
-			;
+
+		withdrawInstructorFail(ROLE_INSTRUCTOR);
 	}
 
 	@Test
 	void withdrawInstructorRoleStudent() throws Exception {
-		log.info("withdrawInstructorRoleStudent");
-		
-		String validationRole = ROLE_STUDENT;
-		
-		// check if course id 1 exists
-		int id = 1;
-		CourseVO courseVO = courseService.findById(id);
-		log.info(courseVO.toString());
-		
-		assertNotNull(courseVO,"courseVO null");
-		assertEquals(1, courseVO.getId());
-		assertNotNull(courseVO.getTitle(),"courseVO.getTitle() null");
-		assertEquals("test course", courseVO.getTitle(),"assertEquals courseVO.getTitle() failure");
-		assertNull(courseVO.getInstructorVO(),"courseVO.getInstructorVO() null");
-		assertEquals(1, courseVO.getStudentsVO().size());
-		
-		// check if instructor id 1 exists
-		InstructorVO instructorVO = instructorService.findById(id);
-		log.info(instructorVO.toString());
-		
-		assertNotNull(instructorVO,"courseVO null");
-		assertEquals(1, instructorVO.getId());
-		assertNotNull(instructorVO.getFirstName(),"instructorVO.getFirstName() null");
-		assertEquals("firstNameInstr", instructorVO.getFirstName(),"assertEquals instructorVO.getFirstName() failure");
-		
-		// enroll instructor
-		mockMvc.perform(MockMvcRequestBuilders.put(ROOT + COURSES + "/{courseId}" + INSTRUCTOR_ENROLL, id, id)
-				.param("validationRole", validationRole)
-				.contentType(APPLICATION_JSON_UTF8)
-			).andDo(MockMvcResultHandlers.print())
-			.andExpect(status().is4xxClientError())
-			.andExpect(status().isBadRequest()) // verify json root element status $ is 400 BAD_REQUEST
-			.andExpect(jsonPath("$.message", is(String.format(messageSource.getMessage(ValidatorCodes.ERROR_CODE_ACTION_INVALID.getMessage(), new Object[] {}, LocaleContextHolder.getLocale()), ActionType.ENROLL)))) // verify json root element message
-			;
-		
-		// check course
-		courseVO = courseService.findById(id);
-		log.info(courseVO.toString());
-		
-		assertEquals(1, courseVO.getId());
-		assertNull(courseVO.getInstructorVO(),"courseVO.getInstructorVO() null");
-		
-		// withdraw instructor id=1
-		mockMvc.perform(MockMvcRequestBuilders.put(ROOT + COURSES + "/{courseId}" + INSTRUCTOR_WITHDRAW, id, id)
-				.param("validationRole", validationRole)
-				.contentType(APPLICATION_JSON_UTF8)
-			).andDo(MockMvcResultHandlers.print())
-			.andExpect(status().is4xxClientError())
-			.andExpect(status().isBadRequest()) // verify json root element status $ is 400 BAD_REQUEST
-			.andExpect(jsonPath("$.message", is(String.format(messageSource.getMessage(ValidatorCodes.ERROR_CODE_ACTION_INVALID.getMessage(), new Object[] {}, LocaleContextHolder.getLocale()), ActionType.WITHDRAW)))) // verify json root element message
-			;
-		
-		// check course
-		courseVO = courseService.findById(id);
-		log.info(courseVO.toString());
-		
-		assertEquals(1, courseVO.getId());
-		assertNull(courseVO.getInstructorVO(),"courseVO.getInstructorVO() null");
-		
-		// withdraw instructor (non existing course courseId=2)
-		mockMvc.perform(MockMvcRequestBuilders.put(ROOT + COURSES + "/{courseId}" + INSTRUCTOR_WITHDRAW, 2, id)
-				.param("validationRole", validationRole)
-				.contentType(APPLICATION_JSON_UTF8)
-			).andDo(MockMvcResultHandlers.print())
-			.andExpect(status().isOk())
-			.andExpect(jsonPath("$.message", is(String.format(getMessage("error_code_course_id_not_found"), 2)))) // verify json element
-			;
-		
-		// withdraw non existing instructor id=2
-		mockMvc.perform(MockMvcRequestBuilders.put(ROOT + COURSES + "/{courseId}" + INSTRUCTOR_WITHDRAW, id, 2)
-				.param("validationRole", validationRole)
-				.contentType(APPLICATION_JSON_UTF8)
-			).andDo(MockMvcResultHandlers.print())
-			.andExpect(status().isOk())
-			.andExpect(jsonPath("$.message", is(String.format(getMessage("error_code_instructor_id_not_found"), 2)))) // verify json element
-			;
+
+		withdrawInstructorFail(ROLE_STUDENT);
 	}
 	
 	@Test
 	void withdrawInstructorNoRole() throws Exception {
-		log.info("withdrawInstructorNoRole");
+
+		withdrawInstructorFail(null);
+	}
+	
+	private void withdrawInstructorFail(String validationRole) throws Exception {
+		log.info("withdrawInstructorFail {}", validationRole);
 		
 		// check if course id 1 exists
 		int id = 1;
@@ -1525,7 +1078,7 @@ public class CourseControllerTest {
 		
 		// enroll instructor
 		mockMvc.perform(MockMvcRequestBuilders.put(ROOT + COURSES + "/{courseId}" + INSTRUCTOR_ENROLL, id, id)
-				//.param("validationRole", validationRole)
+				.param("validationRole", validationRole)
 				.contentType(APPLICATION_JSON_UTF8)
 			).andDo(MockMvcResultHandlers.print())
 			.andExpect(status().is4xxClientError())
@@ -1542,7 +1095,7 @@ public class CourseControllerTest {
 		
 		// withdraw instructor id=1
 		mockMvc.perform(MockMvcRequestBuilders.put(ROOT + COURSES + "/{courseId}" + INSTRUCTOR_WITHDRAW, id, id)
-				//.param("validationRole", validationRole)
+				.param("validationRole", validationRole)
 				.contentType(APPLICATION_JSON_UTF8)
 			).andDo(MockMvcResultHandlers.print())
 			.andExpect(status().is4xxClientError())
@@ -1559,7 +1112,7 @@ public class CourseControllerTest {
 		
 		// withdraw instructor (non existing course courseId=2)
 		mockMvc.perform(MockMvcRequestBuilders.put(ROOT + COURSES + "/{courseId}" + INSTRUCTOR_WITHDRAW, 2, id)
-				//.param("validationRole", validationRole)
+				.param("validationRole", validationRole)
 				.contentType(APPLICATION_JSON_UTF8)
 			).andDo(MockMvcResultHandlers.print())
 			.andExpect(status().isOk())
@@ -1568,7 +1121,7 @@ public class CourseControllerTest {
 		
 		// withdraw non existing instructor id=2
 		mockMvc.perform(MockMvcRequestBuilders.put(ROOT + COURSES + "/{courseId}" + INSTRUCTOR_WITHDRAW, id, 2)
-				//.param("validationRole", validationRole)
+				.param("validationRole", validationRole)
 				.contentType(APPLICATION_JSON_UTF8)
 			).andDo(MockMvcResultHandlers.print())
 			.andExpect(status().isOk())
@@ -1657,80 +1210,18 @@ public class CourseControllerTest {
 	
 	@Test
 	void enrollStudentRoleAdmin() throws Exception {
-		log.info("enrollInstructorRoleAdmin");
-		
-		String validationRole = ROLE_ADMIN;
-		
-		// check if course id 1 exists
-		int id = 1;
-		CourseVO courseVO = courseService.findById(id);
-		log.info(courseVO.toString());
-		
-		assertNotNull(courseVO,"courseVO null");
-		assertEquals(1, courseVO.getId());
-		assertNotNull(courseVO.getTitle(),"courseVO.getTitle() null");
-		assertEquals("test course", courseVO.getTitle(),"assertEquals courseVO.getTitle() failure");
-		assertNull(courseVO.getInstructorVO(),"courseVO.getInstructorVO() null");
-		assertEquals(1, courseVO.getStudentsVO().size());
-		
-		// create new student
-		// set id 0: this is to force a save of new item ... instead of update
-		StudentVO studentVO = new StudentVO("firstName", "lastName", "emailAddress@babinkuk.com");
-		studentVO.setId(0);
-				
-		studentService.saveStudent(studentVO);
-		
-		// check new student
-		StudentVO newStudentVO = studentService.findByEmail(studentVO.getEmailAddress());
-		log.info(newStudentVO.toString());
-		
-		assertNotNull(newStudentVO,"courseVO null");
-		assertNotNull(newStudentVO.getFirstName(),"newStudentVO.getFirstName() null");
-		assertEquals(studentVO.getFirstName(), newStudentVO.getFirstName(),"assertEquals newStudentVO.getFirstName() failure");
-		assertEquals(studentVO.getEmailAddress(), newStudentVO.getEmailAddress(),"assertEquals newStudentVO.getEmailAddress() failure");
-		
-		// enroll new student
-		mockMvc.perform(MockMvcRequestBuilders.put(ROOT + COURSES + "/{courseId}" + STUDENT_ENROLL, id, newStudentVO.getId())
-				.param("validationRole", validationRole)
-				.contentType(APPLICATION_JSON_UTF8)
-			).andDo(MockMvcResultHandlers.print())
-			.andExpect(status().isOk())
-			.andExpect(jsonPath("$.message", is(getMessage(CourseServiceImpl.COURSE_SAVE_SUCCESS)))) // verify json element
-			;
-		
-		// check course
-		courseVO = courseService.findById(id);
-		log.info(courseVO.toString());
-		
-		assertEquals(1, courseVO.getId());
-		assertNotNull(courseVO,"courseVO not null");
-		assertEquals(2, courseVO.getStudentsVO().size(), "courseVO.getStudentsVO().size()");
-        assertTrue(courseVO.getStudentsVO().stream().filter(o -> o.getEmailAddress().equals(studentVO.getEmailAddress())).findFirst().isPresent());
-        
-		// enroll student (non existing course courseId=2)
-		mockMvc.perform(MockMvcRequestBuilders.put(ROOT + COURSES + "/{courseId}" + STUDENT_ENROLL, 2, newStudentVO.getId())
-				.param("validationRole", validationRole)
-				.contentType(APPLICATION_JSON_UTF8)
-			).andDo(MockMvcResultHandlers.print())
-			.andExpect(status().isOk())
-			.andExpect(jsonPath("$.message", is(String.format(getMessage("error_code_course_id_not_found"), 2)))) // verify json element
-			;
-		
-		// enroll non existing student id=2
-		mockMvc.perform(MockMvcRequestBuilders.put(ROOT + COURSES + "/{courseId}" + STUDENT_ENROLL, id, 2222)
-				.param("validationRole", validationRole)
-				.contentType(APPLICATION_JSON_UTF8)
-			).andDo(MockMvcResultHandlers.print())
-			.andExpect(status().isOk())
-			.andExpect(jsonPath("$.message", is(String.format(getMessage("error_code_student_id_not_found"), 2222)))) // verify json element
-			;
+
+		enrollStudentRoleInstructor(ROLE_ADMIN);
 	}
 
 	@Test
 	void enrollStudentRoleInstructor() throws Exception {
-		log.info("enrollStudentRoleInstructor");
-		
-		String validationRole = ROLE_INSTRUCTOR;
+
+		enrollStudentRoleInstructor(ROLE_INSTRUCTOR);
+	}
+	
+	private void enrollStudentRoleInstructor(String validationRole) throws Exception {
+		log.info("enrollStudentSuccess {}", validationRole);
 		
 		// check if course id 1 exists
 		int id = 1;
@@ -1799,79 +1290,18 @@ public class CourseControllerTest {
 	
 	@Test
 	void enrollStudentRoleStudent() throws Exception {
-		log.info("enrollInstructorRoleAdmin");
-		
-		String validationRole = ROLE_STUDENT;
-		
-		// check if course id 1 exists
-		int id = 1;
-		CourseVO courseVO = courseService.findById(id);
-		log.info(courseVO.toString());
-		
-		assertNotNull(courseVO,"courseVO null");
-		assertEquals(1, courseVO.getId());
-		assertNotNull(courseVO.getTitle(),"courseVO.getTitle() null");
-		assertEquals("test course", courseVO.getTitle(),"assertEquals courseVO.getTitle() failure");
-		assertNull(courseVO.getInstructorVO(),"courseVO.getInstructorVO() null");
-		assertEquals(1, courseVO.getStudentsVO().size());
-		
-		// create new student
-		// set id 0: this is to force a save of new item ... instead of update
-		StudentVO studentVO = new StudentVO("firstName", "lastName", "emailAddress@babinkuk.com");
-		studentVO.setId(0);
-				
-		studentService.saveStudent(studentVO);
-		
-		// check new student
-		StudentVO newStudentVO = studentService.findByEmail(studentVO.getEmailAddress());
-		log.info(newStudentVO.toString());
-		
-		assertNotNull(newStudentVO,"courseVO null");
-		assertNotNull(newStudentVO.getFirstName(),"newStudentVO.getFirstName() null");
-		assertEquals(studentVO.getFirstName(), newStudentVO.getFirstName(),"assertEquals newStudentVO.getFirstName() failure");
-		assertEquals(studentVO.getEmailAddress(), newStudentVO.getEmailAddress(),"assertEquals newStudentVO.getEmailAddress() failure");
-		
-		// enroll new student
-		mockMvc.perform(MockMvcRequestBuilders.put(ROOT + COURSES + "/{courseId}" + STUDENT_ENROLL, id, newStudentVO.getId())
-				.param("validationRole", validationRole)
-				.contentType(APPLICATION_JSON_UTF8)
-			).andDo(MockMvcResultHandlers.print())
-		.andExpect(status().is4xxClientError())
-		.andExpect(status().isBadRequest()) // verify json root element status $ is 400 BAD_REQUEST
-		.andExpect(jsonPath("$.message", is(String.format(messageSource.getMessage(ValidatorCodes.ERROR_CODE_ACTION_INVALID.getMessage(), new Object[] {}, LocaleContextHolder.getLocale()), ActionType.ENROLL)))) // verify json root element message
-		;
-		
-		// check course
-		courseVO = courseService.findById(id);
-		log.info(courseVO.toString());
-		
-		assertEquals(1, courseVO.getId());
-		assertNotNull(courseVO,"courseVO not null");
-		assertEquals(1, courseVO.getStudentsVO().size(), "courseVO.getStudentsVO().size()");
-        assertFalse(courseVO.getStudentsVO().stream().filter(o -> o.getEmailAddress().equals(studentVO.getEmailAddress())).findFirst().isPresent());
-        
-		// enroll student (non existing course courseId=2)
-		mockMvc.perform(MockMvcRequestBuilders.put(ROOT + COURSES + "/{courseId}" + STUDENT_ENROLL, 2, newStudentVO.getId())
-				.param("validationRole", validationRole)
-				.contentType(APPLICATION_JSON_UTF8)
-			).andDo(MockMvcResultHandlers.print())
-			.andExpect(status().isOk())
-			.andExpect(jsonPath("$.message", is(String.format(getMessage("error_code_course_id_not_found"), 2)))) // verify json element
-			;
-		
-		// enroll non existing student id=2
-		mockMvc.perform(MockMvcRequestBuilders.put(ROOT + COURSES + "/{courseId}" + STUDENT_ENROLL, id, 2222)
-				.param("validationRole", validationRole)
-				.contentType(APPLICATION_JSON_UTF8)
-			).andDo(MockMvcResultHandlers.print())
-			.andExpect(status().isOk())
-			.andExpect(jsonPath("$.message", is(String.format(getMessage("error_code_student_id_not_found"), 2222)))) // verify json element
-			;
+
+		enrollStudentFail(ROLE_STUDENT);
 	}
 	
 	@Test
 	void enrollStudentNoRole() throws Exception {
-		log.info("enrollInstructorNoRole");
+
+		enrollStudentFail(null);
+	}
+	
+	private void enrollStudentFail(String validationRole) throws Exception {
+		log.info("enrollInstructorFail {}", validationRole);
 		
 		// check if course id 1 exists
 		int id = 1;
@@ -1903,7 +1333,7 @@ public class CourseControllerTest {
 		
 		// enroll new student
 		mockMvc.perform(MockMvcRequestBuilders.put(ROOT + COURSES + "/{courseId}" + STUDENT_ENROLL, id, newStudentVO.getId())
-				//.param("validationRole", validationRole)
+				.param("validationRole", validationRole)
 				.contentType(APPLICATION_JSON_UTF8)
 			).andDo(MockMvcResultHandlers.print())
 		.andExpect(status().is4xxClientError())
@@ -1922,7 +1352,7 @@ public class CourseControllerTest {
         
 		// enroll student (non existing course courseId=2)
 		mockMvc.perform(MockMvcRequestBuilders.put(ROOT + COURSES + "/{courseId}" + STUDENT_ENROLL, 2, newStudentVO.getId())
-				//.param("validationRole", validationRole)
+				.param("validationRole", validationRole)
 				.contentType(APPLICATION_JSON_UTF8)
 			).andDo(MockMvcResultHandlers.print())
 			.andExpect(status().isOk())
@@ -1931,14 +1361,13 @@ public class CourseControllerTest {
 		
 		// enroll non existing student id=2
 		mockMvc.perform(MockMvcRequestBuilders.put(ROOT + COURSES + "/{courseId}" + STUDENT_ENROLL, id, 2222)
-				//.param("validationRole", validationRole)
+				.param("validationRole", validationRole)
 				.contentType(APPLICATION_JSON_UTF8)
 			).andDo(MockMvcResultHandlers.print())
 			.andExpect(status().isOk())
 			.andExpect(jsonPath("$.message", is(String.format(getMessage("error_code_student_id_not_found"), 2222)))) // verify json element
 			;
 	}
-	
 	@Test
 	void enrollStudentRoleNotExist() throws Exception {
 		log.info("enrollStudentRoleNotExist");
@@ -2013,64 +1442,18 @@ public class CourseControllerTest {
 	
 	@Test
 	void withdrawStudentRoleAdmin() throws Exception {
-		log.info("withdrawStudentRoleAdmin");
-		
-		String validationRole = ROLE_ADMIN;
-		
-		// check if course id 1 exists
-		int id = 1;
-		CourseVO courseVO = courseService.findById(id);
-		log.info(courseVO.toString());
-		
-		assertNotNull(courseVO,"courseVO null");
-		assertEquals(1, courseVO.getId());
-		assertNotNull(courseVO.getTitle(),"courseVO.getTitle() null");
-		assertEquals("test course", courseVO.getTitle(),"assertEquals courseVO.getTitle() failure");
-		assertNull(courseVO.getInstructorVO(),"courseVO.getInstructorVO() null");
-		assertEquals(1, courseVO.getStudentsVO().size());
-		assertTrue(courseVO.getStudentsVO().stream().filter(o -> o.getId() == 1).findFirst().isPresent());
-        
-		// withdraw instructor id=1
-		mockMvc.perform(MockMvcRequestBuilders.put(ROOT + COURSES + "/{courseId}" + STUDENT_WITHDRAW, id, id)
-				.param("validationRole", validationRole)
-				.contentType(APPLICATION_JSON_UTF8)
-			).andDo(MockMvcResultHandlers.print())
-			.andExpect(status().isOk())
-			.andExpect(jsonPath("$.message", is(getMessage(CourseServiceImpl.COURSE_SAVE_SUCCESS)))) // verify json element
-			;
-		
-		// check course
-		courseVO = courseService.findById(id);
-		log.info(courseVO.toString());
-		
-		assertEquals(1, courseVO.getId());
-		assertEquals(0, courseVO.getStudentsVO().size());
-		assertFalse(courseVO.getStudentsVO().stream().filter(o -> o.getId() == 1).findFirst().isPresent());
-        
-		// withdraw instructor (non existing course courseId=2)
-		mockMvc.perform(MockMvcRequestBuilders.put(ROOT + COURSES + "/{courseId}" + STUDENT_WITHDRAW, 2, id)
-				.param("validationRole", validationRole)
-				.contentType(APPLICATION_JSON_UTF8)
-			).andDo(MockMvcResultHandlers.print())
-			.andExpect(status().isOk())
-			.andExpect(jsonPath("$.message", is(String.format(getMessage("error_code_course_id_not_found"), 2)))) // verify json element
-			;
-		
-		// withdraw non existing instructor id=2
-		mockMvc.perform(MockMvcRequestBuilders.put(ROOT + COURSES + "/{courseId}" + STUDENT_WITHDRAW, id, 2)
-				.param("validationRole", validationRole)
-				.contentType(APPLICATION_JSON_UTF8)
-			).andDo(MockMvcResultHandlers.print())
-			.andExpect(status().isOk())
-			.andExpect(jsonPath("$.message", is(String.format(getMessage("error_code_student_id_not_found"), 2)))) // verify json element
-			;
+
+		withdrawStudentSuccess(ROLE_ADMIN);
 	}
 	
 	@Test
 	void withdrawStudentRoleInstructor() throws Exception {
-		log.info("withdrawStudentRoleInstructor");
-		
-		String validationRole = ROLE_INSTRUCTOR;
+
+		withdrawStudentSuccess(ROLE_INSTRUCTOR);
+	}
+	
+	private void withdrawStudentSuccess(String validationRole) throws Exception {
+		log.info("withdrawStudentSuccess {}", validationRole);
 		
 		// check if course id 1 exists
 		int id = 1;
@@ -2123,60 +1506,16 @@ public class CourseControllerTest {
 	
 	@Test
 	void withdrawStudentRoleStudent() throws Exception {
-		log.info("withdrawStudentRoleStudent");
-		
-		String validationRole = ROLE_STUDENT;
-		
-		// check if course id 1 exists
-		int id = 1;
-		CourseVO courseVO = courseService.findById(id);
-		log.info(courseVO.toString());
-		
-		assertNotNull(courseVO,"courseVO null");
-		assertEquals(1, courseVO.getId());
-		assertNotNull(courseVO.getTitle(),"courseVO.getTitle() null");
-		assertEquals("test course", courseVO.getTitle(),"assertEquals courseVO.getTitle() failure");
-		assertNull(courseVO.getInstructorVO(),"courseVO.getInstructorVO() null");
-		assertEquals(1, courseVO.getStudentsVO().size());
-		assertTrue(courseVO.getStudentsVO().stream().filter(o -> o.getId() == 1).findFirst().isPresent());
-        
-		// withdraw instructor id=1
-		mockMvc.perform(MockMvcRequestBuilders.put(ROOT + COURSES + "/{courseId}" + STUDENT_WITHDRAW, id, id)
-				.param("validationRole", validationRole)
-				.contentType(APPLICATION_JSON_UTF8)
-			).andDo(MockMvcResultHandlers.print())
-			.andExpect(status().is4xxClientError())
-			.andExpect(status().isBadRequest()) // verify json root element status $ is 400 BAD_REQUEST
-			.andExpect(jsonPath("$.message", is(String.format(messageSource.getMessage(ValidatorCodes.ERROR_CODE_ACTION_INVALID.getMessage(), new Object[] {}, LocaleContextHolder.getLocale()), ActionType.WITHDRAW)))) // verify json root element message
-			;
-		
-		// check course
-		courseVO = courseService.findById(id);
-		log.info(courseVO.toString());
-		
-		assertEquals(1, courseVO.getId());
-		assertEquals(1, courseVO.getStudentsVO().size());
-		assertTrue(courseVO.getStudentsVO().stream().filter(o -> o.getId() == 1).findFirst().isPresent());
-        
-		// withdraw instructor (non existing course courseId=2)
-		mockMvc.perform(MockMvcRequestBuilders.put(ROOT + COURSES + "/{courseId}" + STUDENT_WITHDRAW, 2, id)
-				.param("validationRole", validationRole)
-				.contentType(APPLICATION_JSON_UTF8)
-			).andDo(MockMvcResultHandlers.print())
-			.andExpect(status().isOk())
-			.andExpect(jsonPath("$.message", is(String.format(getMessage("error_code_course_id_not_found"), 2)))) // verify json element
-			;
-		
-		// withdraw non existing instructor id=2
-		mockMvc.perform(MockMvcRequestBuilders.put(ROOT + COURSES + "/{courseId}" + STUDENT_WITHDRAW, id, 2)
-				.param("validationRole", validationRole)
-				.contentType(APPLICATION_JSON_UTF8)
-			).andDo(MockMvcResultHandlers.print())
-			.andExpect(status().isOk())
-			.andExpect(jsonPath("$.message", is(String.format(getMessage("error_code_student_id_not_found"), 2)))) // verify json element
-			;
-	}
 
+		withdrawStudentFail(ROLE_STUDENT);
+	}
+	
+	@Test
+	void withdrawStudentNoRole() throws Exception {
+
+		withdrawStudentFail(null);
+	}
+	
 	@Test
 	void withdrawStudentRoleNotExist() throws Exception {
 		log.info("withdrawStudentRoleNotExist");
@@ -2233,9 +1572,8 @@ public class CourseControllerTest {
 			;
 	}
 
-	@Test
-	void withdrawStudentNoRole() throws Exception {
-		log.info("withdrawStudentNoRole");
+	private void withdrawStudentFail(String validationRole) throws Exception {
+		log.info("withdrawStudentFail {}", validationRole);
 		
 		// check if course id 1 exists
 		int id = 1;
@@ -2250,9 +1588,9 @@ public class CourseControllerTest {
 		assertEquals(1, courseVO.getStudentsVO().size());
 		assertTrue(courseVO.getStudentsVO().stream().filter(o -> o.getId() == 1).findFirst().isPresent());
         
-		// withdraw instructor id=1
+		// withdraw student id=1
 		mockMvc.perform(MockMvcRequestBuilders.put(ROOT + COURSES + "/{courseId}" + STUDENT_WITHDRAW, id, id)
-				//.param("validationRole", validationRole)
+				.param("validationRole", validationRole)
 				.contentType(APPLICATION_JSON_UTF8)
 			).andDo(MockMvcResultHandlers.print())
 			.andExpect(status().is4xxClientError())
@@ -2268,28 +1606,24 @@ public class CourseControllerTest {
 		assertEquals(1, courseVO.getStudentsVO().size());
 		assertTrue(courseVO.getStudentsVO().stream().filter(o -> o.getId() == 1).findFirst().isPresent());
         
-		// withdraw instructor (non existing course courseId=2)
+		// withdraw student (non existing course courseId=2)
 		mockMvc.perform(MockMvcRequestBuilders.put(ROOT + COURSES + "/{courseId}" + STUDENT_WITHDRAW, 2, id)
-				//.param("validationRole", validationRole)
+				.param("validationRole", validationRole)
 				.contentType(APPLICATION_JSON_UTF8)
 			).andDo(MockMvcResultHandlers.print())
 			.andExpect(status().isOk())
 			.andExpect(jsonPath("$.message", is(String.format(getMessage("error_code_course_id_not_found"), 2)))) // verify json element
 			;
 		
-		// withdraw non existing instructor id=2
+		// withdraw non existing student id=2
 		mockMvc.perform(MockMvcRequestBuilders.put(ROOT + COURSES + "/{courseId}" + STUDENT_WITHDRAW, id, 2)
-				//.param("validationRole", validationRole)
+				.param("validationRole", validationRole)
 				.contentType(APPLICATION_JSON_UTF8)
 			).andDo(MockMvcResultHandlers.print())
 			.andExpect(status().isOk())
 			.andExpect(jsonPath("$.message", is(String.format(getMessage("error_code_student_id_not_found"), 2)))) // verify json element
 			;
 	}
-	
-	// TODO all extreme situations
-	// empty fields, email format, hibernate/JPA connections
-	
 	private String getMessage(String str) {
 		return messageSource.getMessage(str, new Object[] {}, LocaleContextHolder.getLocale());
 	}

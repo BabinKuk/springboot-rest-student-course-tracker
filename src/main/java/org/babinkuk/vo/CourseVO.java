@@ -109,6 +109,6 @@ public class CourseVO {
 	
 	@Override
 	public String toString() {
-		return "CourseVO [id=" + id + ", title=" + title + ", instructorVO=" + instructorVO + ", studentsVO=" + studentsVO + "]";
-	}	
+		return "CourseVO [id=" + id + ", title=" + title + ", instructorVO=" + instructorVO + ", studentsVO=" + studentsVO + ", reviewsVO=" + reviewsVO + "]";
+	}
 }

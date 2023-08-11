@@ -130,7 +130,7 @@ public class CourseServiceImpl implements CourseService {
 	}
 
 	@Override
-	public CourseVO findByTitle(String title) throws ObjectNotFoundException {
+	public CourseVO findByTitle(String title) {
 		
 		Optional<Course> result = courseRepository.findByTitle(title);
 		
@@ -144,13 +144,13 @@ public class CourseServiceImpl implements CourseService {
 			// mapping
 			courseVO = courseMapper.toVO(course);
 			log.info("courseVO ({})", courseVO);
-			
-			return courseVO;
 		} else {
 			// not found
 			String message = String.format(getMessage("error_code_course_title_not_found"), title);
 			log.warn(message);
-			throw new ObjectNotFoundException(message);
+			//throw new ObjectNotFoundException(message);
 		}
+		
+		return courseVO;
 	}
 }
